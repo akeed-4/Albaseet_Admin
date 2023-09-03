@@ -1,0 +1,67 @@
+
+<div class="doctor-view">
+
+    <table id="tbl" class="table table-hover table-striped rounded mb-3 table-bordered ">
+      <thead>
+        <tr class="bg-dark text-warning">
+          <th> التاريخ</th>
+          <th> العميل</th>
+          <th> المبلغ</th>
+          <th> حاله السند</th>
+          <th>
+            <input  type="checkbox"     class="ckheader" name="Input"   (change)="SelectAll()" >
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of recipte">
+          <td scope="row">{{item.  receipt_date  }}</td>
+          <td scope="row">{{item.customer.customer_aname }}</td>
+          <td scope="row">{{item.receipt_amount }}</td>
+          <td>
+            <div  class="table-light">
+     
+             <div > <td *ngIf="item.receipt_acceptance!==1" style="background-color: rgb(218, 226, 219);" >غير مقبول </td></div>
+               <div> <td *ngIf="item.receipt_acceptance===1" > مقبول </td></div>
+            </div>
+           </td>
+            
+          <td>
+            <div>
+              <input  type="checkbox"  class="ckitem"  value="{{item.receipt_no}}" >
+            </div>
+          </td>
+  
+        </tr>
+        
+      </tbody>
+    </table>
+    <!-- <div>
+      <button type="button" class="btn btn-danger btn-lg rounded-pill shadow-sm" data-toggle="modal" data-target="#modelId"  (click)="DeleteCount()" [disabled]="!IsDelete()">
+        حــذف
+      </button>
+    </div> -->
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">تنبيه حذف</h5>
+            </div>
+            <div class="modal-body">
+                      هل تريد حذف {{num}}  فعلا؟؟
+            </div>
+            <div class="modal-footer">
+                <button  id="btnClose" type="button" class="btn btn-secondary" data-dismiss="modal">تراجع</button>
+                <button type="button" class="btn btn-danger" (click)="DeleteConfirm()">تأكيد الحذف</button>
+            </div>
+        </div>
+    </div>
+  </div>
+  <div *ngIf="recipte.length<1">
+    <div class="alert alert-primary d-flex justify-content-center">
+      <strong class="spinner-border">   </strong>
+    <!-- <button class="btn" (click)="getInvice()">تحديث القائمة</button> -->
+    </div>
+    </div>

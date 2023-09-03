@@ -1,0 +1,10 @@
+@media (max-width: 412px) {
+    .hist {
+    display: none;
+  
+    }
+    #right{
+        margin-right: 10px;
+    }
+  
+}

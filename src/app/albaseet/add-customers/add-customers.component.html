@@ -1,0 +1,168 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/css/intlTelInput.css">
+<div class="container py-5 ar div1  ">
+    <div class="row tap  ">
+        <div class="col-lg-6 mx-auto ">
+            <div class="   p-5 show1 ">
+                <div class="alert alert1 text-center alert-secondary1 alert-secondary mb-4 ">
+                    <strong> {{'Customer Data'|translate}}</strong>
+                </div>
+
+                <hr class="mb-6">
+               
+
+                <div class="tab-content">
+                    <div class="tab-pane fade show  active form-row ">
+                        <form [formGroup]="customerForm" (ngSubmit)="Addcustmer()" >
+                            <div class="form-row form-group">
+                                <div class="col-md-4 form-group " id="inp2">
+                                    <div class="col-lg-12">
+                                        <label> {{'Name Ar'|translate}}</label>
+                                        <span class="text-danger">*</span>
+                                    </div>
+                                    <input type="text " class="form-control classm Shadow" autofocus   dir="rtl"
+                                        formControlName="customer_aname" maxlength="30"
+                                        [ngClass]="{'is-invalid': this.customerForm.get('customer_aname')?.invalid && this.customerForm.get('customer_aname')?.touched}">
+
+                                    <div class="text-danger" style="width:180px" *ngIf="this.customerForm.get('customer_aname').invalid && this.customerForm.get('customer_aname').touched
+                               && this.customerForm.get('customer_aname')?.value==='' ">
+                               {{'Customer name is required.'|translate}}
+                                     
+                                    </div>
+                                    <div class="text-danger" *ngIf="this.customerForm.get('customer_aname')?.value !== null && 
+                                    this.customerForm.get('customer_aname')?.value !== '' && isUserNameExist()">
+
+                                        {{'The customer name already exists.'|translate}}
+                                    </div>
+                                </div>
+                                <div class="col-md-4  form-group  ">
+                                    <div class="col-lg-12 lagstyle">
+                                        
+                                        <label>  {{'Name En'|translate}}</label>
+                                        <span class="text-danger">*</span>
+                                    </div>
+                                    <input type="text " class="form-control classm1" required  dir="ltr"
+                                        formControlName="customernameEn" id="customernameEn" maxlength="30"
+                                        [ngClass]="{'is-invalid': this.customerForm.get('customernameEn')?.invalid && this.customerForm.get('customernameEn')?.touched}">
+
+                                    <div class="text-danger" style="margin-right: 60px; width:180px " *ngIf="this.customerForm.get('customernameEn').invalid && this.customerForm.get('customernameEn').touched
+                               && this.customerForm.get('customernameEn').value===''">
+
+                                        {{'Customer name is required.'|translate}}
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <!-- <label for="doctorNationality" style="font-weight: bold;">العنوان :</label> -->
+                                <label> {{'National Address'|translate}} </label>
+                                <span class="text-danger">*</span>
+                                <input type="text " class="form-control" formControlName="address" id="address"
+                                    [ngClass]="{'is-invalid': this.customerForm.get('address').invalid && this.customerForm.get('address').touched}">
+
+                                <div class="text-danger" *ngIf="this.customerForm.get('address').invalid && this.customerForm.get('address').touched
+                               && this.customerForm.get('address').value===''">
+
+                                    {{'Customer address is required.'|translate}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                              
+                                    <label> {{'phone'|translate}} </label>
+                                    <span class="text-danger ">*</span>
+                                
+                                <!-- <label for="doctorNationality" style="font-weight: bold;">العنوان :</label> -->
+                                <input type="number" class="form-control"  formControlName="mobile" id="mobile"
+                                    pattern="[0-9]{10}"
+                                    [ngClass]="{'is-invalid': this.customerForm.get('mobile').invalid && this.customerForm.get('mobile').touched}">
+                                <div class="text-danger" *ngIf="this.customerForm.get('mobile').invalid && this.customerForm.get('mobile').touched
+                                       && this.customerForm.get('mobile').value==='' ">
+                                    {{'Phone number is required'|translate}}
+
+                                </div>
+                                <div class="text-danger" *ngIf="this.customerForm.get('mobile').value !== null && 
+                                this.customerForm.get('mobile').value !== '' && isUserphone()">
+
+                                    {{'The mobile number already exists'|translate}}
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="width: 100%;">
+                                <label> {{'National country'|translate}} </label>
+                                <span class="text-danger">*</span>
+                                <select class="form-control selectpicker" formControlName="country">
+                                    <option *ngFor="let item of contryes" [ngValue]="item.text">
+                                        {{item.text}}
+                                    </option>
+                                </select>
+
+
+
+                            </div>
+                            <div class="form-group">
+                                <label> {{'customer_city'|translate}} </label>
+                                <span class="text-danger"></span>
+                                <!-- <label for="doctorQualifa" style="font-weight: bold;"> البريد الالكتروني :</label> -->
+                                <input type="text" class="form-control" formControlName="customer_city"
+                                    id="customer_city">
+
+
+                            </div>
+                            <div class="form-group">
+                                <label> {{'National Number'|translate}} </label>
+                                <span class="text-danger">*</span>
+                                <input type="number" class="form-control" formControlName="customer_taxid"
+                                    id="customer_taxid" pattern="[0-9]{15}"
+                                    [ngClass]="{'is-invalid': this.customerForm.get('customer_taxid').invalid && this.customerForm.get('customer_taxid').touched}">
+
+                                <div class="text-danger" *ngIf="this.customerForm.get('customer_taxid').invalid && this.customerForm.get('customer_taxid').touched
+                               && this.customerForm.get('customer_taxid').value===''">
+                                   
+                                    {{'Tax number is required'|translate}}
+                                    
+                                </div>
+                                <div class="text-danger" *ngIf="this.customerForm.get('customer_taxid').value !== null && 
+                                this.customerForm.get('customer_taxid').value !== '' && isUserNational()">
+                                
+                                    {{'Tax number exists'|translate}}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label> {{'customer_postcode'|translate}} </label>
+                                <span class="text-danger"></span>
+                                <!-- <label for="doctorQualifa" style="font-weight: bold;"> البريد الالكتروني :</label> -->
+                                <input type="text" class="form-control" formControlName="customer_postcode"
+                                    id="customer_postcode">
+
+
+                            </div>
+                            <button type="submit" style="text-align:center ;" id="submit"
+                                class="subscribe rounded-pill btn btn-primary btn-block rounded-pill shadow-sm mt-4"
+                                [disabled]="customerForm.invalid ||isUserNameExist() ">{{btnTitle}}
+                               
+                            </button>
+                            <div *ngIf="isLoading" style="text-align: center;">
+                                <div class="spinner-grow text-muted"></div>
+                              </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+

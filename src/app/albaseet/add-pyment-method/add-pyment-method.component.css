@@ -1,0 +1,18 @@
+.tap{
+    margin-top: 6%;
+}
+
+@media (max-width: 412px) {
+    #ar {
+        margin-right: -60px;
+       
+    }
+  }
+
+  .show1{
+    background-color: rgb(246, 246, 252);
+    padding: 50px 70px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.075);
+}

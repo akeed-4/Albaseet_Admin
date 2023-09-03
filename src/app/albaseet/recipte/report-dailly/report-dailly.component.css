@@ -1,0 +1,21 @@
+@media print {
+
+    .id2,
+    .id2 {
+        display: none;
+    }
+
+
+}
+
+@media (min-width: 412px) {
+    .hist {
+    display: none;
+  
+    }
+    #right{
+        margin-right: 10px;
+    }
+  
+  
+}

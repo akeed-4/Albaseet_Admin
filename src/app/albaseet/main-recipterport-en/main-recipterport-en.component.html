@@ -1,0 +1,218 @@
+<div >
+    <p class="alert alert-primary">  {{'Receipts Reports'|translate}}</p>
+
+ </div>
+<div>
+    <div id="fullscreen_bg" id="rtt">
+        <form class="" id="rtt" [formGroup]="inviocereport" class="cotainer2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-md-offset-2 " id="rtt">
+                        <div class="row btnr " >
+                            <button (click)="chekedApprove()" id="btn1" class="btn btn-primary btnbg"   style="border-radius: 12px">   {{'approve'|translate}}</button>
+                           
+                            <button (click)="chekedUnApprove()" id="btn2"  class="btn btn-primary btnbg" style="margin-right:24px ;border-radius: 12px"> {{'unapprove'|translate}} </button>
+                        
+                        </div>
+                     
+                        <nav class="navbar navbar-expand-sm  navbar-green  navbars ar" *ngIf="chekedAppro">
+                            
+                            <div class="collapse navbar-collapse  " id="navbarNavDropdown1" class="nav1" style="margin-bottom:-40px ;" >
+                                <ul class="navbar-nav  " style="direction: ltr;">
+                                    <li class="nav-item dropdown " >
+    
+                                        <a class="nav-link dropdown-toggle alert-primary rounded-pill" href="#"
+                                            id="navbarDropdownMenuLink " role="button" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            {{'choose list'|translate}}
+    
+                                        </a>
+    
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"
+                                            style="text-align:right ;border: none;padding-bottom: 40px;">
+                                            <div>
+                                                <a class="dropdown-item" class="point" (click)="checkreport()">  {{'All'|translate}}
+                                                </a>
+    
+                                            </div>
+                                            <div>
+                                                <a class="dropdown-item" class="point"
+                                                    (click)="checkreportdatcustomer()">    {{'Specific customer report'|translate}}</a>
+    
+                                            </div>
+    
+                                            <div>
+                                                <a class="dropdown-item" class="point" (click)="check()"> 
+                                                    {{'Report by period'|translate}}  </a>
+    
+                                            </div>
+    
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                        <nav class="navbar navbar-expand-sm  navbar-green  navbars ar" *ngIf="checkinvoicunapprove" >
+                            
+                            <div class="collapse navbar-collapse " id="navbarNavDropdown1" class="nav2" style="margin-bottom:-40px ;" >
+                                <ul class="navbar-nav  " style="direction: ltr;">
+                                    <li class="nav-item dropdown " >
+    
+                                        <a class="nav-link dropdown-toggle alert-primary rounded-pill" href="#"  
+                                            id="navbarDropdownMenuLink " role="button" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            {{'choose list'|translate}}
+    
+                                        </a>
+    
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"
+                                            style="text-align:right ;border: none;padding-bottom: 40px;">
+                                            <div>
+                                                <a class="dropdown-item" class="point" (click)="checkallrecipt()">  {{'All'|translate}}
+                                                </a>
+    
+                                            </div>
+                                            <div> 
+                                                <a class="dropdown-item"  class="point"
+                                                    (click)="checkreportcustomer()">    {{'Specific customer report'|translate}}</a>
+    
+                                            </div>
+    
+                                            <div>
+                                                <a class="dropdown-item" class="point" (click)="checkreportdate()"> 
+                                                    {{'Report by period'|translate}}  </a>
+    
+                                            </div>
+    
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                        <div class="panel panel-default" id="fullscreen_bg">
+    
+                            <div class="panel panel-primary">
+    
+    
+                                <div class="text-center " id="rtt">
+    
+    
+    
+    
+    
+                                    <div *ngIf="isdate ">
+                                        <app-report-recipt-date></app-report-recipt-date>
+                                    </div>
+                                    <div *ngIf="isDaydate ">
+                                        <div class="customer">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span
+                                                        class="glyphicon glyphicon-calendar"></span></span>
+                                                <input type="date" formControlName="startdate" (change)="change()"
+                                                    value="2022-07-01" placeholder="Date" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <br>
+                                </div>
+                                <div class="panel-body">
+                                    <div *ngIf="isreportdate ">
+                                        <table class="table  rounded mb-3 table-bordered ">
+                                            <thead id="tap1">
+                                                <tr class="bg-dark text-warning">
+                                                    <th> رقم السند </th>
+                                                    <th> التاريخ</th>
+                                                    <th> العميل</th>
+                                                    <th> المبلغ</th>
+                                                    <th> حاله الفاتوره</th>
+    
+    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of selectedMembers">
+    
+                                                    <td>{{item.invoice_no}}</td>
+                                                    <td scope="row">{{item. invoice_date|date : "dd.MM.y" }}</td>
+                                                    <td scope="row">{{item.customer.customer_aname }}</td>
+                                                    <td scope="row">{{item.total_amount }}</td>
+    
+                                                    <!-- <td>{{item.doctorPicure}}</td> -->
+                                                    <td>
+                                                        <div class="table-light">
+    
+                                                            <div>
+                                                    <td *ngIf="item.invoice_acceptance===0"
+                                                        style="background-color: rgb(184, 196, 187);"
+                                                        class="rounded-pill shadow-sm">غير معتمد </td>
+                                    </div>
+                                    <div>
+                                        <td *ngIf="item.invoice_acceptance===1"
+                                            style="background-color: rgb(225, 241, 227);" class="rounded-pill shadow-sm">
+                                            معتمد </td>
+                                    </div>
+                                </div>
+    
+                                </td>
+    
+    
+                                </tr>
+    
+                                </tbody>
+                                </table>
+                            </div>
+    
+    
+    
+                           <div class="toplist1">
+                            <div *ngIf="isAllreport" style="direction: rtl;text-align:right ;" class="cont">
+                                <app-report-all-recipt></app-report-all-recipt>
+                            </div>
+                            <div *ngIf="ispaymontinvice" style="direction: rtl;text-align:right ;" class="cont">
+                                <app-paid-cash-invoice></app-paid-cash-invoice>
+                            </div>
+                            <div *ngIf="ispaymontcredit" style="direction: rtl;text-align:right ;" class="cont">
+                                <app-credit-sales-invoice></app-credit-sales-invoice>
+                            </div>
+                            <div *ngIf="ischratlist" style="direction: rtl;text-align:right ;" class="cont">
+                                <app-charlist-invioce></app-charlist-invioce>
+                            </div>
+                            <div *ngIf="reportdatelimet" class="cont">
+                                <app-report-invioce-date></app-report-invioce-date>
+                            </div>
+                            <div *ngIf="reportdatcustomer" style="direction: rtl;text-align:right ;" class="cont">
+                                <app-report-customer-recipt></app-report-customer-recipt>
+                            </div>
+                            <div *ngIf="reportproduct" class="cont">
+                                <app-report-product></app-report-product>
+                            </div>
+    
+                            <div *ngIf="allrecipt " class="cont">
+                                <app-recipt-all></app-recipt-all>
+                            </div>
+                            <div *ngIf="reportcustomer" class="cont">
+                                <app-recipt-customer></app-recipt-customer>
+                            </div>
+                            <div *ngIf="reportdate" class="cont">
+                                <app-recipt-date-view></app-recipt-date-view>
+                            </div>
+                            <div  *ngIf=" Allrecipt" class="cont">
+                                <app-all-reciept-v></app-all-reciept-v>
+                            </div>
+                           </div>
+    
+    
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </div>
+    
+    </form>
+    
+    
+    
+    </div>
+</div>

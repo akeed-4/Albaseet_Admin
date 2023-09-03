@@ -1,0 +1,38 @@
+.NewRowColor{
+    background-color:darkturquoise;
+  }
+
+  @media (max-width: 360px) {
+.products{
+  margin-top: -20px;
+}
+.pro{
+  margin-top: -20px;
+}
+.disply{
+  width: 120px;
+ }
+#tbl{
+  margin-top: -24px;
+}
+  }
+  @media (max-width: 375px) {
+    .products{
+      margin-top: -20px;
+    }
+    .pro{
+      margin-top: -20px;
+    }
+    .disply{
+      width: 100px;
+     }
+    #tbl{
+      margin-top: -24px;
+    }
+  }
+  @media screen and (min-width:601px) and (min-width:800px){
+    .disply{
+      width: 100px;
+     }
+
+  }

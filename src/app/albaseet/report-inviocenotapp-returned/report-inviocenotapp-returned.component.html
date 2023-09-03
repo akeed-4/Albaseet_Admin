@@ -1,0 +1,78 @@
+<div class="alert alert-primary" role="alert" [dir]="'dir'|translate">
+    <strong> {{'List of returned invoices'|translate}} </strong>
+</div>
+<div [dir]="'dir'|translate" id="cont">
+    <!-- <nav class="navbar input-group mb-3">
+        <span class=" input-group-text" style="height:40px ;"> <i class="fa fa-search fs-5 text-primary"></i></span>
+        <input class="form-control " type="text" name="customer_aname" placeholder="{{'Search here'|translate}} " id=""
+            [(ngModel)]="customer_aname" (ngModelChange)="sertch()">
+    </nav> -->
+    <table datatable  class="table table-hover table-striped table-bordered rounded mb-3  ">
+        <thead>
+            <tr class="bg-dark text-warning ">
+                <th>
+                    {{'customer name'|translate}}
+                </th>
+                <th>
+                    {{'customer_address'|translate}}
+                </th>
+                <th >{{'history'|translate}}</th>
+                <th > {{'Amount'|translate}}</th>
+                <th > {{'Payment'|translate}}</th>
+                <th > {{'tax_amount'|translate}}</th>
+              
+                <th> {{'invoice state'|translate}} </th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of invoice">
+                <td>{{item.customer.customer_aname }}</td>
+                <td>{{item.customer.customer_address }}</td>
+                <td >{{item. invoice_date| date: 'dd/MM/yyyy hh:mm a' }}</td>
+
+                <td >{{item.total_amount }}</td>
+                <td >{{item.paid_amount }}</td>
+                    <td >{{item.taxAmount }}</td>
+                    <!-- <td >{{item.tax_per }}</td> -->
+                <td>
+                    <div class="table-light rounded">
+                        <div>
+                <td *ngIf="item.invoice_acceptance===0" style="background-color: rgb(178, 199, 199);">
+                    {{'unapproved'|translate}} </td>
+                    
+                    <!-- <td >{{item.tax_amount }}</td> -->
+</div>
+<div>
+    <td *ngIf="item.invoice_acceptance===1" style="background-color: rgb(225, 241, 227);"> {{'approved'|translate}}
+    </td>
+</div>
+</div>
+</td>
+</tr>
+<tr *ngIf="invoice.length>1" class=" text-center bg-light " style="font-weight:600 ; font-size: 20px; ">
+    <td scope="row" class="text-danger"> {{'total'|translate}} </td>
+    <td scope="row"></td>
+    <td scope="row"></td>
+    <td scope="row">{{price}}</td>
+    <td scope="row">
+    </td>
+   
+
+</tr>
+<!-- <tr *ngIf="invoice.length>1">
+                <div class="row " >
+                 <label for="" style="margin-right: 17px;"> الاجمالي </label> 
+                  <div  style="margin-right: 17px;background-color: aqua"> {{price}}</div>
+                </div>
+               
+              </tr> -->
+</tbody>
+</table>
+<div *ngIf="invoice.length<1">
+    <div class="alert alert-primary d-flex justify-content-center">
+        <strong> {{'loading'|translate}}...</strong>
+    </div>
+</div>
+</div>

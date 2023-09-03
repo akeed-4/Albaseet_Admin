@@ -1,0 +1,20 @@
+
+  
+  @media (max-width:360px) {
+    .hist {
+    display: none;
+  
+    }
+    .tb1{
+      margin-top: -24px;
+    }
+    
+    .btn1{
+      margin-right: -40px;
+  
+    }
+    #cont{
+      margin-top: -14px;
+    }
+  
+}

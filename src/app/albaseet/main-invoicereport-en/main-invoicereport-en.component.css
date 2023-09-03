@@ -1,0 +1,255 @@
+        
+       body
+       {
+           overflow:auto;
+           background-color: #1b1b1b;
+           padding-top: 40px;
+       }
+       #fullscreen_bg{
+        margin-top: 40px;
+       }
+       .form-signin {
+           max-width: 280px;
+           padding: 15px;
+           margin:200px;
+           margin-top:80px;
+           margin-left: 130px;
+         }
+       
+       .input-group-addon
+       {
+           background-color: rgb(50, 118, 177);
+           border-color: rgb(40, 94, 142);
+           color: rgb(255, 255, 255);
+       }
+       
+       .form-signup input[type="text"],.form-signup input[type="password"] { border: 1px solid rgb(50, 118, 177); }
+       .fullscreen_bg {
+           position: fixed;
+           top: 0;
+           right: 0;
+           bottom: 0;
+           left: 0;
+           background-size: cover;
+           background-position: 50% 50%;
+           background-image: url('http://i.imgur.com/aFs5QmP.jpg');
+           background-repeat:repeat;
+         }
+         .rtt{
+            text-align: right;
+            direction: rtl;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      background-color: blue;
+         }
+         table {
+           width: 100%;
+           display:block;
+       }
+       thead {
+           display: inline-table;
+           width: 95%;
+           height: 30px;
+       }
+       tbody {
+   
+           height: 150px;
+           display: inline-block;
+           width: 95%;
+           overflow: auto;
+       }
+          #tap1{
+            width: 100%;
+            margin-right: 7px;
+          
+          }   
+    
+          @media (min-width: 360px) and  (max-width: 450px) {
+            .cotainer2 {
+                margin-right: 5px;
+               
+            }
+            .nav2{
+              margin-right: 30px;
+          }
+          .nav1{
+              margin-right: 70px;
+          
+          }
+            .btnr{
+              margin-right: -20px;
+            
+            }
+            .navbars{
+              margin-right: 10px;
+            }
+            .cotainer1{
+              margin-left: -40px;
+            }
+            .cotainer3{
+              margin-left: -40px;
+            }
+          
+          }
+          @media (max-width: 412px ) {
+            .cotainer2 {
+                margin-left: 5px;
+               
+            }
+          
+          
+          }
+
+          @media (max-width: 375px) {
+            .cotainer2 {
+                margin-right: 5px;
+               
+            }
+            .nav2{
+              margin-right: 30px;
+          }
+          .nav1{
+              margin-right: 70px;
+          
+          }
+            .btnr{
+              margin-right: -20px;
+            
+            }
+            .navbars{
+              margin-right: 10px;
+            }
+            .cotainer1{
+              margin-left: -54px;
+            }
+            .cotainer3{
+              margin-left: -40px;
+            }
+          
+          }
+          /* Style The Dropdown Button */
+          .dropbtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+          }
+          
+          /* The container <div> - needed to position the dropdown content */
+          .dropdown {
+            position: relative;
+            display: inline-block;
+          }
+          
+          /* Dropdown Content (Hidden by Default) */
+          .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+          }
+          
+          /* Links inside the dropdown */
+          .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+          }
+          
+          /* Change color of dropdown links on hover */
+          .dropdown-content a:hover {background-color: #f1f1f1}
+          
+          /* Show the dropdown menu on hover */
+          .dropdown:hover .dropdown-content {
+            display: block;
+          }
+          
+          /* Change the background color of the dropdown button when the dropdown content is shown */
+          .dropdown:hover .dropbtn {
+            background-color: #3e8e41;
+          }
+        
+
+          /* jefgbkdfgbkdfbgkdfbgdf */
+
+          .toplist1{
+            margin-top: -60px;
+          }
+          @media screen and (min-width:601px) and (min-width:800px){
+  
+            .btn2{
+                display: none;
+            
+            }
+            .btnbg{
+              margin-left:40px ;
+            }
+            .nav2{
+                margin-right: 800px;
+            }
+            .nav1{
+                margin-right: 940px;
+            }
+            }
+            @media screen and (min-width:600px){
+            
+              .btn2{
+                display: none;
+              }
+            }
+
+            @media (max-width: 360px) {
+ 
+                .nav2{
+                    margin-right: -80px;
+                }
+                .nav1{
+                    margin-left: 30px;
+                }
+              .navbars{
+                margin-right: 100px;
+               
+              
+              }
+              .nav2{
+                margin-left: -150px;
+              }
+              .btn2{
+                margin-right: -4px;
+          
+              }
+              .btn1{
+                margin-left: -48px;
+              }
+              .btn3{
+                margin-right: -38px;
+              }
+            }
+            #inp1{
+              cursor: pointer;
+            }
+
+            .point{
+              cursor: pointer;
+            }
+            .point:hover{
+              text-decoration: none;
+              background-color: rgb(183, 216, 216);
+            }
+            .dropdown-menu{
+             border: 2px solid #3e8e41;
+            }
+            @media print{
+   
+              #btn1,#btn1{
+                  display: none;
+              }
+          #btn2,#btn2{
+              display: none;
+          }
+          }

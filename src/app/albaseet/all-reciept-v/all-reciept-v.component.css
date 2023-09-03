@@ -1,0 +1,43 @@
+
+@media (max-width: 360px)and(max-width: 450px) {
+  .hist {
+  display: none;
+
+  }
+  #tbl{
+    margin-top: -24px;
+  }
+#cont{
+  margin-top: -14px;
+}
+.top3{
+  margin-top: 10px;
+}
+.ser{
+  display: none;
+}
+}
+
+@media (max-width: 375px) {
+  .hist {
+    display: none;
+  
+    }
+    #tbl{
+      margin-top: -24px;
+    }
+  #cont{
+    margin-top: -14px;
+  }
+  .top3{
+    margin-top: 10px;
+  }
+  .ser{
+    display: none;
+  }
+}
+@media (min-width:800px) {
+  .divright {
+ margin-right: 400px;
+
+  }}

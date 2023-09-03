@@ -1,0 +1,75 @@
+<div class="alert alert-primary" role="alert" [dir]="'dir'|translate">
+    <strong> {{'List of Overall Reports of the Bond Arrested'|translate}}  </strong>
+  </div>
+  
+  <div class="doctor-view" >
+      <table style="width: 100%;"  class="table table-hover table-striped rounded mb-3 table-bordered ">
+        <thead>
+          <tr class="bg-dark text-warning">
+            <th> 'Reciept Number'</th>
+           <th> 'customer name'|translate</th>
+           <th>
+       customer_address
+        </th>
+            <th> history</th>
+        
+            <th>Amount</th>
+            <th>  translate</th>
+          </tr>
+        </thead>
+        <tbody>
+  
+          <tr *ngFor="let item of recipte">
+        
+            <td scope="row">{{item.receipt_no}}</td>
+            <td scope="row">{{item.customer.customer_aname }}</td>
+            <td>{{item.customer.customer_address }}</td>
+            <td scope="row">{{item.receipt_date}}</td>
+  
+            <td scope="row">{{item.receipt_amount }}</td>
+            <td>
+              <div  class="table-light">
+       
+               <div > <td *ngIf="item.receipt_acceptance!==1" >   {{'unapproved'|translate}}  </td></div>
+                 <div> <td *ngIf="item.receipt_acceptance===1" >  {{'approved'|translate}}  </td></div>
+              </div>
+             </td>
+              
+          </tr>
+         
+        </tbody>
+      </table>
+      <div *ngIf="recipte.length>1" class=" text-center bg-light " style="font-weight:600 ; font-size: 20px; ">
+        <td scope="row" class="text-danger"> {{'total Amounts'|translate}} </td>
+        <td scope="row"></td>
+      
+        <td scope="row">{{price}}</td>
+        <td scope="row">
+            </td>
+       
+          </div>
+    </div>
+    
+    <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title">تنبيه حذف</h5>
+              </div>
+              <div class="modal-body">
+                        هل تريد حذف {{num}}  فعلا؟؟
+              </div>
+              <div class="modal-footer">
+                  <button  id="btnClose" type="button" class="btn btn-secondary" data-dismiss="modal">تراجع</button>
+                  <button type="button" class="btn btn-danger" (click)="DeleteConfirm()">تأكيد الحذف</button>
+              </div>
+          </div>
+      </div>
+    </div>
+    <div *ngIf="recipte.length<1">
+      <div class="alert alert-primary d-flex justify-content-center">
+        <strong > {{'loading'|translate}}...   </strong>
+   
+      </div>
+      </div>
+     

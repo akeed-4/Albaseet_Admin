@@ -1,0 +1,23 @@
+form{
+    margin-right: 15px;
+}
+
+@media (max-width: 412px) {
+    .container1{
+        margin-left: 20px;
+        margin-right: 10px;
+    }
+    .container2{
+        margin-left: 16px;
+        margin-right: 10px;
+    }
+}
+@media print {
+
+    .id2,
+    .id2 {
+        display: none;
+    }
+
+
+}

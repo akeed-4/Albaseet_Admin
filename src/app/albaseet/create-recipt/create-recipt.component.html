@@ -1,0 +1,136 @@
+<body>
+    <div class="registration-form">
+
+        <div>
+            <form class="needs-validation" novalidate class="forms1" style="text-align:right ;direction:rtl ;">
+                <div style="text-align: center;margin-bottom:25px ;color:royalblue ;">
+                    <h2>سند استلام بضاعة</h2>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        <label for="validationCustom01">رقم السند</label>
+                        <input type="text" class="form-control" id="validationCustom01" readonly="true" value=" 1"
+                            required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="validationCustom02">التاريخ </label>
+                        <input type="date" class="form-control" id="validationCustom02" readonly="true"
+                            value="2022-12-01" required>
+
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="validationCustomUsername">المستلم</label>
+                        <div class="input-group">
+
+                            <input type="text" class="form-control" id="validationCustomUsername" readonly="true"
+                                placeholder="المستلم" aria-describedby="inputGroupPrepend" required>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label for="validationCustom03">العميل( المرسل)</label>
+                        <select name="" class="form-control" id="">
+                            <option value=""> احمد</option>
+                        </select>
+                        
+                        <div class="invalid-feedback">
+                            Please provide a valid city.
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="validationCustom04">State</label>
+                        <input type="text" class="form-control" id="validationCustom04" placeholder="State" required>
+                        <div class="invalid-feedback">
+                            Please provide a valid state.
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="validationCustom05">Zip</label>
+                        <input type="text" class="form-control" id="validationCustom05" placeholder="Zip" required>
+                        <div class="invalid-feedback">
+                            Please provide a valid zip.
+                        </div>
+                    </div>
+                </div>
+
+<!--zone work-->
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">
+        الصنف    
+        </th>
+        <th scope="col">الكميه</th>
+        <th scope="col">السعر</th>
+        <th scope="col">الاجمالي</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="font-size: 0.8em ;">
+        
+        <td>
+            <select name="" id="" style="border: none; " class=""> 
+                <option value="">اختر صنف</option>
+            </select>
+
+        </td>
+        <td>
+            <input type="number" style="width:60px ; ">
+        </td>
+        <td><input type="number" style="width:80px ;" max="5">
+        </td>
+        <td><input type="text" style="width:60px ;"  placeholder="Total" readonly="true">
+        </td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <div *ngIf="ischeaked">
+    <table class="table">
+        
+        <tbody>
+          <tr style="font-size: 0.8em ;">
+            
+            <td>
+                <select name="" id="" style="border: none; " class=""> 
+                    <option value="">اختر صنف</option>
+                </select>
+    
+            </td>
+            <td>
+                <input type="number" style="width:60px ; ">
+            </td>
+            <td><input type="number" style="width:80px ;" max="5">
+            </td>
+            <td><input type="text" style="width:60px ;"  placeholder="Total" readonly="true">
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>
+  </div>
+<div>
+    <button style="border:none" (click)="additem()">اضافه صنف</button>
+</div>
+             <button type="submit"
+             class="subscribe rounded-pill btn btn-primary  btn-block rounded-pill shadow-sm mt-4" >ارسال
+          
+         </button>
+            </form>
+           
+    
+
+        </div>
+
+      
+
+
+       
+
+
+
+    </div>
+
+</body> 

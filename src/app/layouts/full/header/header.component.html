@@ -1,0 +1,26 @@
+<!-- ============================================================== -->
+<!-- Profile - style you can find in header.scss -->
+<!-- ============================================================== -->
+<span  class="language" [hidden]="currentLanguage == 'en'" (click)="onChangeLanguage('en')"> English</span>
+<span class="language" [hidden]="currentLanguage == 'ar'" (click)="onChangeLanguage('ar')"> العربية</span>
+
+<button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5 p-0 d-flex jc-c align-items-center">
+    <img src="assets/images/users/1.jpg" alt="user" class="profile-pic"> 
+    
+  </button>
+<mat-menu #profile="matMenu" class="mymegamenu">
+    <!-- <h4>  <p>userName:{{userName}}</p></h4> -->
+    <p>{{UserName}}:{{'User_name'|translate}}</p>
+    <button mat-menu-item *ngIf="loginuser()"  routerLink="login">
+        <mat-icon>notifications_off</mat-icon> {{'login'|translate}} </button>
+    <button mat-menu-item (click)="logout()" *ngIf="isUserRegistered()" routerLink="logout">
+        <mat-icon>exit_to_app</mat-icon> {{'singout'|translate}}  </button>
+    
+</mat-menu>
+<style>
+    .language{
+        cursor: pointer;
+    }
+</style>
+<!-- <button class="btn btn-primary">انشاء حساب</button>
+<button class="btn btn-primary"> الصلاحيات</button> -->

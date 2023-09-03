@@ -1,0 +1,14 @@
+<div style="width: 25%;background-color: rgb(194, 194, 223);margin-right: 30%;margin-top: 20%;" class="form-group">
+<h1 class="text-center">اختر لغة التطبيق</h1>
+<li  class="justify-content-left navbar-brand">
+
+   
+      <select  style="width: 200px;margin-right:130px ;background-color: rgb(179, 176, 174);border: none;"   #selectedLang (change)="switchLang(selectedLang.value)">
+        <option value="">اختر اللغة</option>
+        <option  *ngFor="let language of translate.getLangs()" [value]="language"
+          [selected]="language === translate.currentLang">
+          {{ language }}
+        </option>
+      </select>
+
+  </li></div>

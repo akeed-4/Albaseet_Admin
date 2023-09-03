@@ -1,0 +1,54 @@
+.tap{
+    margin-top: 10%;
+}
+.my-select {
+    width:20px;
+    max-width:20px;
+    background-color: red;
+    font-size: 10px;
+    direction: rtl;
+
+}
+.div1{
+    margin-top: -10%;
+}
+@media (max-width: 360px) {
+    #input1 {
+        margin-right: -65px;
+        
+    
+       
+    }
+    .div1{
+        margin-top: 10%;
+    }
+    #inp2{
+        width: 500px;
+    }
+    #input1{
+        width: 300px;
+    }
+  }
+  @media screen and (min-width:601px) and (min-width:800px){
+    .classm{
+     
+        width:220px;
+       
+    }
+    .lagstyle{
+      margin-right: 100px;
+    }
+    .classm1{
+     
+        width:204px;
+        margin-right: 90px;
+       
+    }
+}
+.show1{
+    background-color: rgb(246, 246, 252);
+    padding: 50px 70px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.075);
+}

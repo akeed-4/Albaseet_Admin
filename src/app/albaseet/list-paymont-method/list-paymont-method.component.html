@@ -1,0 +1,67 @@
+
+<div class="card-header" style="text-align: right;">
+  <button type="button" class="btn btn-success mb-3 rounded-pill shadow-sm" (click)="addpaymont()">
+      +</button>
+
+</div>
+<div *ngIf="!showloading" style="text-align: center;margin-top: 50px;">
+  <p  class="spinner-grow"></p>
+  </div>
+  <div *ngIf="showloading">
+    <dx-data-grid id="gridContainer"
+    [dataSource]="Invoiceheader"
+   
+    [columnAutoWidth]="true"
+    (onExporting)="onExporting($event)"
+    [showColumnLines]="true"
+    [showRowLines]="true"
+    [showBorders]="true"
+    [rowAlternationEnabled]="true"
+    [rtlEnabled]="true"
+    >
+    <dxo-toolbar class="grid-buttons">
+      <dxi-item location="before" >
+        <div *dxTemplate>
+        
+          <dx-button icon="refresh" (onClick)="refreshDataGrid()" hint="{{'dxDataGrid.refreshButton' | translate}}"></dx-button>
+          <dx-button icon="chevronup" (onClick)="zoomIn()" hint="{{'dxDataGrid.zoomIn' | translate}}"></dx-button>
+          <dx-button icon="chevrondown" (onClick)="zoomOut()" hint="{{'dxDataGrid.zoomOut' | translate}}"></dx-button>
+        </div>
+      </dxi-item>
+      <dxi-item name="exportButton"></dxi-item>
+      <dxi-item name="columnChooserButton"></dxi-item>
+      <dxi-item name="groupPanel"></dxi-item>
+    </dxo-toolbar>
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    <dxo-search-panel [visible]="true" [placeholder]="placeholder"></dxo-search-panel>
+      <dxo-header-filter [visible]="true"> </dxo-header-filter>
+      <dxo-filter-panel [visible]="true"> </dxo-filter-panel>
+      <dxo-export [enabled]="true" [formats]="['pdf']" [allowExportSelectedData]="false"
+        fileName="purches"></dxo-export>
+      <dxo-filter-row [visible]="true"> </dxo-filter-row>
+      <dxo-paging [pageSize]="10"> </dxo-paging>
+      <dxo-pager [allowedPageSizes]="[5, 10]" [showPageSizeSelector]="true" [showNavigationButtons]="true">
+      </dxo-pager>
+    
+      <dxi-column dataField="customer_aname"  [caption]="formatMessage('customer_aname')" > </dxi-column>
+      <dxi-column dataField="customer_ename"  [caption]="formatMessage('customer_ename')" > </dxi-column>
+      
+    
+    
+      <dxo-column-chooser #columnChooser [enabled]="true" mode="select">
+        <dxo-search [enabled]="true" [editorOptions]="true"></dxo-search>
+        <dxo-selection [allowSelectAll]="true" [selectByClick]="true" [recursive]="true"></dxo-selection>
+    
+      </dxo-column-chooser>
+    
+      <dxo-paging [pageSize]="10"> </dxo-paging>
+    
+      <!-- <dxo-export [enabled]="true" [formats]="['pdf','xlsx']" [allowExportSelectedData]="false" fileName="countries" *ngIf="exportCountry"></dxo-export> -->
+      <dxo-pager [visible]="true" [allowedPageSizes]="allowedPageSizes" [displayMode]="displayMode"
+        [showPageSizeSelector]="showPageSizeSelector" [showInfo]="showInfo" [showNavigationButtons]="showNavButtons">
+      </dxo-pager>
+    </dx-data-grid>
+  </div>
+
+
+ 

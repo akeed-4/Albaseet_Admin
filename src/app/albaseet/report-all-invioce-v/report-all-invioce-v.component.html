@@ -1,0 +1,64 @@
+
+
+
+<div class="card-header" style="text-align: right;">
+ 
+
+</div>
+
+
+
+<dx-data-grid id="gridContainer"
+[dataSource]="Invoiceheader"
+keyExpr="customer_id"
+[showBorders]="true"
+[focusedRowEnabled]="true"
+[focusedRowEnabled]="true"
+id="gridContainer"
+[repaintChangesOnly]="true"
+[highlightChanges]="true"
+[selectedRowKeys]="[]"
+[allowColumnResizing]="true"
+[columnResizingMode]="'nextColumn'"
+[columnMinWidth]="50"
+[columnAutoWidth]="true"
+[remoteOperations]="true"
+(onExporting)="onExporting($event)"
+[showColumnLines]="true"
+[showRowLines]="true"
+[showBorders]="true"
+[rowAlternationEnabled]="true"
+[rtlEnabled]="true"
+>
+<dxo-search-panel [visible]="true" ></dxo-search-panel>
+  <dxo-header-filter [visible]="true"> </dxo-header-filter>
+  <dxo-filter-panel [visible]="true"> </dxo-filter-panel>
+  <dxo-export [enabled]="true" [formats]="['pdf']" [allowExportSelectedData]="false"
+    fileName="purches"></dxo-export>
+  <dxo-filter-row [visible]="true"> </dxo-filter-row>
+  <dxo-paging [pageSize]="10"> </dxo-paging>
+  <dxo-pager [allowedPageSizes]="[5, 10]" [showPageSizeSelector]="true" [showNavigationButtons]="true">
+  </dxo-pager>
+
+  <dxi-column dataField="customer_aname" > </dxi-column>
+  <dxi-column dataField="customer_country"> </dxi-column>
+  <dxi-column dataField="customer_mobile"> </dxi-column>
+  <dxi-column dataField="customer_taxid" > </dxi-column>
+  <dxi-column dataField="invoices_count" > </dxi-column>
+
+ 
+  <dxo-column-chooser #columnChooser [enabled]="true" mode="select">
+    <dxo-search [enabled]="true" [editorOptions]="true"></dxo-search>
+    <dxo-selection [allowSelectAll]="true" [selectByClick]="true" [recursive]="true"></dxo-selection>
+
+  </dxo-column-chooser>
+
+  <dxo-paging [pageSize]="10"> </dxo-paging>
+
+  <!-- <dxo-export [enabled]="true" [formats]="['pdf','xlsx']" [allowExportSelectedData]="false" fileName="countries" *ngIf="exportCountry"></dxo-export> -->
+  <dxo-pager [visible]="true" [allowedPageSizes]="allowedPageSizes" [displayMode]="displayMode"
+    [showPageSizeSelector]="showPageSizeSelector" [showInfo]="showInfo" [showNavigationButtons]="showNavButtons">
+  </dxo-pager>
+</dx-data-grid>
+
+ 

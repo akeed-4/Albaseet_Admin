@@ -1,0 +1,48 @@
+
+<div class="user-profile" style="background: url(assets/images/background/user-info.jpg) no-repeat;overflow: hidden">
+
+    <div class="profile-img"> <img src="assets/images/users/profile.png" alt="user"> </div>
+  
+ 
+
+</div>
+<mat-nav-list appAccordion style="padding: 20px;" id="menu">
+    <mat-list-item appAccordionLink *ngFor="let menuitem of menuItems.getMenuitem()" routerLinkActive="selected">
+        <a style="color: black;font-size: 18px;" class="" appAccordionToggle [routerLink]="['/', menuitem.state]" *ngIf="menuitem.type === 'link'">
+            <mat-icon>{{ menuitem.icon }}</mat-icon>
+            <span>{{ this.currentLanguage == 'ar'? menuitem.nameNameAr:menuitem.nameNameEn }}</span>
+            <span fxFlex></span>
+
+        </a>
+
+
+       
+    </mat-list-item>
+    <!-- <div class="btn-group-vertical"  tyle="padding: 20px;">
+        <button type="button" class="btn " routerLink="listcustomer" style="margin-bottom: 25px;" >
+            <mat-icon>view_headline</mat-icon> <span
+                fxFlex></span>  حساب</button>
+        <button type="button" routerLink="listproduct" class="btn" style="margin-bottom: 25px;"  >
+            <mat-icon>assistant</mat-icon>
+            <span fxFlex></span>
+            لوحه التحكم</button>
+        <button type="button" class="btn " routerLink="lsitpaymont" style="margin-bottom: 25px;"  >  <mat-icon  >developer_mode</mat-icon> 
+            الصلاحيات
+          <span fxFlex></span></button>
+       
+
+        <button type="button" class="btn " routerLink="reportinvioce" style="margin-bottom: 25px;" > 
+            <mat-icon>save</mat-icon><span
+                fxFlex></span> تاسيس معرض</button>
+
+        <button type="button" class="btn " routerLink="listReicept" style="margin-bottom: 25px;"  >
+            <mat-icon>local_taxi</mat-icon> <span
+                fxFlex></span> السيارات</button>
+        
+    </div>   -->
+ <!-- <style>
+        button:active{
+background-color: rgb(11, 65, 212);
+        }
+    </style> -->
+</mat-nav-list> 

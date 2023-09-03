@@ -1,0 +1,27 @@
+@media print {
+
+    #cont,
+    #cont {
+        display: block;
+    }
+    #fas1,#fas1{
+        display: none;
+    }
+    #pr,
+    #pr {
+        display: none;
+    }
+    }
+    
+    @media (max-width: 412px) {
+        .hist {
+        display: none;
+      
+        }
+        #tbl{
+            margin-top: -24px;
+          }
+          #cont{
+            margin-top: -20px;
+        }
+    }

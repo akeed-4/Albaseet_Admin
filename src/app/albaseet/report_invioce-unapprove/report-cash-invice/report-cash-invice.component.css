@@ -1,0 +1,14 @@
+
+    @media (max-width: 412px) {
+        .hist {
+        display: none;
+      
+        }
+        
+        #tbl{
+            margin-top: -24px;
+          }
+          #cont{
+            margin-top: -14px;
+          }
+    }

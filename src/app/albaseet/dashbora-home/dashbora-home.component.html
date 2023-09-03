@@ -1,0 +1,567 @@
+<div class="wrapper  " [dir]="'dir'|translate" >
+
+
+    <!-- Sidebar  -->
+    <nav id="sidebar" >
+      <div class="sidebar-header">
+        <h3>{{'dashboard'|translate}} </h3>
+      </div>
+      <ul class="list-unstyled components"  >
+        <li  >
+          <a href="#hospitalSubmenu" data-toggle="collapse"  class="dropdown-toggle ">
+
+            {{'opretions'|translate}}
+           
+          </a>
+          <ul class="collapse list-unstyled" id="hospitalSubmenu">
+            <li>
+              <a (click)="Checkcustomer()" id="customer" class="point"   >
+                <i  class="fa fa-user-circle fa-lg" ></i>{{'customer'|translate}}</a>
+            </li>
+            <li>
+              <a (click)="Checkproduct()" id="product" class="point">
+                <i class="fa fa-shopping-bag fa-lg" aria-hidden="true"></i>  {{'product'|translate}}</a>
+            </li>
+           
+            <li>
+              <a (click)="checkpeymont()" id="payment" class="point">
+                <i class="fa fa-university fa-lg" aria-hidden="true"></i>{{'payment_method'|translate}} </a>
+            </li>
+           
+  
+          </ul>
+        </li>
+  
+        <li class="active" [dir]="'dir'|translate">
+          <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+           {{'report '|translate}}
+</a>
+          <ul class="collapse list-unstyled" id="homeSubmenu">
+  
+            <li>
+              <a (click)="checkreport()" id="reportinvioce" class="point"> 
+                <i class="fa fa-file-text-o fa-lg" aria-hidden="true"></i> {{'report invioce'|translate}}</a>
+            </li>
+  
+            <li>
+              <a (click)="checkreciptreport()" id="reportrecipt" class="point">
+                <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i> {{'report recipts'|translate}}</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    
+    <!-- Page Content  -->
+    <div id="content">
+  
+      <nav class="navbar navbar-expand-lg navbar-light bg-light ">
+        <div class="container-fluid btn-res">
+          <button type="button" id="sidebarCollapse" class="btn btn-light"  >
+            <i class="fa fa-align-right"></i>
+          </button>
+          <div class="pl-2 pr-2 titel" style="display: inline-block;" *ngIf="!ischeckhome">
+            <button (click)="checkHome()" id="rmz"  style="border:none ;margin-right: 12px;" class="fa fa-arrow-right fa-2x mb-3 rounded-pill shadow-sm">
+            </button>
+          
+          </div>
+        </div>
+      </nav>
+  
+      <div class="container   main-panel">
+        <div *ngIf='isUserList'>
+  
+        </div>
+       
+        <div *ngIf='isCustomerList' class="hom2" >
+          <div class="alert alert-primary row" role="alert">
+            <!-- <button (click)="checkHome()" id="rmz"  style="border:none ;margin-right: 10px;" class="fa fa-arrow-left fa-2x mb-3 rounded-pill shadow-sm"></button> -->
+            <strong class="title">  {{'customer list'|translate}} </strong>
+         
+          <div>
+            <button type="button"  class="btn btn-success rights  shadow-sm " (click)="Addcustomers()" ><i class="fa fa-plus"></i> </button>
+          </div>
+         
+        </div>
+        </div>
+       
+        <div *ngIf='isproductslist' class="hom2">
+          <div class="alert alert-primary row" role="alert">
+            <!-- <button (click)="checkHome()" id="rmz"  style="border:none " class="fa fa-arrow-left fa-2x mb-3 rounded-pill shadow-sm"></button> -->
+            <strong class="titles">  {{'product list'|translate}}</strong>
+            <div>
+              <button type="button"  class="btn btn-success rights  shadow-sm " (click)="Addproductss()" > <i class="fa fa-plus"></i></button>
+            </div>
+          </div>
+          
+  
+        </div>
+        <div *ngIf='isinvicese' class="hom2">
+          <div class="alert alert-primary" role="alert">
+            <strong> الفواتير</strong>
+          </div>
+        </div>
+        <div *ngIf='isrecipte' class="hom2">
+          <div class="alert alert-primary" role="alert">
+            <strong>   {{'recipt list'|translate}}</strong>
+          </div>
+        </div>
+        <div *ngIf='isAllreport' class="hom2">
+         
+          <!-- <button (click)="checkHome()" id="rmz"  style="border:none ;margin-right: 12px;" class="fa fa-arrow-left fa-2x mb-3 rounded-pill shadow-sm">
+  </button> -->
+          <div >
+  
+            <app-main-invoicereport-en></app-main-invoicereport-en>
+          </div>
+  
+        </div>
+        <div *ngIf='isRecipt' class="hom2">
+         
+          <!-- <button (click)="checkHome()" id="rmz"  style="border:none;margin-right: 1px; " class="fa fa-arrow-left fa-2x mb-3 rounded-pill shadow-sm"></button> -->
+          <div>
+  
+            <app-main-recipterport-en></app-main-recipterport-en>
+  
+  
+          </div>
+  
+  
+        </div>
+  
+        <div *ngIf='ischarlist'>
+          <div class="alert alert-primary" role="alert">
+            <strong>قائمة التقارير</strong>
+  
+          </div>
+          <div>
+            <div>
+              <button type="button" class="btn btn-success mb-3 rounded-pill shadow-sm" (click)="checkreport()"> العوده
+                للقائمه</button>
+            </div>
+  
+          </div>
+          <div>
+        
+          </div>
+  
+        </div>
+        <div *ngIf='ischeckhome' class="hom" >
+          <div class="col-md-10 " >
+            
+            <div class="row " style="margin-top: 30px;">
+                <div class="col-xl-3 col-lg-6  padd"  (click)="checkproduct1()">
+                    <div class="card l-bg-cherry point">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large"><i style="margin-right:30px ;" class="fa fa-shopping-cart fa-5x"></i></div>
+                            <div class="mb-4">
+                                <h5 class="card-title mb-0"> {{'product number'|translate}} </h5>
+                            </div>
+                            <div class="row align-items-center mb-2 d-flex">
+                                <div class="col-12">
+                                    <h2 class="d-flex align-items-center mb-0">
+                                      {{num3}}
+                                    </h2>
+                                </div>
+                                <div class=" text-right">
+                                  
+                                </div>
+                            </div>
+                            <div class="progress mt-1 " data-height="8" style="height: 8px;">
+                                <div class="progress-bar l-bg-cyan" role="progressbar" data-width="25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 padd" (click)="checkcustomer()">
+                    <div class="card l-bg-blue-dark point">
+                        <div class="card-statistic-3 p-4" >
+                            <div class="card-icon card-icon-large"><i style="margin-right:30px ;" class="fa fa-users fa-5x"></i></div>
+                            <div class="mb-4">
+                                <h5 class="card-title mb-0"> {{'customer number'|translate}}</h5>
+                            </div>
+                            <div class="row align-items-center mb-2 d-flex">
+                                <div class="col-12">
+                                    <h2 class="d-flex align-items-center mb-0">
+                                      {{num1}}
+                                    </h2>
+                                </div>
+                                <div class=" text-right">
+                                    
+                                </div>
+                            </div>
+                            <div class="progress mt-1 " data-height="8" style="height: 8px;">
+                                <div class="progress-bar l-bg-green" role="progressbar" data-width="25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 padd" (click)="checkinvioce()">
+                    <div class="card l-bg-green-dark point">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large"><i style="margin-right:30px ;" class="fa fa-address-card  fa-5x"></i></div>
+                            <div class="mb-4">
+                                <h5 class="card-title mb-0">{{'invioce number'|translate}}  </h5>
+                            </div>
+                            <div class="row align-items-center mb-2 d-flex">
+                                <div class="col-12">
+                                    <h2 class="d-flex align-items-center mb-0">
+                                        {{num}}
+                                    </h2>
+                                </div>
+                                <div class=" text-right">
+                                
+                                </div>
+                            </div>
+                            <div class="progress mt-1 " data-height="8" style="height: 8px;">
+                              <span style="width:10px ;">{{price1}}SAR <i class="fa fa-arrow-left"></i></span>
+                                <div class="progress-bar l-bg-orange" role="progressbar" data-width="25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 padd" (click)="checkrecipt1()">
+                    <div class="card l-bg-orange-dark point">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large"><i style="margin-right:30px ;" class="fa fa-address-card fa-5x"></i></div>
+                            <div class="mb-4">
+                                <h5 class="card-title mb-0"> {{'recipt number'|translate}} </h5>
+                            </div>
+                            <div class="row align-items-center mb-2 d-flex">
+                                <div class="col-12">
+                                    <h2 class="d-flex align-items-center mb-0">
+                                     {{num2}}
+                                    </h2>
+                                </div>
+                                <div class=" text-right">
+                                   
+                                </div>
+                            </div>
+                            <div class="progress mt-1 " data-height="8" style="height: 8px;">
+                              <span>{{price2}} SAR<i class="fa fa-arrow-left"></i></span>
+                                <div class="progress-bar l-bg-cyan" role="progressbar" data-width="25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+  
+                <div class="col-xl-12 col-lg-12 padd" style="margin-top: 10px;" (click)="showdat()">
+                 
+                    <div class="card l-bg-orange-dark point ">
+                      <div class="card-statistic-3 p-4">
+                          <div class="card-icon card-icon-large"><i class="fa fa-dollar-sign"></i></div>
+                          <div class="mb-4">
+                              <h5 class="card-title mb-0"> {{'requist'|translate}} </h5>
+                          </div>
+                          <div class="row align-items-center mb-2 d-flex">
+                              <div class="col-8">
+                                  <h2 class="d-flex align-items-center mb-0">
+                                  
+                                  </h2>
+                                  <div class="col-4 text-right">
+                                    <p  *ngIf="showda" style="text-align:center ;margin-left: 40px;color: black;">سيتم التحديث قريبا </p>
+                                  </div>
+                              </div>
+                              
+                          </div>
+                          <div class="progress mt-1 " data-height="8" style="height: 8px;">
+                              <div class="progress-bar l-bg-cyan" role="progressbar" data-width="25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                          </div>
+                      </div>
+                  </div>
+             
+               
+              </div>
+            </div>
+        </div>
+        </div>
+        <div *ngIf='reportAll'>
+          <div class="alert alert-primary" role="alert">
+            <strong>قائمة التقارير</strong>
+          </div>
+          <button type="button" class="btn btn-success mb-3 rounded-pill shadow-sm" (click)="checkreport()"> العودة
+            للقائمة</button>
+          <div>
+            <app-report-all-invoice></app-report-all-invoice>
+          </div>
+  
+        </div>
+        <div *ngIf='reportdatelimet'>
+          <div class="alert alert-primary" role="alert">
+            <strong>قائمة التقارير</strong>
+          </div>
+          <button type="button" class="btn btn-success mb-3" (click)="checkreport()"> العودة للقائمة</button>
+          <div>
+            <app-report-invioce-date></app-report-invioce-date>
+          </div>
+  
+        </div>
+  
+        <div *ngIf='reportproduct'>
+          <div class="alert alert-primary" role="alert">
+            <strong> تقرير منتج معين </strong>
+          </div>
+          <button type="button" class="btn btn-success mb-3" (click)="checkreport()">  {{'list back'|translate}}</button>
+          <div>
+            <app-report-product></app-report-product>
+          </div>
+  
+        </div>
+        <div *ngIf='ischratlist'>
+          <div class="alert alert-primary" role="alert">
+            <strong>قائمة التقارير</strong>
+          </div>
+          <div>
+            <div>
+              <button type="button" class="btn btn-success mb-3 rounded-pill shadow-sm" (click)="checkreport()"> {{'list back'|translate}}</button>
+            </div>
+  
+          </div>
+          <div>
+            <app-charlist-invioce></app-charlist-invioce>
+          </div>
+  
+        </div>
+        <div *ngIf='reportdatcustomer'>
+          <div class="alert alert-primary" role="alert">
+            <strong>قائمة التقارير</strong>
+          </div>
+          <div>
+            <div>
+              <button type="button" class="btn btn-success mb-3 rounded-pill shadow-sm" (click)="checkreport()"> {{'list back'|translate}}
+                </button>
+            </div>
+  
+          </div>
+          <div>
+            <app-report-customer></app-report-customer>
+          </div>
+  
+        </div>
+        <div *ngIf='ispaymont' class="hom2">
+          <div class="alert alert-primary" role="alert">
+            <strong >   {{'pywmont_method list'|translate}} </strong>
+  
+  
+          </div>
+          <div>
+            <button type="button" class="btn btn-success mb-3 rounded-pill shadow-sm" (click)="Add_paymeont()"> <i class="fa fa-user-plus"></i></button>
+          </div>
+  
+          <app-list-paymont-method></app-list-paymont-method>
+        </div>
+  
+  
+  
+        <div *ngIf='ispaymontcredit'>
+          <div class="alert alert-primary" role="alert">
+            <strong style="margin-bottom:60 ;"> طرق الدفع الاجلة</strong>
+  
+  
+          </div>
+          <div>
+            <div>
+              <button type="button" class="btn btn-success mb-3 rounded-pill shadow-sm" (click)="checkreport()"> {{'list back'|translate}}</button>
+            </div>
+  
+          </div>
+          <!-- <button type="button" class="btn btn-primary mb-4" (click)="GoToListonvioce()">العودة للقائمة  </button> -->
+          <app-credit-sales-invoice></app-credit-sales-invoice>
+        </div>
+  
+        <div *ngIf='isTestviewdata'>
+          <div class="alert alert-primary" role="alert">
+            <strong style="margin-bottom:60 ;"> {{'home page'|translate}} </strong>
+  
+  
+          </div>
+          <div>
+  
+  
+          </div>
+          <!-- <button type="button" class="btn btn-primary mb-4" (click)="GoToListonvioce()">العودة للقائمة  </button> -->
+        
+        </div>
+        <div *ngIf='isrecipte'>
+  
+          <div>
+            <button type="button" class="btn btn-success mb-3 rounded-pill shadow-sm" (click)="checkreciptreport()"> {{'list back'|translate}}</button>
+          </div>
+          <div id="cotainer2">
+            <app-pymont></app-pymont>
+  
+          </div>
+        </div>
+  
+        <div *ngIf='ispaymontMehod' class="bt11">
+  
+  
+          <button type="button" class="btn center1 btn-primary mb-4 rounded-pill shadow-sm"
+            (click)="checkpeymont()"> {{'list back'|translate}} </button>
+  
+          <div class=" center2">
+            <app-add-pyment-method></app-add-pyment-method>
+          </div>
+        </div>
+       
+  
+        <div *ngIf='ispaymontinvice'>
+          <div class="alert alert-primary" role="alert">
+            <strong style="margin-bottom:60 ;"> طرق الدفع النقدية</strong>
+  
+          </div>
+          <div>
+            <button type="button" class="btn btn-success mb-3 rounded-pill shadow-sm" (click)="checkreport()"> {{'list back'|translate}}</button>
+          </div>
+  
+          <!-- <button type="button" class="btn btn-primary mb-4" (click)="GoToListonvioce()">العودة للقائمة  </button> -->
+          <app-paid-cash-invoice></app-paid-cash-invoice>
+        </div>
+  
+        <div *ngIf='isAdddepartment'>
+  
+        </div>
+        <div *ngIf='isAddUser'>
+  
+        </div>
+  
+        <div *ngIf='isaaddOreder'>
+          <app-addrequst></app-addrequst>
+        </div>
+        <div *ngIf='isproductslist'>
+          <div class="container1">
+            <app-view-product></app-view-product>
+          </div>
+       
+          
+        </div>
+  
+        <div *ngIf='islistproduct'>
+          <div class="container1">
+            <app-view-product1></app-view-product1>
+          </div>
+        
+          <div>
+            <nav aria-label="Page navigation example">
+              <ul class="pagination pg-blue">
+                <li class="page-item">
+                  <a class="page-link" aria-label="Previous" (click)="Checkproduct()">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+  
+  
+              </ul>
+            </nav>
+          </div>
+        </div>
+  
+  
+  
+  
+  
+  
+        <div *ngIf='isAddhospital'>
+          <app-add-products></app-add-products>
+        </div>
+  
+  
+        <div *ngIf="islistcustomer1">
+          <app-view-customer1></app-view-customer1>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination pg-blue">
+              <li class="page-item">
+                <a class="page-link" aria-label="Previous" (click)="Checkcustomer()">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span class="sr-only">Previous</span>
+                </a>
+              </li>
+  
+              <li class="page-item"><a class="page-link" (click)="showlist2customer()">2</a></li>
+              <li class="page-item"><a class="page-link">3</a></li>
+              <li class="page-item">
+                <a class="page-link" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+  
+        <div *ngIf="islistcustomer2">
+          <app-view-customer2></app-view-customer2>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination pg-blue">
+              <li class="page-item">
+                <a class="page-link" aria-label="Previous" (click)="Checkcustomer()">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span class="sr-only">Previous</span>
+                </a>
+              </li>
+  
+  
+              <li class="page-item"><a class="page-link" (click)="showlist3customer()">3</a></li>
+              <li class="page-item">
+                <a class="page-link" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+  
+        <div *ngIf="islistcustomer3">
+          <app-view-customer3></app-view-customer3>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination pg-blue">
+              <li class="page-item">
+                <a class="page-link" aria-label="Previous" (click)="Checkcustomer()">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span class="sr-only">Previous</span>
+                </a>
+              </li>
+  
+  
+              <li class="page-item"><a class="page-link" (click)="showlist3customer()">3</a></li>
+  
+            </ul>
+          </nav>
+        </div>
+        <div *ngIf='isInvice'>
+          <app-requst></app-requst>
+        </div>
+        <div *ngIf='isCustomerList'>
+          <div id="container">
+            <app-view-customer></app-view-customer>
+          </div>
+         
+        </div>
+        <div *ngIf='isAddcustomer'>
+          <app-add-customers></app-add-customers>
+        </div>
+        <div *ngIf='isDepartmentList'>
+          <div class="alert alert-primary" role="alert">
+            <strong>قائمة الاقسام</strong>
+          </div>
+          <div>
+            <button type="button" class="btn btn-success mb-3" (click)="Addinvice()">اضافة قسم</button>
+          </div>
+  
+        </div>
+  
+  
+  
+  
+  
+        <div *ngIf='isPatientList'>
+  
+        </div>
+        <div *ngIf='isAddPatient'>
+  
+        </div>
+      </div>
+    </div>
+  </div>

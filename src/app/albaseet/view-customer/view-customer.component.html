@@ -1,0 +1,181 @@
+<!-- <div style="direction: rtl;;">
+
+  <nav class="navbar input-group mb-3">
+   
+  </nav>
+  <div class="alert alert-success" role="alert" *ngIf="message">
+    <strong>{{message}}</strong>
+  </div>
+
+  <table style="width: 100%;" datatable  class="table  table-hover table-striped   mb-3  table-bordered">
+    <thead>
+      <tr class="bg-dark text-warning">
+        <th>
+          {{'customer name'|translate}}
+           </th>
+        <th> {{'invoice'| translate}}</th>
+        <th> {{'customer_country'| translate}}</th>
+        <th> {{'phone Number'|translate}}</th>
+        <th>  {{'National Number'|translate}}</th>
+        <th>  {{'opretions'|translate}}</th>
+        
+      </tr>
+    </thead>
+
+    <tbody>
+ 
+      <tr *ngFor="let item of customers">
+        <td scope="row">{{item.customer_aname}}</td>
+        <td>{{item.invoices_count }}</td>
+        <td scope="row">{{item.customer_country}}</td>
+        <td scope="row">{{item.customer_mobile}}</td>
+        <td>{{item.customer_taxid }}</td>
+        <td >
+       
+         <div class="disply"  >
+          <button  data-toggle="modal" data-target="#myModal"  class=" fa fa-pencil subscribe rounded-pill btn btn-primary btn-block rounded-pill shadow-sm mt-4"
+          (click)="Editcustomer(item.customer_id)"  class="btn btn-primary ">
+          <i class="fa fa-pencil" aria-hidden="true" id="edit" [ariaDisabled]="true"></i>
+          </button>
+
+          <button class="btn  btn-danger remove-record"    data-toggle="modal"   (click)="Customerdelete(item.customer_id)"  data-id="32">
+            <i class="fa fa-trash" id="delete"></i>
+          </button>
+        <a data-toggle="modal" data-target="#myModal"  class="subscribe rounded-pill btn btn-primary btn-block rounded-pill shadow-sm mt-4"
+            (click)="Editcustomer(item.customer_id)"  class="btn btn-primary ">
+         <i class="fa fa-pencil" aria-hidden="true" id="edit" [ariaDisabled]="true"></i>
+           
+                      </a> -->
+                      <!-- <a class="btn  btn-danger remove-record"    data-toggle="modal"   (click)="Customerdelete(item.customer_id)"  data-id="32">
+                             <i class="fa fa-trash" id="delete"></i>
+                         
+                   </a> -->
+ 
+         <!-- </div>
+           
+                    
+          </td>
+        
+      </tr>
+    </tbody>
+  </table>
+  <div> -->
+
+  <!-- </div> -->
+  <!-- <div style="margin-top: 20px;">
+      <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#modelId"  (click)="DeleteCount()" [disabled]="!IsDelete()">
+        حــذف
+      </button>
+    </div> -->
+<!-- </div> --> 
+
+<!-- Modal -->
+<!-- <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">تنبيه حذف</h5>
+      </div>
+      <div class="modal-body">
+        هل تريد حذف  فعلا؟؟ -->
+      <!-- </div>
+      <div class="modal-footer">
+        <button id="btnClose" type="button" class="btn btn-secondary" data-dismiss="modal">تراجع</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="DeleteConfirm()">تأكيد الحذف</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+<!-- <div *ngIf="customers.length<1">
+  <div class="alert alert-primary d-flex justify-content-center">
+    <strong  >  {{'loading'|translate}...</strong>
+ <button class="btn" (click)="getInvice()">تحديث القائمة</button> -->
+  <!-- </div>
+
+</div> -->
+<!-- <div *ngIf="customers.length>1&&!isactive"> -->
+  <!-- <pagination-controls (pageChange)="p = $event"></pagination-controls> -->
+
+<!-- </div> --> 
+
+
+
+
+
+<div class="card-header" style="text-align: right;">
+  <button type="button" class="btn btn-success mb-3 rounded-pill shadow-sm" (click)="addcustomer()">
+    +</button>
+
+</div>
+<div *ngIf="!showloading" style="text-align: center;margin-top: 50px;">
+<p  class="spinner-grow"></p>
+</div>
+<div *ngIf="showloading">
+  <dx-data-grid 
+  [dataSource]="dataSource"
+  keyExpr="customer_id"
+  (onFocusedRowChanged)="getRowData($event)"
+  [showBorders]="true"
+  [focusedRowEnabled]="true"
+  id="gridContainer"
+  [columnAutoWidth]="true"
+  (onExporting)="onExporting($event)"
+  [showColumnLines]="true"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true"
+  [rtlEnabled]="rtlEnabled"
+  
+  >
+  
+  <dxo-toolbar class="grid-buttons">
+    <dxi-item location="before" >
+      <div *dxTemplate>
+      
+        <dx-button icon="refresh" (onClick)="refreshDataGrid()" hint="{{'dxDataGrid.refreshButton' | translate}}"></dx-button>
+        <dx-button icon="chevronup" (onClick)="zoomIn()" hint="{{'dxDataGrid.zoomIn' | translate}}"></dx-button>
+        <dx-button icon="chevrondown" (onClick)="zoomOut()" hint="{{'dxDataGrid.zoomOut' | translate}}"></dx-button>
+      </div>
+    </dxi-item>
+    <dxi-item name="exportButton"></dxi-item>
+    <dxi-item name="columnChooserButton"></dxi-item>
+    <dxi-item name="groupPanel"></dxi-item>
+  </dxo-toolbar>
+  <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+  
+  
+    <dxo-header-filter [visible]="true"> </dxo-header-filter>
+    <dxo-filter-panel [visible]="true"> </dxo-filter-panel>
+    <dxo-export [enabled]="true" [formats]="['pdf']" [allowExportSelectedData]="false"
+      fileName="purches"></dxo-export>
+    <dxo-filter-row [visible]="true"> </dxo-filter-row>
+
+   
+  
+    <dxi-column dataField="customer_aname" [caption]="formatMessage('customer_aname')" dataType="string"> </dxi-column>
+    <dxi-column dataField="customer_country"   [caption]="formatMessage('customer_country')" dataType="string"> </dxi-column>
+    <dxi-column dataField="customer_mobile"  [caption]="formatMessage('customer_mobile')" dataType="number"> </dxi-column>
+    <dxi-column dataField="customer_taxid"   [caption]="formatMessage('customer_taxid')"  dataType="number"> </dxi-column>
+    <dxi-column dataField="balance"   [caption]="formatMessage('balance')"  dataType="number"> </dxi-column>
+  
+    <dxi-column type="buttons">
+      <dxi-button  hint="edit" icon="edit"           [onClick]="Editcustomer" ></dxi-button>
+      <dxi-button   hint="delete"  icon="trash"      [onClick]="Customerdelete" ></dxi-button>
+  
+    </dxi-column>
+    <dxo-column-chooser #columnChooser [enabled]="true" mode="select">
+      <dxo-search [enabled]="true" [editorOptions]="true"  ></dxo-search>
+      <dxo-selection [allowSelectAll]="true" [selectByClick]="true" [recursive]="true"></dxo-selection>
+  
+    </dxo-column-chooser>
+  
+    <dxo-paging [pageSize]="10"> </dxo-paging>
+  
+    <!-- <dxo-export [enabled]="true" [formats]="['pdf','xlsx']" [allowExportSelectedData]="false" fileName="countries" *ngIf="exportCountry"></dxo-export> -->
+    <dxo-pager [visible]="true" [allowedPageSizes]="allowedPageSizes" [displayMode]="displayMode"
+      [showPageSizeSelector]="showPageSizeSelector" [showInfo]="showInfo" [showNavigationButtons]="showNavButtons">
+    </dxo-pager>
+  </dx-data-grid>
+</div>
+
+
+ 
