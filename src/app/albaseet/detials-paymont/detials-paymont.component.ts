@@ -64,7 +64,7 @@ this.title = 'اضافة صنف جديد';
 this.btnTitle = 'اضافة';
     this.title=''
     this.num = 0;
-    this.getpost();
+   
     this.products = [];
     this.message = '';
   this.post1=[];
@@ -115,13 +115,7 @@ this.btnTitle = 'اضافة';
     }
 
   }
-  getpost(){
-    this.service.Getpost().subscribe((list) => {
-      this.post1 = list;
-    }, ex => {
-      console.log(ex);
-    });
-  }
+
   
   IsDelete() {
     var checkboxes = document.getElementsByClassName('ckitem');
@@ -156,12 +150,7 @@ this.btnTitle = 'اضافة';
             ids.push(id);
          }
       }
-      this.service.Deletepost(ids).subscribe(x => {
       
- console.log("تمت عمليه الحذف بنجاح");
-
-        $("#btnClose").trigger("click");
-      }, ex => console.log(ex));
     }
 
   }

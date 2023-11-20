@@ -1,0 +1,60 @@
+
+<div class="cards" >
+<mat-toolbar style="text-align: right;"  color="primary" >{{'Active Clients'|translate}}</mat-toolbar>
+  </div>
+  
+
+    <dx-data-grid 
+    [dataSource]="dataSource" keyExpr="customer_id" 
+    [showBorders]="true" [allowColumnResizing]="true" id="gridContainerid"
+    [columnAutoWidth]="true" (onExporting)="onExporting($event)" [showColumnLines]="true" [showRowLines]="true"
+    [rowAlternationEnabled]="true" [rtlEnabled]="rtlEnabled"
+    >
+    
+    <dxo-toolbar class="grid-buttons">
+      <dxi-item location="before" >
+        <div *dxTemplate>
+        
+          <dx-button icon="refresh" (onClick)="refreshDataGrid()" hint="{{'refreshButton' | translate}}"></dx-button>
+          <dx-button icon="chevronup" (onClick)="zoomIn()" hint="{{'zoomIn' | translate}}"></dx-button>
+          <dx-button icon="chevrondown" (onClick)="zoomOut()" hint="{{'zoomOut' | translate}}"></dx-button>
+        </div>
+      </dxi-item>
+      <dxi-item name="exportButton"></dxi-item>
+      <dxi-item name="columnChooserButton"></dxi-item>
+      <dxi-item name="groupPanel"></dxi-item>
+    </dxo-toolbar>
+
+    <dxi-column dataField="customer_aname" [caption]="formatMessage('customer_aname')" dataType="string"> </dxi-column>
+    <dxi-column dataField="invoices_count"   [caption]="formatMessage('invoices_count')"  dataType="number"> </dxi-column>
+    <dxi-column dataField="balance"  [caption]="formatMessage('balance')" dataType="number"> </dxi-column> 
+
+    
+    
+    <dxo-column-chooser  #columnChooser [enabled]="true" mode="select" >
+      <dxo-search [enabled]="true" [editorOptions]="true"></dxo-search>
+      <dxo-selection [allowSelectAll]="true" [selectByClick]="true" [recursive]="true"></dxo-selection>
+    </dxo-column-chooser>
+    
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+
+    <dxo-selection mode="single"></dxo-selection>
+    <dxo-scrolling rowRenderingMode="virtual"> </dxo-scrolling>
+      <dxo-paging [pageSize]="10"> </dxo-paging>
+      <dxo-pager
+        [visible]="true"
+        [allowedPageSizes]="[10, 50, 100, 'all']"
+        [displayMode]="'full'"
+        [showPageSizeSelector]="true"
+        [showInfo]="true"
+        [showNavigationButtons]="true"
+      >
+      </dxo-pager>
+      <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+      <dxo-export [enabled]="true" [formats]="['pdf','xlsx']" [allowExportSelectedData]="false" fileName="countries" ></dxo-export>
+      <dxo-sorting mode="multiple"></dxo-sorting>
+    </dx-data-grid>
+  
+  
+  

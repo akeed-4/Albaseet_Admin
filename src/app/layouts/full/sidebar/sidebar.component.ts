@@ -21,6 +21,7 @@ export class AppSidebarComponent implements OnDestroy {
   currentLanguage: string;
   menuName: string;
   name: any;
+  styleTexts: string;
 
   constructor(
     changeDetectorRef: ChangeDetectorRef,
@@ -36,37 +37,21 @@ export class AppSidebarComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
+
   }
   ngOnInit(){
     this.changeStyleMarginBody()
-   
+    this.styleTexts = this.currentLanguage == 'ar' ? 'text-align: right;' : 'text-align: left;';
   }
-  logout(){
-    
-    const email = localStorage.getItem('email');
-    console.log(email)
-    if (email != null) {
-      this.service.LogoutUsers().subscribe(
-        succ => {
-
-          this.route.navigate(['login']);
-          localStorage.removeItem("email");
-          localStorage.removeItem("showroomName");
-        },
-        err => console.log(err)
-      );
-    }
-    else {
-      alert("well come")
-      this.route.navigate(['dashboard']);
-    }
+  
+  stye(){
+    this.styleTexts = this.currentLanguage == 'ar' ? 'text-align: right;' : 'text-align: left;';
   }
-
   changeStyleMarginBody(){
     const htmlTag = this.document.getElementById('menu');
     htmlTag.dir = this.currentLanguage === 'ar' ? 'rtl' : 'ltr';
     this.menuName = this.currentLanguage == 'en' ? "menuNameEn" : "menuNameAr";
-
   
   }
+
 }

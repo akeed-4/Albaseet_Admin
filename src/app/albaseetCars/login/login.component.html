@@ -1,96 +1,6 @@
-<!-- <div> -->
-<!-- <a [routerLink]="['/register']">Go to Register</a> -->
-<!-- <mat-card>
-      <mat-card-title>Login</mat-card-title>
-      <mat-card-content>
-        <form [formGroup]="loginForm" (ngSubmit)="submit()">
-  
-          <mat-form-field>
-            <input type="email" matInput placeholder="Email" formControlName="email">
-            <!-- Here we can display error messages/hints for the user, if one of the Validators adds an error to the email 
-             with the .touched check we only display the hints if the input was touched by the users -->
-<!-- <mat-error *ngIf="this.loginForm.get('email')?.touched && this.loginForm.get('email')?.hasError('required')">
-              Email is required</mat-error>
-            <mat-error *ngIf="this.loginForm.get('email')?.touched && this.loginForm.get('email')?.hasError('email')">
-              Email must be a valid Email</mat-error>
-          </mat-form-field>
-   -->
-<!-- <mat-form-field>
-            <input type="password" matInput placeholder="Password" formControlName="password">
-            <mat-error
-              *ngIf="this.loginForm.get('password')?.touched && this.loginForm.get('password')?.hasError('required')"> -->
-<!-- Password is required</mat-error>
-          </mat-form-field>
-  
-          <div class="button">
-           Button is disabled(not clickable), if our LoginForm contains Validation Errors -->
-<!-- <button type="submit" mat-button [disabled]="!loginForm.valid">Login</button>
-          </div>
-  
-        </form>
-      </mat-card-content>
-    </mat-card> -->
-<!-- </div> -->
 
 
-
-
-
-
-<!-- <div class="wrapper"> -->
-  <!-- <button type="button" style="background-color: aquamarine;" (click)="regist()">انشاء  حساب</button> -->
-  <!-- <form class="login" [formGroup]="loginForm" (ngSubmit)="submit1()">
-
-    <div>
-      <p class="title" style="text-align: center;">   {{'Log in'|translate}} </p>
-      <label for=""> {{'User_name'|translate}} </label>
-      <input type="text" placeholder="user_name" formControlName="user_name" [ngClass]="{
-      'is-invalid':
-        this.loginForm.get('user_name').invalid &&
-        this.loginForm.get('user_name').touched
-    }" />
-      <i class="fa fa-user"></i>
-      <div class="text-danger"
-        *ngIf="this.loginForm.get('user_name')?.invalid && this.loginForm.get('user_name')?.touched">
-        <div class="text-danger" *ngIf="this.loginForm.get('user_name')?.errors">
-          {{'User_name is required'|translate}}
-        </div>
-      </div>
-    </div>
-    <div>
-      <label for=""> {{'password'|translate}}</label>
-      <input type="password" placeholder="Password" formControlName="password" [ngClass]="{
-    'is-invalid':
-      this.loginForm.get('password').invalid &&
-      this.loginForm.get('password').touched
-                              }" />
-      <i class="fa fa-key"></i>
-      <div class="text-danger" *ngIf="
-  this.loginForm.get('password').invalid &&
-  this.loginForm.get('password').touched
-                              ">
-        <div *ngIf="this.loginForm.get('password')?.errors">
-          {{'Password required'|translate}}
-        </div>
-
-      </div>
-
-    </div>
-
-    <input type="submit" style="text-align: center;color: black;" value="دخول">
-
-
-    <div *ngIf="isloading" style="text-align: center;">
-      <div class="spinner-grow text-muted"></div>
-    </div>
-  </form> -->
-  <!-- <ngx-loading [show]="isloading" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading> -->
-
-
-
-
-  <body>
-    <div class="container h-100">
+    <!-- <div class="container h-100">
       <div class="d-flex justify-content-center h-100">
         <div class="user_card">
           <div class="d-flex justify-content-center">
@@ -126,7 +36,9 @@
                   'is-invalid':
                     this.loginForm.get('password').invalid &&
                     this.loginForm.get('password').touched
-                                            }">
+                                            }" 
+                                            >
+                                            
                                             <div class="text-danger" *ngIf="
                                             this.loginForm.get('password').invalid &&
                                             this.loginForm.get('password').touched
@@ -140,10 +52,10 @@
             
                 <div class="d-flex justify-content-center mt-3 login_container">
              <input type="submit" name="button" class="btn login_btn" value="{{'login'|translate}}">
-             </div>
-             <div *ngIf="isloading" style="text-align: center;">
-              <div class="spinner-grow text-muted"></div>
+             
             </div>
+              <mat-progress-bar mode="indeterminate"*ngIf="isloading" style="margin-top: 40px;"></mat-progress-bar>
+          
             </form>
           </div>
       
@@ -153,7 +65,59 @@
           </div>
         </div>
       </div>
-    </div>
-  </body>
+    </div> -->
 
+
+
+
+
+
+  <mat-card style="margin-top: 10%;">
+    <mat-card-content>
+      <div class="header">
+        <div class="brand_logo_container">
+          <img src="/assets/images/logo.png" class="brand_logo" width="100px" height="100px" alt="Logo">
+        </div>
+      </div>
+      <form (ngSubmit)="submit1()" name="loginForm" [formGroup]="loginForm">
+        <div class="emailInput">
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>user_name</mat-label>
+            <input
+              formControlName="user_name"
+              matInput
+              placeholder="Enter user_name " required
+              [ngClass]="{
+                'is-invalid':
+                  this.loginForm.get('user_name').invalid &&
+                  this.loginForm.get('user_name').touched
+              }" />
+            <mat-error *ngIf="!loginForm.controls['user_name'].valid">
+              {{'User_name is required'|translate}}
+              </mat-error>
+          </mat-form-field>
+        </div>
   
+        <div>
+          
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Password</mat-label>
+            <input [type]="hide ? 'password':'text'"  formControlName="password" matInput  autocomplete="off" 
+            />
+            <button  mat-icon-button   matSuffix  (click)="hide = !hide" [attr.aria-label]="'Hide Password'"
+            [attr.aria-pressed]="hide">
+            <mat-icon>
+                {{hide ? 'visibility_off' : 'visibility'}}
+            </mat-icon>
+        </button>
+        <mat-error *ngIf="!loginForm.controls['password'].valid">
+          {{'Password required'|translate}}
+          </mat-error>
+        </mat-form-field>
+        </div>
+        <button mat-flat-button color="primary">{{'login'|translate}}</button>
+      </form>
+  
+      <mat-progress-bar mode="indeterminate"*ngIf="isloading" style="margin-top: 40px;"></mat-progress-bar>
+    </mat-card-content>
+  </mat-card>

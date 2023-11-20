@@ -1,13 +1,15 @@
-<div class="card-header" style="text-align: right;">
+<div class="cards" style="text-align: right;">
+
+  <mat-toolbar style="margin-top: 5%;" color="primary">{{'recipt list'|translate}}</mat-toolbar>
+
 </div >
-<div *ngIf="!showloading" style="text-align: center;margin-top: 50px;">
-  <p  class="spinner-grow"></p>
-  </div>
-<div  *ngIf="showloading">
+
+
   <dx-data-grid 
   [dataSource]="AllRecipte"
   keyExpr="receipt_no"
   [focusedRowEnabled]="true"
+  [allowColumnResizing]="true"
   id="gridContainer"
   [columnAutoWidth]="true"
   (onExporting)="onExporting($event)"
@@ -21,53 +23,48 @@
     <dxi-item location="before" >
       <div *dxTemplate>
       
-        <dx-button icon="refresh" (onClick)="refreshDataGrid()" hint="{{'dxDataGrid.refreshButton' | translate}}"></dx-button>
-        <dx-button icon="chevronup" (onClick)="zoomIn()" hint="{{'dxDataGrid.zoomIn' | translate}}"></dx-button>
-        <dx-button icon="chevrondown" (onClick)="zoomOut()" hint="{{'dxDataGrid.zoomOut' | translate}}"></dx-button>
+        <dx-button icon="refresh" (onClick)="refreshDataGrid()" hint="{{'refreshButton' | translate}}"></dx-button>
+        <dx-button icon="chevronup" (onClick)="zoomIn()" hint="{{'zoomIn' | translate}}"></dx-button>
+        <dx-button icon="chevrondown" (onClick)="zoomOut()" hint="{{'zoomOut' | translate}}"></dx-button>
       </div>
     </dxi-item>
     <dxi-item name="exportButton"></dxi-item>
     <dxi-item name="columnChooserButton"></dxi-item>
     <dxi-item name="groupPanel"></dxi-item>
   </dxo-toolbar>
-  <dxo-search-panel [visible]="true"></dxo-search-panel>
-    <dxo-header-filter [visible]="true"> </dxo-header-filter>
-    <dxo-filter-panel [visible]="true"> </dxo-filter-panel>
-    <dxo-export [enabled]="true" [formats]="['pdf']" [allowExportSelectedData]="false"
-      fileName="reciept"></dxo-export>
-    <dxo-filter-row [visible]="true"> </dxo-filter-row>
-    <dxi-column dataField="receipt_no" [caption]="formatMessage('receipt_no')" dataType="number"> </dxi-column>
-    <dxi-column dataField="customer.customer_aname" [caption]="formatMessage('customer_aname')"  dataType="string"> </dxi-column>
-    <dxi-column dataField="customer.customer_address" [caption]="formatMessage('customer_address')" dataType="string"> </dxi-column>
-    <dxi-column dataType="date"    [caption]="formatMessage('receipt_date')"  dataField="receipt_date" > </dxi-column>
-    <dxi-column dataField="receipt_amount" [caption]="formatMessage('receipt_amount')" dataType="number"></dxi-column>
-   
-    <!-- <dxi-column
-    dataField="receipt_acceptance"
-    [caption]="formatMessage('receipt_acceptance')"
-    cellTemplate="cellTemplate"
-    position="relative"
-  >
-  <div *dxTemplate="let data of 'cellTemplate'">
-    <div *ngIf="data.value==1"> {{'Upproved'|translate}}</div>
-    <div *ngIf="data.value!=1"> {{'UnUpproved'|translate}}</div>
-  </div>
-   </dxi-column> -->
-    <dxo-column-chooser #columnChooser [enabled]="true" mode="select">
-      <dxo-search [enabled]="true" [editorOptions]="true"></dxo-search>
-      <dxo-selection [allowSelectAll]="true" [selectByClick]="true" [recursive]="true"></dxo-selection>
-  
-    </dxo-column-chooser>
-  
+
+
+  <dxi-column dataField="receipt_no" [caption]="formatMessage('receipt_no')" dataType="number"> </dxi-column>
+  <dxi-column dataField="customer.customer_aname" [caption]="formatMessage('customer_aname')"  dataType="string"> </dxi-column>
+  <dxi-column dataType="date"    [caption]="formatMessage('receipt_date')"  dataField="receipt_date" > </dxi-column>
+  <dxi-column dataField="receipt_amount" [caption]="formatMessage('receipt_amount')" dataType="number"></dxi-column>
+  <dxi-column dataField="receipt_state" [caption]="formatMessage('receipt_state')" dataType="string"></dxi-column>
+  <dxi-column dataField="localUser.user_name" [caption]="formatMessage('user_name')"  dataType="string"> </dxi-column>
+
+  <dxo-column-chooser  #columnChooser [enabled]="true" mode="select" >
+    <dxo-search [enabled]="true" [editorOptions]="true"></dxo-search>
+    <dxo-selection [allowSelectAll]="true" [selectByClick]="true" [recursive]="true"></dxo-selection>
+  </dxo-column-chooser>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+  <dxo-selection mode="single"></dxo-selection>
+  <dxo-scrolling rowRenderingMode="virtual"> </dxo-scrolling>
     <dxo-paging [pageSize]="10"> </dxo-paging>
-   
-  
-    <!-- <dxo-export [enabled]="true" [formats]="['pdf','xlsx']" [allowExportSelectedData]="false" fileName="countries" *ngIf="exportCountry"></dxo-export> -->
-    <dxo-pager [visible]="true"[allowedPageSizes]="allowedPageSizes" [displayMode]="displayMode"
-      [showPageSizeSelector]="showPageSizeSelector" [showInfo]="showInfo" [showNavigationButtons]="showNavButtons">
+    <dxo-pager
+      [visible]="true"
+      [allowedPageSizes]="[10, 50, 100, 'all']"
+      [displayMode]="'full'"
+      [showPageSizeSelector]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+    >
     </dxo-pager>
+    <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+    <dxo-export [enabled]="true" [formats]="['pdf','xlsx']" [allowExportSelectedData]="false" fileName="countries" ></dxo-export>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+
   </dx-data-grid>
-</div>
+
  
   
    

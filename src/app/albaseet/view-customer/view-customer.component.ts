@@ -22,9 +22,9 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import { CurrentSettingService } from 'src/app/services/current-setting.service';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import DevExpress from 'devextreme';
-
-
-
+import { SignalRService } from 'src/app/services/serviceSignalr';
+import { ExportExcelService } from 'src/app/services/export-excel.service';
+import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-view-customer',
@@ -52,18 +52,17 @@ export class ViewCustomerComponent {
   pagination = true;
   dataSource: any;
   loadingVisible: any
-
-
-
+  signalRMessageDataContinuos: any;
   private baseUrl = "http://app.eofficewebapp.com/";
   currentClickedId: any;
   showloading: any;
-
-  constructor(
+  message: any;
+  routePath = 'procedureshub';
+  constructor(     private exportExcelService : ExportExcelService,
     private service: MyservcesService, private translateService: TranslateService, private languageService: LanguageService, private exportPdfService: ExportPdfService,
     private router: Router, private listCustomer: ListCusomerService, private currentSettingService: CurrentSettingService,
-    private activeRoute: ActivatedRoute, private auth: AuthoService
-  ) {
+    private activeRoute: ActivatedRoute, private auth: AuthoService,private signalRService:SignalRService
+   ,private spinnerService:NgxSpinnerService ) {
     loadMessages(this.listCustomer.getListCustomerDictionary());
     this.Editcustomer = this.Editcustomer.bind(this)
     this.Customerdelete = this.Customerdelete.bind(this)
@@ -72,13 +71,21 @@ export class ViewCustomerComponent {
   }
 
   ngOnInit() {
-
+     this.spinnerService.show();
+   
+    setTimeout(() => {
+      /** spinner ends after 5 seconds */
+      this.spinnerService.hide();
+    }, 4000);
   this.showloading=false
     this.loadingVisible = false
     this.currentClickedId = 1
    
   }
-
+  connect = () => {
+    this.signalRService.startRoutedSignalRConnection(this.routePath);
+  }
+  
   filterData($event: any) {
     this.dataSource.filter = $event.target.value;
   }
@@ -91,21 +98,33 @@ export class ViewCustomerComponent {
   onHidden() {
     this.dataSource = this.dataSource;
   }
-
+ 
   showLoadPanel() {
     this.dataSource = {};
     this.loadingVisible = true;
   }
   Customerdelete(e: any) {
-    if (Number(e)) {
-      this.router.navigate(['DeleteCustomer', e.row.data.customer_id]);
-    } else {
+    if(confirm("هل ترغب بعملية حذف  هذا العميل ")) {
       var id = e.row.data.customer_id;
       e.event.preventDefault();
+      this.service.DeletAllcustomer(id).subscribe((s: any) => {
+        this.message = s.message.ar;
 
-      this.router.navigate(['DeleteCustomer', id]);
+        this.LoadCustomers();
+     
+        Swal.fire({
+          toast: true, position: 'center',
+          showConfirmButton: false, timer: 2000, title: 'Success!', text: 'تمت عملية الحذف بنجاح',
+          icon: 'success',
+        });
+      },
+       (ex: any) => Swal.fire({
+        toast: true, position: 'center',
+        showConfirmButton: false, timer: 2000, title: 'Success!', text: ex,
+        icon: 'success',
+      }));
     }
-
+   
   }
   delet(e: any) {
     var invioce = 0;
@@ -118,28 +137,26 @@ export class ViewCustomerComponent {
     }
   }
   addcustomer() {
+    
     this.router.navigate(['Addcustomer']);
     // this.router.navigate(['Dashborad']);
   }
-  grid:any
   LoadCustomers() {
  
     this.dataGrid?.instance.beginCustomLoading("loading");
   this.service.GetAllcustmers().subscribe(async (res: any) => {
   
       this.dataSource =await res.data;
-      console.log(this.dataSource)
+     
       if(   this.dataSource ){
         this.showloading=true
       }
       this.dataGrid?.instance.endCustomLoading();
-    
-
     });
   }
   onExporting(e) {
     if (e.format == 'xlsx') {
-      // this.exportPdfService.exportPdfDataGrid(e, 'purches', false);
+      this.exportExcelService.exportExcelDataGrid(e,'customer','customer');
     }
     if (e.format == 'pdf') {
       this.exportPdfService.exportPdfDataGrid(e, 'Customer list', false);

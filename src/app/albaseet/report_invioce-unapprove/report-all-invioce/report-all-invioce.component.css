@@ -27,3 +27,19 @@
     margin-top: -24px;
   }
 }
+
+.cards{
+   margin-bottom: 10px;
+    }
+
+    mat-toolbar{
+        font-family: 'droidKufi-bold', sans-serif;
+      }
+      div{
+        .ngx-spinner img {
+            width: 100px;
+            height: 100px;
+          }
+      }
+      
+      

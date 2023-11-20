@@ -147,3 +147,6 @@
         *.dt-button.buttons-columnVisibility.ui-state-active:hover .before {
         background-position: 16px 0px;
         }
+        mat-toolbar{
+            font-family: 'droidKufi-bold', sans-serif;
+          }

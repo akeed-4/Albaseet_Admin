@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./product-delete.component.css']
 })
 export class ProductDeleteComponent {
+  page: any;
 
   constructor(
     private fb: FormBuilder,
@@ -57,6 +58,7 @@ export class ProductDeleteComponent {
   price: number;
   customer_ename: string
   ngOnInit(): void {
+    this.page=1
     this.product_aname = '',
       this.product_ename = '',
       this.price = 0
@@ -100,7 +102,8 @@ export class ProductDeleteComponent {
       const id = String(param.get('id'));
       console.log(id);
       if (id) {
-        this.service.GetAllproduct().subscribe((customer: any) => {
+        this.service.GetAllproduct(this.page).subscribe((customer: any) => {
+          this.page++;
           this.storedata = customer.data;
           this.product = this.storedata.filter((x: any) => x.product_id === id)
           console.log(this.product);
@@ -169,7 +172,8 @@ export class ProductDeleteComponent {
 
   GetAllproducts() {
 
-    this.service.GetAllproduct().subscribe((list: any) => {
+    this.service.GetAllproduct(this.page).subscribe((list: any) => {
+      this.page++
       this.product = list.data;
       console.log(this.product)
     }, ex => console.log(ex));
@@ -209,14 +213,10 @@ export class ProductDeleteComponent {
       this.message = _x.message.ar
       this.isloading=false
 
-      this.service.GetAllproduct().subscribe((list: any) => {
+      this.service.GetAllproduct(this.page).subscribe((list: any) => {
+        this.page++
         this.products = list.data;
         
-      
-    
-  
-     
-         
       }, ex => {
         console.log(ex.error);
       });

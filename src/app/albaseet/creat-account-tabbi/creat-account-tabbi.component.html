@@ -21,7 +21,7 @@
         </li>
       </ul>
       <div class="tab-content" id="myTabContent">
-        <form [formGroup]="userForm" (ngSubmit)="register()">
+        <form (ngSubmit)="register()">
           <div class="tab-pane fade show  active   " *ngIf="this.showReUser" id="home1" role="tabpanel"
             aria-labelledby="home-tab">
             <br>
@@ -40,11 +40,7 @@
 
                 <div class="form-group" >
                   <input type="password" class="form-control" required  formControlName="password"
-                    placeholder="كلمة المرور " value="" [ngClass]="{
-                                              'is-invalid':
-                                                this.userForm.get('password').invalid &&
-                                                this.userForm.get('password').touched
-                                            }" />
+                    placeholder="كلمة المرور " value=""  />
                   <div class="text-danger" *ngIf="
                                               this.userForm.get('password').invalid &&
                                               this.userForm.get('password').touched

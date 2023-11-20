@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
@@ -6,6 +6,20 @@ import { MyservcesService } from 'src/app/myservces.service';
 import { approveinvice } from '../../models/approveinvice';
 import { recipte } from '../../models/recipte';
 import { reportinv } from '../../models/report';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { TranslateService } from '@ngx-translate/core';
+import { DxDataGridComponent } from 'devextreme-angular';
+import { formatMessage, loadMessages } from 'devextreme/localization';
+import { AuthoService } from 'src/app/autho.service';
+import { CurrentSettingService } from 'src/app/services/current-setting.service';
+import { ExportPdfService } from 'src/app/services/export-pdf.service';
+import { ListCusomerService } from 'src/app/services/list-cusomer.service';
+import { keyboadShortCut } from '../../models/staticData.model';
+import { LanguageService } from '../../myservice/language.service';
+import { DatePipe } from '@angular/common';
+import { ExportExcelService } from 'src/app/services/export-excel.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-report-dailly',
@@ -13,139 +27,206 @@ import { reportinv } from '../../models/report';
   styleUrls: ['./report-dailly.component.css']
 })
 export class ReportDaillyComponent {
+  displayedColumns = ['CustmerName', 'invioces', 'country', 'phone_Number', 'Tax', 'opretions'];
+  productForm:FormGroup
+  placeholder = 'Search...';
+  @ViewChild('paginator') paginator!: MatPaginator;
+  @ViewChild(MatSort) matSort!: MatSort;
+  readonly allowedPageSizes = [5, 10,100, 'all'];
+  public showPageSizeSelector = true;
+  public showInfo = true;
+  public showNavButtons = true;
+  @ViewChild(DxDataGridComponent, { static: false })dataGrid: DxDataGridComponent;
+  havepdf: any
+  displayMode = 'full';
+  fontSize = this.currentSettingService.getUserGridFontSize();
+  email: string;
+  loadIndicatorVisible = false;
+  rtlEnabled = this.languageService.getCurrentLanguage() == 'en' ? false : true;
+  formatMessage = formatMessage;
+  pagination = true;
+  dataSource: any;
+  loadingVisible: any
 
-  start: any;
-  end: any;
-  count: any;
-  count1: any;
 
-  constructor(
-    private router: Router,
-    private servicess: MyservcesService,
-    private activeRoute: ActivatedRoute,private fb: FormBuilder
 
-  ) { }
-  report: reportinv;
-  selectedMember:any[]
-  productForm: FormGroup
-  selectedMembers:any[]
-  aprove: approveinvice;
-  storedata:any
-  temp:any[]
-  recipte: recipte [];
-  labledata:any[]
-  //doctor: AddDoctorModel;
-  num: number;
-  message: string;
-  selectdata:any[]
-  ngOnInit(): void {
-    const currentDate = new Date().toISOString().substring(0, 10);
-    this.count=0
-    this.count1=0
-    this.selectdata=[]
-    this.selectedMember=[]
-    this.temp=[]
-    this.labledata=[]
-    this.start = new Date()
-    this.end = new Date()
-    this.storedata=[]
-    this.report = {
-      enddate: new Date(),
-      startdate: new Date()
+  
+  currentClickedId: any;
+  showloading: any;
+  stores: any[];
+  storess: any;
+  dataSources: any;
+  storeuserid: any;
 
-    }
+  constructor(    private fb: FormBuilder,private spinnerService: NgxSpinnerService,
+      private exportExcelService : ExportExcelService,
+    private service: MyservcesService, private translateService: TranslateService, private languageService: LanguageService, private exportPdfService: ExportPdfService,
+    private router: Router, private listCustomer: ListCusomerService, private currentSettingService: CurrentSettingService,
+    private activeRoute: ActivatedRoute, private auth: AuthoService,private datePipe: DatePipe
+  ) {
+    loadMessages(this.listCustomer.getListCustomerDictionary());
+    this.Editcustomer = this.Editcustomer.bind(this)
+    this.LoadCustomers()
+  
+  }
 
-    this.aprove = {
-      id: 0
-    }
+  ngOnInit() {
+    this.spinnerService.show();
+
+    setTimeout(() => {
+      /** spinner ends after 5 seconds */
+      this.spinnerService.hide();
+    }, 3000);
     this.productForm = this.fb.group({
-      startdate: ['2023-01-01', Validators.required],
-      enddate: [currentDate, Validators.required],
-
+      startDate: ['', [Validators.required]],
+      endDate: ['', [Validators.required]]
+      
     });
-  this.selectedMembers=[]
-    this.num = 0;
-    this.recipte = [];
-    this.message = '';
+    this.LoadUsers()
+this.stores=[]
+this. storeuserid=0
+  this.showloading=false
+    this.loadingVisible = false
+    this.currentClickedId = 1
+   this.LoadCustomers()
+  }
+  generateReport(){
+    const startDate = this.productForm.get('startDate').value;
+    const endDate = this.productForm.get('endDate').value;
+
+  const formattedStartDate = this.datePipe.transform(startDate, 'yyyy-MM-dd HH:mm:ss');
+  const formattedendtDate = this.datePipe.transform(endDate, 'yyyy-MM-dd HH:mm:ss');
+  if(formattedStartDate&& formattedendtDate&&this.storeuserid){
+    this.service.checkDateFormUser(this.storeuserid,formattedStartDate,formattedendtDate).subscribe((list:any)=>{
+      this.dataSource=[]
+    this.dataSource=list.data;
+      console.log(  this.dataSource)
+    },err=>{
+      console.log(err)
+    })
+  }
+  else{
+    
+  }
    
-    this.getrecipte();
   }
  
-  getrecipte() {
-    this.servicess.GetAllrecipte().subscribe((list:any) => {
-      this.storedata = list.data;
-
-      this.recipte =  this.storedata.filter((x:any)=> x.receipt_acceptance===1 ) ;
-
-    }, (ex: any) => {
-      console.log(ex);
+ 
+  sendValue(e:any){
+   this. storeuserid=e
+   
+    // this.service.GetToTalUser(e).subscribe( (res: any) => {
+    //   this.dataSource = res.data;
+      
+    //   if(   this.dataSource ){
+    //     this.showloading=true
+    //   }
+    //   this.dataGrid?.instance.endCustomLoading();
+    // },err=>{
+    //   alert( err.error)
+    // });
+  }
+  grid:any
+  LoadCustomers() {
+  this.service.GetReportTransaction().subscribe( (res: any) => {
+      this.dataSource = res.data;
+      console.log(this.dataSource.total)
+      if(   this.dataSource ){
+        this.showloading=true
+      }
+      this.dataGrid?.instance.endCustomLoading();
+    
+    },err=>{
+      alert( err.error)
     });
   }
-
-  change(){
-    this.labledata=[]
-    this.report.startdate=this.productForm.value.startdate;
-    this.report.enddate=this.productForm.value.enddate;
-    
-    this.start = moment(this.report.startdate + 'T00:00')
-    this.end = moment(this.report.enddate + 'T23:59')
-    this.selectedMembers = this.recipte.filter(m => new Date(m.receipt_date) >  this.start && new Date(m.receipt_date) <  this.end);
-    this.count=0
-    this.count1=0
-    for (var item of this.selectedMembers) {
-      this.count += item.total_amount
-      this.count1 += item.paid_amount
-
-    }
-
-    for (let item of this.selectedMembers) {
-      this.labledata.push({
-
-        "totalamount": item.receipt_amount,
-        "date": moment(item.receipt_date).format('MM/DD/YYYY')
-      })
-    }
-    const groupBy = (array: any[], groups: any | any[], valueKey: any) => {
-        const
-          getKey = (o: { [x: string]: any; }) => groups.map((k: string | number) => o[k]).join('|'),
-          getObject = (o: { [x: string]: any; }) => Object.fromEntries([...groups.map((k: string | number) => [k, o[k]]), [valueKey, 0]])
-        groups = [].concat(groups);
-        return Object.values(array.reduce((r: { [x: string]: any; }, o: { [x: string]: string | number; }) => {
-          (r[getKey(o)] ??= getObject(o))[valueKey] += +o[valueKey];
-     
-          return r;
-        }, {}));
-      }
-  
-    
-this.selectedMember=groupBy( this.labledata, 'date', 'totalamount')
-
-
-    
-  
+  alert(){
+    alert("kshbdfjhsbdjkfsd")
   }
-
-  IsDelete() {
-    var checkboxes = document.getElementsByClassName('ckitem');
-    if (checkboxes.length > 0) {
-      for (let i = 0; i < checkboxes.length; i++) {
-        if ($(checkboxes[i]).is(":checked")) {
-          return true;
+  LoadUsers() {
+    this.service.GetAllUser().subscribe( (res: any) => {
+        this.dataSources = res.data;
+       
+        if(   this.dataSource ){
+          this.showloading=true
         }
-      }
+        this.dataGrid?.instance.endCustomLoading();
+      },err=>{
+        alert( err.error)
+      });
     }
-    return false;
+  onExporting(e) {
+    if (e.format == 'xlsx') {
+      // this.exportPdfService.exportPdfDataGrid(e, 'purches', false);
+      this.exportExcelService.exportExcelDataGrid(e,'report','report');
+    }
+    if (e.format == 'pdf') {
+      this.exportPdfService.exportPdfDataGrid(e, 'operations', false);
+    }
+  }
+  refreshDataGrid() {
+    this.dataGrid.instance.refresh();
   }
 
-  DeleteCount() {
-    var cont = $(".ckitem:checked").length;
-    this.num = cont;
+  Editcustomer(e: any) {
+    if (Number(e)) {
+      this.router.navigate(['Addcustomer', e.row.data.customer_id]);
+    } else {
+      var id = e.row.data.customer_id;
+      e.event.preventDefault();
+
+      this.router.navigate(['Addcustomer', id]);
+    }
+
   }
 
 
+  @HostListener('window:keydown.' + keyboadShortCut.addNew, ['$event'])
+  createButton(event: KeyboardEvent) {
+    event.preventDefault();
+    this.router.navigate(['Addcustomer']);
+  }
 
+  @HostListener('window:keydown.' + keyboadShortCut.refrsh, ['$event'])
+  refreshButton(event: KeyboardEvent) {
+    event.preventDefault();
+    this.dataGrid.instance.refresh();
+  }
 
+  @HostListener('window:keydown.' + keyboadShortCut.increaseFont, ['$event'])
+  increaseFontButton(event: KeyboardEvent) {
+    event.preventDefault();
+    this.zoomIn();
+  }
+
+  @HostListener('window:keydown.' + keyboadShortCut.decreaseFont, ['$event'])
+  decreaseFontButton(event: KeyboardEvent) {
+    event.preventDefault();
+    this.zoomOut();
+  }
+
+  @HostListener('window:keydown.' + keyboadShortCut.edit, ['$event'])
+  editButton(event: KeyboardEvent) {
+    event.preventDefault();
+
+    this.router.navigate(['Addcustomer', this.currentClickedId]);
+  }
+
+  @HostListener('window:keydown.' + keyboadShortCut.delete, ['$event'])
+  deleteButton(event: KeyboardEvent) {
+    event.preventDefault();
+    this.router.navigate(['DeleteCustomer', this.currentClickedId]);
+
+  }
+  zoomIn() {
+    document.getElementById('gridContainer')!.style.fontSize = ++this.fontSize + 'px';
+    localStorage.setItem('gridFontSize', this.fontSize.toString());
+  }
+
+  zoomOut() {
+    document.getElementById('gridContainer')!.style.fontSize = --this.fontSize + 'px';
+    localStorage.setItem('gridFontSize', this.fontSize.toString());
+  }
+ 
 }
-
-
 

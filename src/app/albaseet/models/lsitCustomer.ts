@@ -12,8 +12,13 @@ export interface listCustomer{
     invoices_count:string;
     receipts_amount:string;
     customer_postcode:string
-    customer_taxid:string
-    
+    customer_taxid:string,
+    transactions:string,
+    total_amount:string
+    invoice_name:string
+    invoice_date:string
+    user_name:string
+
   }
   export interface countryDropDownDto{
     customer_id:string;
@@ -27,7 +32,11 @@ export interface listCustomer{
   export class lsitCustomerLanguageData {
     public static lsitCustomerDictionary: lsitCustomerDictionary = {
       en: {
-        
+        user_name:"user_name",
+        invoice_date:"invoice date",
+        invoice_name:"invoice name",
+        total_amount:"total amount",
+        transactions:"transactions",
         customer_id: 'Cusomer Id',
         customernameRr: 'Customer Name Arabic',
         customer_aname:'Customer Name Arabic',
@@ -44,6 +53,11 @@ export interface listCustomer{
         invoices_count:"Invoices count"
       },
       ar: {
+        user_name:"اسم المستخدم",
+        invoice_date:"التاريخ",
+        invoice_name:"العملية",
+        total_amount:"المبلغ",
+        transactions:"العلميات",
         customer_id: 'كود العميل',
         customernameRr: 'اسم العميل عربي',
         customer_aname:'اسم العميل عربي',
@@ -52,7 +66,7 @@ export interface listCustomer{
         invoices_count:'الفواتير ',
         customer_state: 'حاله العميل',
         customer_country:"البلد",
-        customer_taxid:"الرقم الوطني",
+        customer_taxid:"الرقم الضريبي",
         customer_address:"البلد",
         customer_city:"المدينة",
         receipts_amount:' المبلغ',

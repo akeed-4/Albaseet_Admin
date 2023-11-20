@@ -15,7 +15,9 @@ import { registarcar } from './albaseet/models/modells/RegistarCar';
   providedIn: 'root'
 })
 export class AuthoService {
-  private baseUrl = "https://localhost:44389/";
+  // private baseUrl = "http://localhost:5000/";
+  private baseUrl="http://baseet.selfip.com:8096/"
+  
   private url = "https://localhost:44377/Account/";
   private url2 = "https://localhost:44377/Admin/";
   role: string
@@ -52,7 +54,7 @@ getAllpermation(){
   }
   UserLogin(log: any): Observable<any> {
 
-    return this.http.post<Login>(this.baseUrl + 'Login', log, this.headers).pipe();
+    return this.http.post<Login>(this.baseUrl + 'loginAdmin', log, this.headers).pipe();
 
   }
   GetUserRolse(): Observable<any[]> {
@@ -103,3 +105,4 @@ getAllpermation(){
   }
   
 }
+// private baseUrl = "https://mobweb.eofficewebapp.com/";

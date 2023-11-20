@@ -157,13 +157,7 @@ export class AddrequstComponent implements OnInit {
   }
   Getproducts() {
 
-    this.servicess.GetAllproduct().subscribe((list: any) => {
-
-      this.products = list.data;
-
-    }, ex => {
-      console.log(ex.error);
-    });
+ 
   }
 
 

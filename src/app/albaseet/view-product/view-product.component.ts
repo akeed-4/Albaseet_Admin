@@ -17,6 +17,11 @@ import { ExportPdfService } from 'src/app/services/export-pdf.service';
 import { keyboadShortCut } from '../models/staticData.model';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { CurrentSettingService } from 'src/app/services/current-setting.service';
+import Swal from 'sweetalert2';
+import { SignalRService } from 'src/app/services/serviceSignalr';
+import { HubConnection } from '@microsoft/signalr';
+import { ExportExcelService } from 'src/app/services/export-excel.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-view-product',
@@ -45,25 +50,50 @@ export class ViewProductComponent {
   locale: any;
   currentClickedId: any;
   showloading: boolean;
-  constructor(
+  message: any;
+  page: number;
+  signalRMessageDataContinuos: any;
+  routePath = 'procedures';
+  numberpage=1
+  constructor( private exportExcelService : ExportExcelService,
     private service: MyservcesService,  private currentSettingService:CurrentSettingService,
     private router: Router,  private languageService: LanguageService, private exportPdfService:ExportPdfService,
     private activeRoute: ActivatedRoute,private auth:AuthoService, private productservice:lstproductService
-  ) { 
+   , private signalRService:SignalRService ,private spinnerService:NgxSpinnerService ) { 
    
     loadMessages(this.productservice.getListprodcutDictionary());
     this.Editproduct=this.Editproduct.bind(this)
-    this.deleteproduct=this.deleteproduct.bind(this)
+    this.productdelete=this.productdelete.bind(this)
     this.Loadproduct()
-  }
+    // this.signalRService.startRoutedSignalRConnection(this.routePath);
+    // this.signalRService.signalRMessageDataContinuos.subscribe(
+    //   (data) => (this.signalRMessageDataContinuos = data)
+     
+    // );
+  
+
+// Connect to the SignalR hub.
+    }
 
 
-
- 
   ngOnInit() {
+    this.spinnerService.show();
+    setTimeout(() => {
+      /** spinner ends after 5 seconds */
+      this.spinnerService.hide();
+    }, 3000);
+  
+
+    // setTimeout(() => {
+    //   this.signalRService.askServerListener("receiveProductData");
+    //   console.log(this.signalRMessageDataContinuos)
+    
+    // }, 9000);
+    this.page=1
     this.showloading=false
     this.currentClickedId=0
     
+  
   }
   refreshDataGrid() {
     this.dataGrid.instance.refresh();
@@ -87,13 +117,13 @@ export class ViewProductComponent {
     }
   }
   Loadproduct() {
-    this.service.GetAllproduct().subscribe((response:any) =>{
-      this.Invoiceheader=response.data
-    
+  
+    this.service.GetAllproduct(this.numberpage).subscribe((response:any) =>{
+      this.Invoiceheader=response.data;
+      this.numberpage++;
   if( this.Invoiceheader){
     this.showloading=true
   }
-      console.log( this.Invoiceheader)
     });
   }
   Editproduct(e: any) {
@@ -106,10 +136,12 @@ export class ViewProductComponent {
     }
         
       }
-
+  addproduct(){
+        this.router.navigate(['Addproduct']);
+ }
   onExporting(e) {
     if (e.format == 'xlsx') {
-      // this.exportPdfService.exportPdfDataGrid(e, 'purches', false);
+       this.exportExcelService.exportExcelDataGrid(e, 'products', "products");
     }
     if (e.format == 'pdf') {
        this.exportPdfService.exportPdfDataGrid(e, 'purches', false);
@@ -118,15 +150,29 @@ export class ViewProductComponent {
     }
 
   }
-  deleteproduct(e: any) {
-    if((e)){
-      this.router.navigate(['ProductDelet', e.row.data.product_id]);
-    }else{
+  productdelete(e: any) {
+    if(confirm("هل ترغب بعملية حذف  هذا الصنف ")) {
+      this.numberpage--;
       var id = e.row.data.product_id;
       e.event.preventDefault();
-      this.router.navigate(['ProductDelet', id]);
+      this.service.Deleteproduct(id).subscribe((s: any) => {
+        this.message = s.message.ar;
+
+        this.Loadproduct();
+      
+        Swal.fire({
+          toast: true, position: 'center',
+          showConfirmButton: false, timer: 2000, title: 'Success!', text: 'تمت عملية الحذف بنجاح',
+          icon: 'success',
+        });
+      },
+       (ex: any) => Swal.fire({
+        toast: true, position: 'center',
+        showConfirmButton: false, timer: 2000, title: 'Success!', text: ex,
+        icon: 'success',
+      }));
     }
-   
+    
   }
   
   @HostListener('window:keydown.' + keyboadShortCut.addNew, ['$event'])
@@ -139,6 +185,7 @@ export class ViewProductComponent {
   refreshButton(event: KeyboardEvent) {
     event.preventDefault();
     this.dataGrid.instance.refresh();
+    this.Loadproduct();
   }
 
   @HostListener('window:keydown.' + keyboadShortCut.increaseFont, ['$event'])
@@ -166,6 +213,8 @@ export class ViewProductComponent {
     this.router.navigate(['ProductDelet', this.currentClickedId]);
     
   }
+ 
+  
   zoomIn() {
     document.getElementById('gridContainer')!.style.fontSize = ++this.fontSize + 'px';
     localStorage.setItem('gridFontSize', this.fontSize.toString());

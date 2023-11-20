@@ -9,6 +9,7 @@ import { products } from '../../models/products';
   styleUrls: ['./view-product1.component.css']
 })
 export class ViewProduct1Component {
+  page: any;
 
   constructor(
     private service: MyservcesService,
@@ -23,6 +24,7 @@ export class ViewProduct1Component {
   //id: number;
 
   ngOnInit(): void {
+    this.page=1
     this.num = 0;
     this.product_aname = '';
     this.products = [];
@@ -57,7 +59,8 @@ export class ViewProduct1Component {
   }
 
   Getproducts() {
-    this.service.GetAllproduct().subscribe((list: any) => {
+    this.service.GetAllproduct(this.page).subscribe((list: any) => {
+      this.page++
       this.products = list.data;
    
     }, ex => {

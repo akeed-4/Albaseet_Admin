@@ -492,17 +492,7 @@ return this.isAllreport=true
     });
   }
   Getproducts() {
-    this.servicess.GetAllproduct().subscribe((list: any) => {
 
-      this.products = list.data;
-      for (var pr of this.products) {
-        this.num3 += 1
-
-      }
-    }, ex => {
-      console.log(ex.error);
-
-    });
   }
 }
 

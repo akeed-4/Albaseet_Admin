@@ -68,7 +68,7 @@
    "Receipts Reports":"تقارير سندات القبض ",
    "Specific Product Report":"تقرير منتج معين  ",
    "Report by period":"  حسب الفترة بالتفصيل",
-   "Graphic Reports":"تقارير بيانية",
+   "Graphic Reports":" تقارير بيانية للفواتير",
    "invoice id":"رقم الفاتورة",
    "history":"التاريخ",
    "Amount":"المبلغ",
@@ -142,8 +142,8 @@
    "Customer is country is required":" بلد العميل مطلوب",
    "Customer address is required.":"عنوان العميل مطلوب.",
    "Customer name is required.":"   اسم العميل مطلوب.",
-   "The customer name already exists.":"اسم العميل موجود",
-   "The name of the variety already exists.":"اسم الصنف موجود مسبقا",
+   "The customer name already exists.":" العميل موجود",
+   "The name of the variety already exists.":" الصنف موجود ",
    "Item name is required":"اسم الصنف مطلوب",
    "Item price is required":"سعر الصنف مطلوب",
    "More Details":"تفاصيل اكثر",
@@ -155,7 +155,59 @@
    "password":"كلمة المرور",
    "Upproved":"معتمد",
    "UnUpproved":"غير معتمد",
-   "User_name is required":"اسم المستخدم مطلوب"
+   "User_name is required":"اسم المستخدم مطلوب",
+   "refreshButton":"اعادة تحميل",
+   "zoomIn":"تكبير" ,
+   "zoomOut":"تصغير",
+   "titleSave":"اضافة طريقة دفع جديدة",
+   "titleEdit":"تعديل طريقة دفع ",
+   "Active Clients":"حركة العملاء النشيطين ",
+   "Financial Reports":"التقارير المالية",
+   "btnTitle":"اضافة",
+   "addButton":"اضافة ",
+   "Payment list":"قائمة طرق الدفع",
+   "titleSaveproduct":"اضافة صنف جديد",
+   "titleEditproduct":"تعديل صنف ",
+   "Payment method name is required":"اسم طريقة الدفع مطلوبة",
+   "Payment method exists":"  طريقة الدفع  موجودة ",
+   "Invoice list":"قائمة الفواتير",
+   "All Operations": " العمليات   ",
+   "ReportsTransactionsTotal":"اجمالي العمليات",
+   "search":"بحث",
+   "Select a representative":"اختر مندوب",
+   "Users sales report":"تقرير مبيعات المستخدمين",
+   "Start_date":"من",
+   "End_date":"الى",
+   "Filter":"فلتر",
+   "notification":{
+      "yes" : "نعم",
+      "cancel" : "إنهاء",
+      "ok" : "تمام",
+      "confirmTitle" : "هل أنت متأكد؟",
+      "warningTitle": "برجاء الانتباه",
+      "successTitle": "تهانينا",
+      "errorTitle" : "عفواً",
+      "successText": "تمت المهمة بنجاح"
+    },
+    "button":{
+      "save" : "حفظ",
+      "edit" : "تعديل",
+      "reset" : "تنظيف",
+      "delete" : "حذف",
+      "cancel" : "إلغاء",
+      "saveAndReset" : "حفظ وتنظيف",
+      "info" : "تفاصيل",
+      "back" : "عودة",
+      "import":"استيراد",
+      "export":"تصدير"
+    },
+    "nameNameAr": "العمليات" 
+    
+   
+
+
+
+  
 
   
 

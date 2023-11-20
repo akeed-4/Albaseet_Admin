@@ -5,6 +5,7 @@ import { MyservcesService } from 'src/app/myservces.service';
 import Swal from 'sweetalert2';
 import { nameModel } from '../models/namemodel';
 import { products } from '../models/products';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-update-product',
@@ -12,8 +13,9 @@ import { products } from '../models/products';
   styleUrls: ['./update-product.component.css']
 })
 export class UpdateProductComponent {
+  page: any;
 
-  constructor(
+  constructor(private notifyService : NotificationService,
     private fb: FormBuilder,
     private service: MyservcesService,
     private router: Router,
@@ -59,6 +61,7 @@ export class UpdateProductComponent {
   productImage:any
   customer_ename: string
   ngOnInit(): void {
+    this.page=1
     this.product_aname = '',
       this.product_ename = '',
       this.price = 0
@@ -103,7 +106,8 @@ export class UpdateProductComponent {
       const id = String(param.get('id'));
       console.log(id);
       if (id) {
-        this.service.GetAllproduct().subscribe((customer: any) => {
+        this.service.GetAllproduct(this.page).subscribe((customer: any) => {
+          this.page++
           this.storedata = customer.data;
           this.product = this.storedata.filter((x: any) => x.product_id === id)
           console.log(this.product);
@@ -150,17 +154,19 @@ export class UpdateProductComponent {
 
       if (this.id != null) {
 
-        this.service.Editproduct(this.products).subscribe(hospital => {
-          Swal.fire({
-            toast: true, position: 'center',
-            showConfirmButton: false, timer: 3000, title: 'Success!', text: 'تم التعديل بنجاح',
-            icon: 'success',
-          });
+        this.service.Editproduct(this.products).subscribe((product:any) => {
+          // Swal.fire({
+          //   toast: true, position: 'center',
+          //   showConfirmButton: false, timer: 3000, title: 'Success!', text: 'تم التعديل بنجاح',
+          //   icon: 'success',
+          // });
+          this.notifyService.showSuccess(product.message.ar);
           this.isloading = false
           // this.GoToList();
         }, ex => {
           console.log(ex);
           this.message = '';
+          this.notifyService.showError(ex);
           this.isloading = false
         })
       }
@@ -173,7 +179,8 @@ export class UpdateProductComponent {
 
   GetAllproducts() {
 
-    this.service.GetAllproduct().subscribe((list: any) => {
+    this.service.GetAllproduct(this.page).subscribe((list: any) => {
+      this.page++
       this.product = list.data;
       console.log(this.product)
     }, ex => console.log(ex));

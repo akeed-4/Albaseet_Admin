@@ -2,23 +2,22 @@
     margin-top: 10%;
 }
 .show1{
-    background-color: rgb(237, 237, 248);
+    background-color: rgb(253, 253, 255);
     padding: 50px 70px;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.075);
 }
-
+form{
+    padding: 5px;
+    border: 1px solid rgb(0, 0, 0);
+  }
 @media (max-width: 412px) {
     .hist {
     display: none;
-  
     }
     #input1 {
         margin-right: -65px;
         
-    
-       
     }
     #input1>input{
         width: 100px;
@@ -36,6 +35,11 @@
      
         width:204px;
         margin-right: 90px;
-       
     }
+}
+
+.form-control{
+    width: 150px;
+    border-radius: 8px;
+    padding: 5px;
 }

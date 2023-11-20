@@ -5,6 +5,9 @@ import { MyservcesService } from 'src/app/myservces.service';
 import Swal from 'sweetalert2';
 import { customer } from '../models/customers';
 import { payment_method } from '../models/payment_method';
+import { TranslateService } from '@ngx-translate/core';
+import { parseWebAPIErrors } from 'src/app/uitiles/utils';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-add-pyment-method',
@@ -13,19 +16,25 @@ import { payment_method } from '../models/payment_method';
 })
 export class AddPymentMethodComponent {
   isloading: boolean;
+  storedata: any;
+  paymont: any;
+  custmer_name: any;
+  customer_ename: any;
+  isLoading: boolean;
 
   constructor(
     private fb: FormBuilder,
     private services: MyservcesService,
-    private router: Router,
-    private activeRoute: ActivatedRoute
+    private router: Router,private notifyService : NotificationService,
+    private activeRoute: ActivatedRoute,private translateService : TranslateService
   ) { }
-
+  baseId! : string
   customerForm!: FormGroup;;
   message: string;
-  id: number;
+  id: any;
   img: File;
   btnTitle: string;
+  isAddMode!: boolean;
   title: string;
   IsEditMode: boolean;
   urlIamge: string;
@@ -34,7 +43,7 @@ export class AddPymentMethodComponent {
   isbusy: boolean;
   //editdoctorData: EditDoctorModel;
   //doctorData: DoctorModel;
-
+  errors: string[] = [];
 
 
   messageValidate = {
@@ -49,7 +58,10 @@ export class AddPymentMethodComponent {
   };
 
   ngOnInit(): void {
-    this.isloading =false
+    this.isLoading = false
+    this.custmer_name = ''
+    this.customer_ename = ''
+    this.isloading = false
     this.title = 'اضافة طريقه دفع جديده';
     this.btnTitle = 'اضافة';
     this.id = 0;
@@ -57,40 +69,61 @@ export class AddPymentMethodComponent {
     this.customer = [];
     this.message = '';
     this.urlIamge = 'assets/images/Add.png';
+    this.payment = {
+      customer_id:'',
+      customer_aname: '',
+      customer_ename: '',
+      id: ''
+    }
 
-this.payment={
- 
-  customer_aname:'',
- customer_ename:''
-}
 
     this.customerForm = this.fb.group({
       customer_aname: ['', Validators.required],
       customer_ename: ['', Validators.required],
-    
-   
+
+
     });
-this.GetAllPayment1()
+    this.baseId = this.activeRoute.snapshot.params['id'];
+    this.isAddMode = !this.baseId;
+    this.GetAllPayment1()
 
     this.activeRoute.paramMap.subscribe(param => {
       var id = Number(param.get('id'));
+
       if (id) {
-        this.services.Getcustomer(id).subscribe(customer => {
-          console.log(customer);
-          this.title = 'تعديل بيانات عميل';
+        this.services.GetAllpaymentbyid(id).subscribe((customer: any) => {
+          this.storedata = customer.data
+          this.paymont = this.storedata.filter((x: any) => x.customer_id === id)
+      
+          this.title = 'تعديل  طريقة دفع';
           this.btnTitle = 'تعديل وحفظ';
           this.IsEditMode = true;
           this.id = id;
+          for (var item of this.paymont) {
+            this.custmer_name = item.customer_aname
+            this.customer_ename = item.customer_ename
+
+          }
           this.customerForm.patchValue({
-            customernameRr: customer.customer_aname,
-            customernameEn: customer.customer_aname,
-          
-
-
+            customer_aname: this.custmer_name,
+            customer_ename: this.customer_ename
           })
+
+
         })
       }
+
+
+      else {
+        console.log("not found")
+      }
     })
+  }
+  getTitle(){
+    return this.isAddMode ? this.translateService.instant('titleSave') : this.translateService.instant('titleEdit');
+  }
+  getSaveButton(){
+    return this.isAddMode ? this.translateService.instant('button.save') : this.translateService.instant('button.edit');
   }
   isUserNameExist() {
 
@@ -112,48 +145,74 @@ this.GetAllPayment1()
   }
 
   Add_payment() {
-
+    this.isloading = true
     if (this.customerForm.valid) {
-      this.isloading = true
       
-       this.ValidateModel();
-        this.services.AddpaymentMethod(this.payment).subscribe((doctor: any) => {
-          sessionStorage.setItem("addcustomer","true");
-        
-           this.ngOnInit();
-           Swal.fire({ toast: true, position: 'center',
-        showConfirmButton: false, timer: 3000, title: 'Success!', text: 'تمت العملية بنجاح',
-         icon: 'success', });
+      if (this.id > 0) {
+        this.payment.customer_id=this.id
+        this.payment.customer_aname = this.customerForm.value.customer_aname;
+        this.payment.customer_ename = this.customerForm.value.customer_ename;
 
-
-        }, (ex: any) => {
-          Swal.fire({ toast: true, position: 'center',
-          showConfirmButton: false, timer: 3000, title: 'info!', text: 'لم تتم العملية بنجاح',
-           icon: 'info', });
+        this.services.EditPaymont(this.payment).subscribe((doctor: any) => {
           
+          this.message = doctor.message.ar
+          Swal.fire({
+            toast: true, position: 'center',
+            showConfirmButton: true, timer: 2000, title: 'Success!', text: 'تمت عملية التعديل بنجاح',
+            icon: 'success',
+          });
+      
+          this.isLoading = false;
+          this.router.navigate(['paymontlsit']);
+        }, (ex: any) => {
+          this.errors = parseWebAPIErrors(ex);
+          Swal.fire({
+            toast: true, position: 'center',
+            showConfirmButton: false, timer: 2000, title: 'info!', text: 'لم تتم عملية التعديل  بنجاح',
+            icon: 'info',
+          });
+          this.isLoading = false;
         })
-
       }
-    }
+      else {
+        this.ValidateModel()
+        this.services.AddpaymentMethod(this.payment).subscribe((doctor: any) => {
+          this.notifyService.showSuccess(doctor.message.ar);
+        
+          this.router.navigate(['paymontlsit']);
+        }, (ex1: any) => {
+          this.errors = parseWebAPIErrors(ex1);
+          Swal.fire({
+            toast: true, position: 'center',
+            showConfirmButton: false, timer: 3000, title: 'info!', text: 'لم تتم العملية بنجاح',
+            icon: 'info',
+          });
 
-  
+        })
+      }
+
+
+    }
+  }
+
+
 
   GoToList() {
     sessionStorage.setItem('customer', 'customer');
     this.router.navigate(['Dashborad']);
   }
   GetAllPayment1() {
-    this.services['GetAllpayment']().subscribe((list:any) => {
+    this.services['GetAllpayment']().subscribe((list: any) => {
       this.customer = list.data;
-      this.customer  =     this.customer.filter((x: any) => x.customer_aname !== null)
-    //   this.customers.sort(function(a, b) {
-    //     return a.customer_aname.localeCompare(b.customer_aname);
-    //  });
+      this.customer = this.customer.filter((x: any) => x.customer_aname !== null)
+      //   this.customers.sort(function(a, b) {
+      //     return a.customer_aname.localeCompare(b.customer_aname);
+      //  });
 
-     
+
     }, (ex: any) => {
       console.log(ex);
-   
+
     });
   }
   // GetAllcustmer() {
@@ -162,26 +221,15 @@ this.GetAllPayment1()
   //   }, ex => console.log(ex));
   // }
 
-  HandleFiles(event: any) {
-    if (event.target.files !== null && event.target.files.length > 0) {
-      this.img = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        $('#image').attr('src');
-      }
-      reader.readAsDataURL(this.img);
-    } else {
-      this.img == null;
-      $('#image').attr('src', 'assets/Images/Add.png');
-    }
-  }
+
 
   ValidateModel() {
+
     this.payment.customer_aname = this.customerForm.value.customer_aname;
     this.payment.customer_ename = this.customerForm.value.customer_ename;
-   
-   
-   
+
+
+
   }
 
 

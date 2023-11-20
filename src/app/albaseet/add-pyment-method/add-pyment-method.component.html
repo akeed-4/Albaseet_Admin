@@ -1,62 +1,44 @@
-<div class="container py-5 ar mt-0 tap">
-    <div class="row tap ">
-        <div class="col-lg-6 mx-auto">
-            <div class="show1 p-5">
-                <div class="alert alert1 text-center alert-secondary1 alert-secondary mb-4 ">
-                    <strong>{{'add new payment method'|translate}} </strong>
-                </div>
-                <div class="alert alert-success" role="alert" *ngIf="message">
-                    <strong>{{message}}</strong>
-                </div>
-                <hr class="mb-6">
-              
-                <div class="tab-content">
-                    <div class="tab-pane fade show active form-row">
-                        <form [formGroup]="customerForm" (ngSubmit)="Add_payment()">
-                            <div class="form-row form-group">
-                                <div class="col-md-4 mb-3 form-group">
-                                    <input type="text " class="form-control"   dir="rtl" required style="width:200px ; " formControlName="customer_aname" id="customer_aname"
-                                    placeholder=" {{'name  payment method'|translate}}"
-                                    [ngClass]="{'is-invalid': this.customerForm.get('customer_aname').invalid && this.customerForm.get('customer_aname').touched}">
 
-                                <div class="text-danger" style="width:180px" *ngIf="this.customerForm.get('customer_aname').invalid && this.customerForm.get('customer_aname').touched
-                               && this.customerForm.get('customer_aname').value===''">
-                                    {{messageValidate.customer_aname.required}}
-                                </div>
-                                <div class="text-danger" *ngIf="this.customerForm.get('customer_aname').value !== null && 
-                                this.customerForm.get('customer_aname').value !== '' && isUserNameExist()">
-                                    {{messageValidate.customer_aname.matchUserName}}
-                                </div>
-                                </div>
-                                <div class="col-md-4 mb-3 form-group "  id="ar">
-                                    <input type="text " class="form-control"  dir="ltr" required style="width:210px ; margin-right: 60px;" formControlName="customer_ename" id="customer_ename"
-                                    placeholder="{{'name  payment methoden'|translate}}"
-                                    [ngClass]="{'is-invalid': this.customerForm.get('customer_ename').invalid && this.customerForm.get('customer_ename').touched}">
+<mat-toolbar style="margin-top: 6%;" color="primary">{{getTitle()}}</mat-toolbar>
+<app-display-errors [errors]="errors"></app-display-errors>
 
-                                <div class="text-danger"  style="margin-right: 60px; width:180px " *ngIf="this.customerForm.get('customer_ename').invalid && this.customerForm.get('customer_ename').touched
-                               && this.customerForm.get('customer_ename').value===''">
-                                    {{messageValidate.payment_en.required}}
-                                </div>
-                                  
-                                </div>
-                            </div>
-                          
+<form  [formGroup]="customerForm" (ngSubmit)="Add_payment()">
+    <mat-grid-list cols="2" rowHeight="90px" class="quot-service-grid">
+        <mat-grid-tile>
+            <mat-form-field appearance="outline" class="ml-2" >
+                <mat-label>{{'product name(Ar)'|translate}} </mat-label>
+                <input matInput type="text "   dir="rtl"   formControlName="customer_aname" id="customer_aname"
 
-                            <button type="submit" style="text-align:center ;" class="subscribe btn btn-primary btn-block rounded-pill shadow-sm mt-4"
-                                [disabled]="customerForm.invalid ||isUserNameExist()">{{btnTitle}}
-                                <img *ngIf="isloading" src="/assets/image/op.gif" alt=""
-                                    style="background-color: rgb(16, 151, 151);">
-                            </button>
-
-                        </form>
-                    </div>
-
-
-                </div>
-            </div>
-
-        </div>
-
+                [ngClass]="{'is-invalid': this.customerForm.get('customer_aname').invalid && this.customerForm.get('customer_aname').touched}">
+                <mat-error class="text-danger"  *ngIf="this.customerForm.get('customer_aname').invalid && this.customerForm.get('customer_aname').touched
+                && this.customerForm.get('customer_aname').value===''">
+                     {{'Payment method name is required'|translate}} </mat-error>
+                <md-error class="text-danger" *ngIf="this.customerForm.get('customer_aname').value !== null && 
+                this.customerForm.get('customer_aname').value !== '' && isUserNameExist()">
+                    {{'Payment method exists'|translate}}
+  
+                </md-error>
+            </mat-form-field>
+  
+        </mat-grid-tile>
+  
+        <mat-grid-tile>
+            <mat-form-field appearance="outline" class="mr-2 ">
+                <mat-label> {{'Name En'|translate}}</mat-label>
+                <input matInput  type="text "  dir="ltr"   formControlName="customer_ename" id="customer_ename"
+                
+                [ngClass]="{'is-invalid': this.customerForm.get('customer_ename').invalid && this.customerForm.get('customer_ename').touched}">
+                <mat-error class="text-danger"   *ngIf="this.customerForm.get('customer_ename').invalid && this.customerForm.get('customer_ename').touched
+                && this.customerForm.get('customer_ename').value===''">
+                {{'Payment method name is required'|translate}} </mat-error>
+  
+  
+            </mat-form-field>
+        </mat-grid-tile>
+    </mat-grid-list>
+   <button type="button"       [disabled]="customerForm.invalid ||isUserNameExist()"
+   class="btn btn-primary" (click)="Add_payment()"> {{ getSaveButton()}}</button>
+    <div *ngIf="isloading" style="text-align: center;">
+        <div class="spinner-grow text-muted"></div>
     </div>
-
-</div>
+  </form>

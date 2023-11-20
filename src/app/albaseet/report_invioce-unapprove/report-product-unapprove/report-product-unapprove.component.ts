@@ -1,9 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/internal/Subject';
 import { MyservcesService } from 'src/app/myservces.service';
 import { productdata } from '../../models/productdata';
 import { products } from '../../models/products';
+import { DxDataGridComponent } from 'devextreme-angular';
+import { CurrentSettingService } from 'src/app/services/current-setting.service';
+import { LanguageService } from '../../myservice/language.service';
+import { formatMessage } from 'devextreme/localization';
+import { ExportPdfService } from 'src/app/services/export-pdf.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-report-product-unapprove',
@@ -11,13 +17,29 @@ import { products } from '../../models/products';
   styleUrls: ['./report-product-unapprove.component.css']
 })
 export class ReportProductUnapproveComponent {
-
-  storagdata: any;
-
+  @ViewChild(DxDataGridComponent, { static: false })dataGrid: DxDataGridComponent;
+  havepdf: any
+  displayMode = 'full';
+  fontSize = this.currentSettingService.getUserGridFontSize();
+  email: string;
+  loadIndicatorVisible = false;
+  rtlEnabled = this.languageService.getCurrentLanguage() == 'en' ? false : true;
+  formatMessage = formatMessage;
+  pagination = true;
+  showloading: any;
+  public showNavButtons = true;
+  dataSource: any;
+  loadingVisible: any
+  public showInfo = true;
+  storagdata: any[];
+  public showPageSizeSelector = true;
+  readonly allowedPageSizes = [5, 10,100, 'all'];
+  currentClickedId: any;
+  selsproducts:any[];
   constructor(
-    private service: MyservcesService,
-    private router: Router,
-    private activeRoute: ActivatedRoute
+    private service: MyservcesService,private exportPdfService: ExportPdfService,
+    private router: Router, private languageService: LanguageService, 
+    private activeRoute: ActivatedRoute,private currentSettingService: CurrentSettingService,
   ) { }
   product_aname: any;
   productname: productdata
@@ -25,87 +47,15 @@ export class ReportProductUnapproveComponent {
   productsss: any[];
   productss: any[]
   storageserch: any[]
-
+  dtoptions: any = {};
+  dtTrigger:Subject<any>=new Subject<any>();
   num: number;
   message: string;
-  dtoptions:any = {};
-  dtTrigger:Subject<any>=new Subject<any>();
+  displayedColumns: string[] = ['products', 'total_amount', 'customer_aname', 'invoice_date'];
+  dataSource1: MatTableDataSource<any>;
 
   ngOnInit(): void {
-    this.dtoptions  = {
-      pagingType: 'simple_numbers',
-      searching:true,
-     paging:true,
     
-     order: [
-      [0, "desc"]
-    ],
-     pageLength: 8,
-    lengthChange:false,
-  
-
-    dom: 'Bfrtip',
-    buttons: [
-      {
-        extend: 'colvis',
-        text:' '
-        },
-      {
-        extend:    'print',
-        text:      '<i class="fa fa-print"></i>',
-        titleAttr: 'Print',
-        className:'alert-primary',
-        messageTop: ' ',
-        exportOptions: {
-          columns: ':visible',
-      },
-      fixedColumns:   {
-        left: 2
-    },
-      customize: function (win: { document: { body: string; }; }) {
-          $(win.document.body).find('table').addClass('display').css('direction', 'rtl').css('font-size', '18px');
-          $(win.document.body).find('tr:nth-child(odd) td').each(function(index){
-              $(this).css('background-color','#D0D0D0');
-          });
-          $(win.document.body).find('h1').css('text-align','center');
-      }
-    },
-    {
-        extend:    'excelHtml5',
-        text:      '<i class="fa fa-file-excel-o"></i>',
-        titleAttr: 'Excel',
-        className:'alert-primary',
-        messageTop: 'تقارير الفواتير',
-        exportOptions: {
-          columns: ':visible',
-      },
-      customize: function (win: { document: { body: string; }; }) {
-          $(win.document.body).find('table').addClass('display').css('direction', 'rtl').css('font-size', '18px');
-          $(win.document.body).find('tr:nth-child(odd) td').each(function(index){
-              $(this).css('background-color','#D0D0D0');
-          });
-          $(win.document.body).find('h1').css('text-align','center');
-      }
-    },
-  
-  ],
-        
-  select: true,   
-    language:{
-      searchPlaceholder:'ابحث هنا',
-      search:"",
-      paginate: { 
-        first: '<i id="f" class="fa fa-forward"></i>',
-       last: '<i id="l" class="fa fa-backward',
-       next: '<i id="n" class="fa fa-step-backward"></i>',
-       previous: '<i id="p" class="fa fa-step-forward"></i>',
-      
-          
-        }
-       
-    },
-    responsive: true
-    };
     this.storagdata=[]
     this.products1 = {
       available_quantity:0,
@@ -131,38 +81,53 @@ export class ReportProductUnapproveComponent {
     this.productname = {
       product_aname: ''
     }
-    this.Getproducts();
-
+    this.Getinvioces();
+this.selsproducts=[]
     //this.hospitals = [];
   }
-  sertch() {
+  
+  refreshDataGrid() {
+    this.dataGrid.instance.refresh();
+  }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
 
-    if (this.product_aname == '') {
-      this.ngOnInit()
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
-    else {
-      this.productsss = this.productss.filter(re => {
-        for (var item of this.productss) {
-          for (var item1 of item.products)
-            if (item1.product_data?.product_aname === this.product_aname) {
-              this.storageserch.push(item);
-              console.log(     this.storageserch)
-              break
-            }
-        }
-        this.productsss = this.storageserch
-      
-        return re.this.productsss
-      })
-    }
+  }
+
+  zoomIn() {
+    document.getElementById('gridContainer')!.style.fontSize = ++this.fontSize + 'px';
+    localStorage.setItem('gridFontSize', this.fontSize.toString());
+  }
+
+  zoomOut() {
+    document.getElementById('gridContainer')!.style.fontSize = --this.fontSize + 'px';
+    localStorage.setItem('gridFontSize', this.fontSize.toString());
   }
   Addproduct() {
     this.router.navigate(['Addproducts']);
   }
-  Getproducts() {
+  Getinvioces() {
     this.service.GetAllInices().subscribe((list: any) => {
       this.storagdata=list.data
-      this.productss = this.storagdata.filter((x:any)=> x.invoice_acceptance===0)
+      this.dataSource1=list.data
+      for(let item of   this.storagdata){
+         
+          for(let items of item.products){
+            this.selsproducts.push(items.product_data)
+          }
+      }
+      if(this.selsproducts){
+        this.showloading=true
+      }
+       
+      
+     console.log(  this.selsproducts)
+    
+      // this.productss = this.storagdata.filter((x:any)=> x.invoice_acceptance===0)
       
       this.dtTrigger.next(null);
     }, ex => {
@@ -192,7 +157,7 @@ export class ReportProductUnapproveComponent {
   DeleteConfirms(id: any) {
     if (id) {
       this.service.DeleteAllproducts(id).subscribe(x => {
-        this.Getproducts();
+        this.Getinvioces();
         $("#btnClose").trigger("click");
       }, ex => console.log(ex));
 
@@ -212,34 +177,20 @@ export class ReportProductUnapproveComponent {
     }
 
   }
-  // SelectAll() {
-  //   var tbl = $('#tbl');
-  //   var header = tbl.find('thead .ckheader');
-  //   var item = tbl.find('tbody .ckitem');
 
-  //   $(function () {
-  //     item.on('change', function () {
-  //       if ($(this).is(':checked')) {
-  //         $(this).closest('tr').addClass('NewRowColor');
-  //       }
-  //       else {
-  //         $(this).closest('tr').removeClass('NewRowColor');
-  //       }
-  //     });
+  getRowData(e: any) {
 
-  //     header.change(function () {
-  //       var c = Boolean(this.checked);
-  //       item.prop("checked", c);
-  //       item.trigger('check');
-  //       if ($(this).is(':checked')) {
-  //         $(item).closest('tr').addClass('NewRowColor');
-  //       }
-  //       else {
-  //         $(item).closest('tr').removeClass('NewRowColor');
-  //       }
-  //     });
-  //   });
-  // }
+    this.currentClickedId = e.row.data.customer_id;
+
+  }
+  onExporting(e) {
+    if (e.format == 'xlsx') {
+      // this.exportPdfService.exportPdfDataGrid(e, 'purches', false);
+    }
+    if (e.format == 'pdf') {
+      this.exportPdfService.exportPdfDataGrid(e, 'Customer list', false);
+    }
+  }
   DeleteCount() {
     var count = $(".ckitem:checked").length;
     this.num = count;
@@ -248,7 +199,7 @@ export class ReportProductUnapproveComponent {
   deleteproduct(ids: any) {
     this.service.Deleteproduct(ids).subscribe(_x => {
       console.log(ids)
-      this.Getproducts();
+      this.Getinvioces();
       console.log(_x)
     }, ex => console.log(ex));
   }

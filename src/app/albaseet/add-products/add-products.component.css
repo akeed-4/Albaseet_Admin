@@ -33,3 +33,37 @@
         margin-right: 120px;
       }
 }
+form,mat-toolbar{
+    padding: 5px;
+    border: 1px solid rgb(0, 0, 0);
+    max-width: 900px;
+  }
+  
+.form-control{
+  
+    border-radius: 8px;
+    padding: 5px;
+}
+.center {
+    float: right;
+    max-height: 100px;
+     max-width:100x;
+  text-align: right;
+  }
+  mat-grid-tile{
+    max-width: 640px;
+  }
+  .mat-form-field{
+    font-family: 'Helvetica', 'Arial', sans-serif;
+  }
+  mat-form-field{
+    max-width: 700px;
+  }
+  .form-field{
+    max-width: 900px;
+  }
+  ::ng-deep .form-field ,mat-form-field{
+    max-width: 600px !important;
+   width: 600px;
+   margin: 5px;
+  }

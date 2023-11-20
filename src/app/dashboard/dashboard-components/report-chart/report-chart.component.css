@@ -1,0 +1,13 @@
+mat-form-field{
+    max-width: 200px;
+}
+.cards{
+    border: 1px solid rgb(204, 204, 212);
+    margin-top: 20px;
+    }
+    mat-toolbar{
+        font-family: 'droidKufi-bold', sans-serif;
+      }
+      mat-toolbar{
+        font-size: 16px;
+      }

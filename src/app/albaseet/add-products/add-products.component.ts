@@ -5,24 +5,37 @@ import { MyservcesService } from 'src/app/myservces.service';
 import Swal from 'sweetalert2';
 import { nameModel } from '../models/namemodel';
 import { products } from '../models/products';
-
+import * as $ from "jquery";
+import { TranslateService } from '@ngx-translate/core';
+import { parseWebAPIErrors } from 'src/app/uitiles/utils';
+import { SignalRService } from 'src/app/services/serviceSignalr';
+import { NotificationService } from 'src/app/services/notification.service';
+import { I } from '@angular/cdk/keycodes';
 @Component({
   selector: 'app-add-products',
   templateUrl: './add-products.component.html',
   styleUrls: ['./add-products.component.css']
 })
 export class AddProductsComponent implements OnInit {
+  page: any;
+  signalRMessageDataContinuos: any;
+  routePath = 'procedures';
   constructor(
     private fb: FormBuilder,
-    private service: MyservcesService,
-    private router: Router,
-    private activeRoute: ActivatedRoute
-  ) { }
-
+    private service: MyservcesService,private translateService : TranslateService,
+    private router: Router,private signalRService:SignalRService,
+    private activeRoute: ActivatedRoute,private notifyService : NotificationService,
+  ) { 
+    this.signalRService.startRoutedSignalRConnection(this.routePath);
+    this.signalRService.signalRMessageDataContinuos.subscribe(
+      (data) => (this.signalRMessageDataContinuos = data));
+  }
+  isAddMode!: boolean;
   productForm: FormGroup
   message: string;
   btnTitle: string;
   title: string;
+  errors: string[] = [];
   id: number;
   img: File;
   isloading: boolean
@@ -55,6 +68,18 @@ export class AddProductsComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    this.page=1
+    $(document).ready(function () {
+      $('#price').keypress(function () {
+        var inputValue = (<HTMLInputElement>document.getElementById('price')).value;
+        if (inputValue.length == 4) {
+          return false
+        };
+        return true
+      });
+  
+    })
+    this.signalRService.askServer('receiveProductData',this.products)
     this.GetAllproducts()
     this.title = 'اضافة صنف جديد';
     this.btnTitle = 'اضافة';
@@ -70,8 +95,7 @@ export class AddProductsComponent implements OnInit {
     this.productForm = this.fb.group({
       productsnameAr: ['', Validators.required],
       productsnameEn: ['', Validators.required],
-      price: ['',   [Validators.required]],
-
+      price: [0.0, Validators.required],
       Images: [null]
     });
     this.products = {
@@ -91,6 +115,7 @@ export class AddProductsComponent implements OnInit {
     }
     this.activeRoute.paramMap.subscribe(param => {
       const id = Number(param.get('id'));
+      this.isAddMode = !this.id;
       console.log(id);
       if (id) {
         this.service.Getproduct(id).subscribe((productsMod: any) => {
@@ -118,33 +143,39 @@ export class AddProductsComponent implements OnInit {
     })
    
   }
- 
+  getTitle(){
+    return this.isAddMode ? this.translateService.instant('titleSaveproduct') : this.translateService.instant('titleEditproduct');
+  }
+   validatePrice(value) {
+    if (!Number.isInteger(value) || value <= 0||value>6) {
+      return {
+        message: 'The price must be a positive integer.'
+      };
+    }
+  
+    return null;
+  }
   Addproduct() {
+    
     if (this.productForm.valid) {
       this.isloading = true
       this.ValidateModel();
       this.service.AddproductMod(this.products).subscribe((product: any) => {
-
-        this.ngOnInit();
-        this.message = product.message.ar;
-
-        Swal.fire({ toast: true, position: 'center',
-        showConfirmButton: false, timer: 3000, title: 'Success!', text: 'تمت عملية الاضافه بنجاح',
-         icon: 'success', });
+        this.notifyService.showSuccess(product.message.ar);
+        this.router.navigate(['productlist']);
 
         this.isloading = false
-        console.log(product)
+     
       }, ex => {
-        console.log(ex);
+        
+        this.errors = parseWebAPIErrors(ex);
         this.message = '';
         this.isloading = false
-        Swal.fire({ toast: true, position: 'center',
-        showConfirmButton: false, timer: 3000, title: 'info!', text: 'لم تتم الاضافه بنجاح',
-         icon: 'info', });
+        this.notifyService.showError(ex);
 
       })
-    }
-  }
+    }}
+  
 
   GoToList() {
     // sessionStorage.setItem('product', 'product');
@@ -156,7 +187,8 @@ export class AddProductsComponent implements OnInit {
     }
   }
   GetAllproducts() {
-    this.service.GetAllproduct().subscribe((list: any) => {
+    this.service.GetAllproduct(this.page).subscribe((list: any) => {
+      this.page++
       this.product = list.data;
     }, ex => console.log(ex));
     this.isloading = false

@@ -1,8 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/internal/Subject';
 import { MyservcesService } from 'src/app/myservces.service';
 import { inivce } from '../../models/invice';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { TranslateService } from '@ngx-translate/core';
+import { DxDataGridComponent } from 'devextreme-angular';
+import { formatMessage, loadMessages } from 'devextreme/localization';
+import { AuthoService } from 'src/app/autho.service';
+import { CurrentSettingService } from 'src/app/services/current-setting.service';
+import { ExportPdfService } from 'src/app/services/export-pdf.service';
+import { ListCusomerService } from 'src/app/services/list-cusomer.service';
+import { keyboadShortCut } from '../../models/staticData.model';
+import { LanguageService } from '../../myservice/language.service';
+import { ExportExcelService } from 'src/app/services/export-excel.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-paid-cash-invoice',
@@ -11,254 +24,189 @@ import { inivce } from '../../models/invice';
 })
 export class PaidCashInvoiceComponent {
 
+  displayedColumns = ['CustmerName', 'invioces', 'country', 'phone_Number', 'Tax', 'opretions'];
 
-  constructor(
-    private router: Router,
-    private servicess: MyservcesService,
-    private activeRoute: ActivatedRoute
+  placeholder = 'Search...';
+  @ViewChild('paginator') paginator!: MatPaginator;
+  @ViewChild(MatSort) matSort!: MatSort;
+  readonly allowedPageSizes = [5, 10,100, 'all'];
+  public showPageSizeSelector = true;
+  public showInfo = true;
+  public showNavButtons = true;
+  @ViewChild(DxDataGridComponent, { static: false })dataGrid: DxDataGridComponent;
+  havepdf: any
+  displayMode = 'full';
+  fontSize = this.currentSettingService.getUserGridFontSize();
+  email: string;
+  loadIndicatorVisible = false;
+  rtlEnabled = this.languageService.getCurrentLanguage() == 'en' ? false : true;
+  formatMessage = formatMessage;
+  pagination = true;
+  dataSource: any;
+  loadingVisible: any
 
-  ) { }
-price:any
-   storedata:any;
-  invoice: inivce[];
-  invoice1: inivce[];
-  approve: boolean;
-  num: number;
-  invioce: inivce;
-  message: string;
-  customer_aname: any;
-  dtoptions:any = {};
-  dtTrigger:Subject<any>=new Subject<any>();
-  ngOnInit(): void {
-    this.dtoptions  = {
-      pagingType: 'simple_numbers',
-      searching:true,
-     paging:true,
-    
-     order: [
-      [0, "desc"]
-    ],
-     pageLength: 6,
-    lengthChange:false,
+
+
+  currentClickedId: any;
+  showloading: any;
+  stores: any[];
+  storess: any;
+
+  constructor( private exportExcelService : ExportExcelService,
+    private service: MyservcesService, private translateService: TranslateService, private languageService: LanguageService, private exportPdfService: ExportPdfService,
+    private router: Router, private listCustomer: ListCusomerService, private currentSettingService: CurrentSettingService,
+    private activeRoute: ActivatedRoute, private auth: AuthoService,  private spinnerService: NgxSpinnerService
+  ) {
+    loadMessages(this.listCustomer.getListCustomerDictionary());
+    this.Editcustomer = this.Editcustomer.bind(this)
+    this.Customerdelete = this.Customerdelete.bind(this)
+    this.LoadCustomers()
   
-
-    dom: 'Blfrtip',
-    buttons: [
-      {
-        extend: 'colvis',
-        text:' '
-        },
-      {
-        extend:    'print',
-        text:      '<i class="fa fa-print"></i>',
-        titleAttr: 'Print',
-        className:'alert-primary',
-        messageTop: ' ',
-        exportOptions: {
-          columns: ':visible',
-      },
-      fixedColumns:   {
-        left: 2
-    },
-      customize: function (win: { document: { body: string; }; }) {
-          $(win.document.body).find('table').addClass('display').css('direction', 'rtl').css('font-size', '18px');
-          $(win.document.body).find('tr:nth-child(odd) td').each(function(index){
-              $(this).css('background-color','#D0D0D0');
-          });
-          $(win.document.body).find('h1').css('display','none');
-      }
-    },
-    {
-        extend:    'excelHtml5',
-        text:      '<i class="fa fa-file-excel-o"></i>',
-        titleAttr: 'Excel',
-        className:'alert-primary',
-        messageTop: ' ',
-        exportOptions: {
-          columns: ':visible',
-      },
-      customize: function (win: { document: { body: string; }; }) {
-          $(win.document.body).find('table').addClass('display').css('direction', 'rtl').css('font-size', '18px');
-          $(win.document.body).find('tr:nth-child(odd) td').each(function(index){
-              $(this).css('background-color','#D0D0D0');
-          });
-          $(win.document.body).find('h1').css('text-align','center');
-      }
-    },
-  
-  ],
-        
-  select: true,   
-    language:{
-      searchPlaceholder:' ',
-      search:"",
-      paginate: { 
-        first: '<i id="f" class="fa fa-forward"></i>',
-       last: '<i id="l" class="fa fa-backward',
-       next: '<i id="n" class="fa fa-step-backward"></i>',
-       previous: '<i id="p" class="fa fa-step-forward"></i>',
-      
-          
-        }
-       
-    },
-    responsive: true
-    };
-    this.price=0.0
-    this. storedata='';
-    this.approve = false;
-    this.num = 0;
-    this.customer_aname = '';
-    this.invoice = [];
-    this.invoice1 = []
-    this.message = '';
-
-    this.getinvioce();
-  }
-  getinvioce() {
-    this.servicess.GetAllInices().subscribe((list: any) => {
-      this.  storedata=list.data;
-      this.invoice = this.storedata.filter((x:any)=>x.invoice_type==="001"&& x.invoice_acceptance===1)
-     console.log ( this.invoice)
-      this.dtTrigger.next(null);
-      for (var pr of  this.invoice) {
-        this.price += pr.total_amount
-
-      }
-
-    }, (ex: any) => {
-      console.log(ex);
-    });
   }
 
-  sorting(){
-    this.servicess.GetAllInices().subscribe((list: any) => {
-      this.storedata = list.data;
-      this.invoice = this.storedata.filter((x:any)=> x.invoice_acceptance===1 &&x.invoice_type==="001")
-      this.invoice= this.invoice .reverse()
-      for (var pr of  this.invoice) {
-        this.price += pr.total_amount
-
-      }
-
-    //  this.renderchart(this.count, this.count1);
-
-    }, (ex: any) => {
-      console.log(ex);
-    });
-  }
-  sortingup(){
-    this.servicess.GetAllInices().subscribe((list: any) => {
-      this.storedata = list.data;
-      this.invoice = this.storedata.filter((x:any)=> x.invoice_acceptance===1&&x.invoice_type==="001" )
-      
-      for (var pr of  this.invoice) {
-        this.price += pr.total_amount
-
-      }
-
-    //  this.renderchart(this.count, this.count1);
-
-    }, (ex: any) => {
-      console.log(ex);
-    });
-  }
-  Addcustomer() {
-    this.router.navigate(['Add-inivce']);
+  ngOnInit() {
+    this.spinnerService.show();
+    setTimeout(() => {
+      /** spinner ends after 5 seconds */
+      this.spinnerService.hide();
+    }, 3000);
+this.stores=[]
+  this.showloading=false
+    this.loadingVisible = false
+    this.currentClickedId = 1
+   this.LoadCustomers()
   }
 
-  checkinvioce() {
-
-    return true
+  filterData($event: any) {
+    this.dataSource.filter = $event.target.value;
+  }
+  onShown() {
+    setTimeout(() => {
+      this.loadingVisible = false;
+    }, 3000);
   }
 
-  Editcustomer(id: number) {
-    if (id) {
+  onHidden() {
+    this.dataSource = this.dataSource;
+  }
 
+  showLoadPanel() {
+    this.dataSource = {};
+    this.loadingVisible = true;
+  }
+  Customerdelete(e: any) {
+    if (Number(e)) {
+      this.router.navigate(['DeleteCustomer', e.row.data.customer_id]);
+    } else {
+      var id = e.row.data.customer_id;
+      e.event.preventDefault();
+
+      this.router.navigate(['DeleteCustomer', id]);
+    }
+
+  }
+  delet(e: any) {
+    var invioce = 0;
+    if (Number(e)) {
+      invioce = e;
+    } else {
+      invioce = e.row.data.invoiceNo;
+      e.event.preventDefault();
 
     }
   }
-
-
-  // SelectAll() {
-  //   var tbl = $('#tbl');
+  addcustomer() {
+    this.router.navigate(['Addcustomer']);
+    // this.router.navigate(['Dashborad']);
+  }
+  grid:any
+  LoadCustomers() {
+  this.service.GetReportTransaction().subscribe( (res: any) => {
+      this.dataSource = res.data;
+   
+      this.dataSource=res.data.transactions
  
-  //   var header = tbl.find('thead .ckheader');
-  //   var item = tbl.find('tbody .ckitem');
-
-  //   $(function () {
-  //     item.on('change', function () {
-  //       if ($(this).is(':checked')) {
-  //         $(this).closest('tr').addClass('NewRowColor');
-  //       }
-  //       else {
-  //         $(this).closest('tr').removeClass('NewRowColor');
-  //       }
-  //     });
-
-  //     header.change(function () {
-
-  //       var c = Boolean(this.checked);
-  //       item.prop("checked", c);
-  //       item.trigger('check');
-  //       if ($(this).is(':checked')) {
-  //         $(item).closest('tr').addClass('NewRowColor');
-  //       }
-  //       else {
-  //         $(item).closest('tr').removeClass('NewRowColor');
-  //       }
-  //     });
-  //   });
-  // }
-
-  IsDelete() {
-    var checkboxes = document.getElementsByClassName('ckitem');
-    if (checkboxes.length > 0) {
-      for (let i = 0; i < checkboxes.length; i++) {
-        if ($(checkboxes[i]).is(":checked")) {
-          return true;
-        }
+      if(   this.dataSource ){
+        this.showloading=true
       }
+      this.dataGrid?.instance.endCustomLoading();
+    
+
+    },err=>{
+      alert( err.error)
+    });
+  }
+  onExporting(e) {
+    if (e.format == 'xlsx') {
+      this.exportExcelService.exportExcelDataGrid(e,'report','report');
     }
-    return false;
-  }
-
-  DeleteCount() {
-    var cont = $(".ckitem:checked").length;
-    this.num = cont;
-  }
-
-  DeleteConfirm() {
-    var checkboxes = document.getElementsByClassName('ckitem');
-    if (checkboxes.length > 0) {
-      var ids = [];
-      for (let i = 0; i < checkboxes.length; i++) {
-        if ($(checkboxes[i]).is(":checked")) {
-          var id = String($(checkboxes[i]).val());
-          ids.push(id);
-        }
-      }
-
-      this.servicess.DeletAllcustomer(ids).subscribe((s: any) => {
-        console.log(s);
-        this.getinvioce();
-        $("#btnClose").trigger("click");
-      }, (ex: any) => console.log(ex));
+    if (e.format == 'pdf') {
+      this.exportPdfService.exportPdfDataGrid(e, 'operations', false);
     }
   }
+  refreshDataGrid() {
+    this.dataGrid.instance.refresh();
+  }
 
-  
-  sertch() {
-    if (this.customer_aname == '') {
-      this.ngOnInit()
-    }
-    else {
+  Editcustomer(e: any) {
+    if (Number(e)) {
+      this.router.navigate(['Addcustomer', e.row.data.customer_id]);
+    } else {
+      var id = e.row.data.customer_id;
+      e.event.preventDefault();
 
-      this.invoice = this.invoice.filter(re => {
-        return re.customer.customer_aname.toLocaleLowerCase().match(this.customer_aname.toLocaleLowerCase());
-      })
+      this.router.navigate(['Addcustomer', id]);
     }
 
   }
+
+
+  @HostListener('window:keydown.' + keyboadShortCut.addNew, ['$event'])
+  createButton(event: KeyboardEvent) {
+    event.preventDefault();
+    this.router.navigate(['Addcustomer']);
+  }
+
+  @HostListener('window:keydown.' + keyboadShortCut.refrsh, ['$event'])
+  refreshButton(event: KeyboardEvent) {
+    event.preventDefault();
+    this.dataGrid.instance.refresh();
+  }
+
+  @HostListener('window:keydown.' + keyboadShortCut.increaseFont, ['$event'])
+  increaseFontButton(event: KeyboardEvent) {
+    event.preventDefault();
+    this.zoomIn();
+  }
+
+  @HostListener('window:keydown.' + keyboadShortCut.decreaseFont, ['$event'])
+  decreaseFontButton(event: KeyboardEvent) {
+    event.preventDefault();
+    this.zoomOut();
+  }
+
+  @HostListener('window:keydown.' + keyboadShortCut.edit, ['$event'])
+  editButton(event: KeyboardEvent) {
+    event.preventDefault();
+
+    this.router.navigate(['Addcustomer', this.currentClickedId]);
+  }
+
+  @HostListener('window:keydown.' + keyboadShortCut.delete, ['$event'])
+  deleteButton(event: KeyboardEvent) {
+    event.preventDefault();
+    this.router.navigate(['DeleteCustomer', this.currentClickedId]);
+
+  }
+  zoomIn() {
+    document.getElementById('gridContainer')!.style.fontSize = ++this.fontSize + 'px';
+    localStorage.setItem('gridFontSize', this.fontSize.toString());
+  }
+
+  zoomOut() {
+    document.getElementById('gridContainer')!.style.fontSize = --this.fontSize + 'px';
+    localStorage.setItem('gridFontSize', this.fontSize.toString());
+  }
+ 
 }
 

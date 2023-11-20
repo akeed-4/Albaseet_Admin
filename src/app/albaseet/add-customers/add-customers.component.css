@@ -9,9 +9,14 @@
     direction: rtl;
 
 }
+
+.mat-form-field{
+    max-width: 100px;
+}
 .div1{
     margin-top: -10%;
 }
+
 @media (max-width: 360px) {
     #input1 {
         margin-right: -65px;
@@ -28,6 +33,10 @@
     #input1{
         width: 300px;
     }
+  }
+  form{
+    padding: 5px;
+    border: 1px solid rgb(0, 0, 0);
   }
   @media screen and (min-width:601px) and (min-width:800px){
     .classm{
@@ -52,3 +61,17 @@
     border-top-right-radius: 30px;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.075);
 }
+
+.form-control{
+
+    border-radius: 8px;
+    padding: 5px;
+}
+mat-form-field,mat-grid-tile{
+    max-width: 400px;
+}
+::ng-deep .form-field ,mat-form-field{
+    max-width: 600px !important;
+   width: 500px;
+   margin: 5px;
+  }

@@ -31,8 +31,10 @@ import { request } from './albaseet/models/request';
 })
 export class MyservcesService {
   [x: string]: any;
-  private baseUrl = "https://localhost:44389/";
-  private baseUr2 = "https://localhost:44377/CarsControler/";
+  // private baseUrl = "http://localhost:5000/";
+  
+  private baseUrl="http://baseet.selfip.com:8096/"
+  private baseUr2= "https://localhost:44377/CarsControler/";
   private basurl3="https://localhost:44377/Invoice/";
   private basurl4="https://localhost:44377/Purchase_invoices/";
   private basurl5="https://localhost:44377/Admin/";
@@ -67,14 +69,18 @@ export class MyservcesService {
    
     return this.http.get<customer[]>(this.baseUrl + 'payments/get_payments', this.headers).pipe();
   }
+  GetAllpaymentbyid(id :any): Observable<any[]>{
+    return this.http.get<customer[]>(this.baseUrl + 'payments/get_payments/' + id, this.headers).pipe();
+  }
   Getproduct(id: number): Observable<products> {
     return this.http.get<products>(this.baseUrl + 'product/get_warehouse_products/' + id, this.headers).pipe();
   }
 
-  GetAllproduct(): Observable<products[]> {
-    return this.http.get<products[]>(this.baseUrl + 'product/get_warehouse_products', this.headers).pipe();
+  GetAllproduct(page:number): Observable<products[]> {
+ 
+    return this.http.get<products[]>(this.baseUrl + 'product/get_products/'+page, this.headers).pipe();
   }
-
+  
  
   DeleteAllproducts(ids: any): Observable<products> {
   console.log(ids)
@@ -86,9 +92,14 @@ export class MyservcesService {
     return this.http.post<products>(this.baseUrl + 'product/delete/'+ ids, this.headers).pipe();
   }
 
+  GetAllUser(): Observable<any> {
+ 
+    return this.http.get<any>(this.baseUrl + 'reports/GetAllUsers' , this.headers).pipe();
+  }
 
-
-
+  GetToTalUser(userId:any): Observable<any> {
+    return this.http.get<any>(this.baseUrl + 'reports/GetTotalUserId/'+userId , this.headers).pipe();
+  }
 
 //details customers
 
@@ -100,6 +111,10 @@ export class MyservcesService {
   GetAllcustmers(): Observable<customer[]> {
    
     return this.http.get<customer[]>(this.baseUrl + 'customers/get_customers', this.headers).pipe();
+  }
+  GetReportTransaction(): Observable<any[]> {
+   
+    return this.http.get<any[]>(this.baseUrl + 'reports/Webget_transaction', this.headers).pipe();
   }
 
   Addcustomermodel(formData: customer) {
@@ -121,7 +136,7 @@ export class MyservcesService {
 
   GetAllrecipte(): Observable<recipte[]> {
    
-    return this.http.get<recipte[]>(this.baseUrl + 'receipts/get_receipts', this.headers).pipe();
+    return this.http.get<recipte[]>(this.baseUrl + 'receipts/Webget_receipts', this.headers).pipe();
   }
 
   approverecipte(id: approveinvice){
@@ -130,9 +145,6 @@ export class MyservcesService {
     
     }
     
-    
-
-
 
   
   postRequset(id: number): Observable<request> {
@@ -143,7 +155,21 @@ export class MyservcesService {
   }
 
   GetAllInices(): Observable<inivce[]> {
-    return this.http.get<inivce[]>(this.baseUrl + 'invoices/get_invoices', this.headers).pipe();
+    return this.http.get<inivce[]>(this.baseUrl + 'invoices/Webget_invoices', this.headers).pipe();
+  }
+  GetAllTotalUser(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + 'reports/Webget_transactionUser', this.headers).pipe();
+  }
+  GetAllTotalUsertoday(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + 'reports/Webget_transactionUsertoday', this.headers).pipe();
+  }
+  checkDateForm(start:any,end:any) {
+  
+    return this.http.get<any[]>(this.baseUrl + 'reports/Webget_transactionUserDate/'+ start + '/' + end).pipe();
+  }
+  checkDateFormUser(userid:any,start:any,end:any) {
+  
+    return this.http.get<any[]>(this.baseUrl + 'reports/GetTotalUser/'+userid+'/'+ start + '/' + end).pipe();
   }
 
 
@@ -173,7 +199,14 @@ console.log(id)
     console.log(formData);
     return this.http.post<payment_method>(this.baseUrl + 'payments/create', formData).pipe();
   }
-
+  EditPaymont(formData: payment_method){
+    console.log(formData)
+    return this.http.post<payment_method>(this.baseUrl + 'payments/update', formData).pipe();
+  }
+  Deletpaymont(id:any){
+    console.log(id)
+    return this.http.post<any>(this.baseUrl + 'payments/delete/'+id, this.headers).pipe();
+  }
 //هنا التسجيل واضافه بيانات سيارة
 AddCarcolors(formData: any): Observable<Carcolor> {
   console.log(formData)
@@ -189,60 +222,26 @@ AddCars(formData: any) {
 }
 
 
-GetAllpurchesinvioce(): Observable<AddPurches_invioce[]> {
-  return this.http.get<AddPurches_invioce[]>(this.baseUr2 + 'Getpurchesinvioce', this.headers).pipe();
-}
-
-AddBrunch(formData: any) {
-  console.log(formData)
-  return this.http.post<BrunchCars>(this.baseUr2 + 'AddTypeCars', formData).pipe();
-}
-
-Getallbrunchlimt(id: any): Observable<Gettypebrunch[]> {
-  console.log(id)
-  return this.http.get<Gettypebrunch[]>(this.baseUr2 + 'GetAllBrunch/'+id,this.headers).pipe();
-}
 
 
-GetNameclass(id: any): Observable<GettNameclass[]> {
-  console.log(id)
-  return this.http.get<GettNameclass[]>(this.baseUr2 + 'GetNameClass/'+id,this.headers).pipe();
-}
-Addmodelcar(formData: any): Observable<modelcar> {
-  console.log(formData)
-  return this.http.post<modelcar>(this.baseUr2 + 'AddModelcar', formData,this.headers).pipe();
-}
-addtypecar(formData: any): Observable<Typecar> {
-  console.log(formData)
-  return this.http.post<Typecar>(this.baseUr2 + 'Addcartype', formData,this.headers).pipe();
-}
 
-GetAlltype(): Observable<Typecar[]> {
-   
-  return this.http.get<Typecar[]>(this.baseUr2 + 'GetAltypecars', this.headers).pipe();
-}
 
-GetAllcars(): Observable<GetCarsVareint[]> {
-   
-  return this.http.get<GetCarsVareint[]>(this.baseUr2 + 'GetAllCarVarint', this.headers).pipe();
-}
+
+
+
+
+
+
+
+
 GetAllproductBuy(): Observable<any[]> {
    
   return this.http.get<any[]>(this.baseUr2 + 'GetAllproductBuy', this.headers).pipe();
 }
-GetAllCarsbuy(): Observable<any[]> {
-   
-  return this.http.get<any[]>(this.basurl4 + 'GetAllCarsBuy', this.headers).pipe();
-}
-GetAllclass(): Observable<Classcars[]> {
-   
-  return this.http.get<Classcars[]>(this.baseUr2 + 'GetAllcatgorycar', this.headers).pipe();
-}
 
-addopeningBalance(data:any): Observable<any[]> {
-   
-  return this.http.post<any[]>(this.UrlshowRoom + 'Addopeninig_Balance',data, this.headers).pipe();
-}
+
+
+
   Register(reg : Rigestar): Observable<Rigestar>{
     console.log(reg)
     return this.http.post<Rigestar>(this.baseUrl +'Register' ,reg,this.headers).pipe();
@@ -262,43 +261,14 @@ addopeningBalance(data:any): Observable<any[]> {
 
 
 
-  GatAllCarSales(): Observable<any[]> {
-   
-    return this.http.get<any[]>(this.UrlReport + 'GetAllCCarsales',this.headers).pipe();
-  }
+ 
 
 
-
-  GetAllcolor(): Observable<Carcolor[]> {
-   
-    return this.http.get<Carcolor[]>(this.baseUr2 + 'GetAllcolor', this.headers).pipe();
-  }
-  GetAllBond_deposit(): Observable<any[]> {
-   
-    return this.http.get<any[]>(this.baseUr2 + 'GetBond_deposit', this.headers).pipe();
-  }
-  
-
-  GetAllModel(): Observable<modelcar[]> {
-   
-    return this.http.get<modelcar[]>(this.baseUr2 + 'GetAllmodel', this.headers).pipe();
-  }
-
-  AddpurchesInvo(formData: any): Observable<AddPurches_invioce> {
-    console.log(formData)
-    return this.http.post<AddPurches_invioce>(this.baseUr2 + 'AddpurchesInvioc', formData,this.headers).pipe();
-  }
 
 
 //testin only
 
-  Getpost(): Observable<post[]> {
-    return this.http.get<post[]>(this.baseUrl + '/posts ', this.headers).pipe();
-  }
-  Deletepost(ids: string[]): Observable<post[]> {
-    console.log(ids)
-    return this.http.delete<post[]>(this.baseUrl + '/posts/1' + ids, this.headers).pipe();
-  }
+ 
   Addppost(formData: post) {
     console.log(formData);
     return this.http.post<post>(this.baseUrl + '/posts', formData, { withCredentials: true }).pipe();
@@ -393,6 +363,6 @@ SaveReciept(depositDAta:any){
     }
 }
 
-
+//  private baseUrl = "https://mobweb.eofficewebapp.com/";
 
 

@@ -24,7 +24,6 @@ export interface VisitorChartOptions {
   dataLabels: ApexDataLabels | any;
   plotOptions: ApexPlotOptions | any;
 }
-
 @Component({
   selector: "app-our-visiter",
   standalone: true,

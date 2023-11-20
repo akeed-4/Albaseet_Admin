@@ -12,12 +12,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialRoutes } from './material.routing';
 
 
-
-
-
-
-
-
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -34,8 +28,6 @@ import { MtxGridModule } from '@ng-matero/extensions/grid';
     ReactiveFormsModule,
     CdkTableModule,
  
-  
-  
   
     MtxGridModule
   ],

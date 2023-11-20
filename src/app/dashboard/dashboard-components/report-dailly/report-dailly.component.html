@@ -1,0 +1,92 @@
+<div class="" >
+  <mat-toolbar  color="primary" style="margin-bottom: 20px;margin-top: 10px;">{{'Users sales report'|translate}}</mat-toolbar>
+
+ <div  style="text-align: right;" class="border-form " >
+  <form [formGroup]="productForm" class="cardss">
+    <mat-form-field appearance="outline">
+      <mat-label>{{'Start_date'|translate}}</mat-label>
+      <input matInput  formControlName="startDate"  (dateChange)="generateReport()"  placeholder="{{'Start_date'|translate}}" [matDatepicker]="startDatePicker">
+      <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #startDatePicker></mat-datepicker>
+    </mat-form-field>
+  
+    <mat-form-field appearance="outline">
+      <mat-label>{{'End_date'|translate}}</mat-label>
+      <input matInput  formControlName="endDate"  (dateChange)="generateReport()"  placeholder="{{'End_date'|translate}}" [matDatepicker]="endDatePicker">
+      <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #endDatePicker></mat-datepicker>
+    </mat-form-field>
+  
+  </form>
+ </div>
+
+</div>
+<!-- <div *ngIf="!showloading" style="text-align: center;margin-top: 50px;">
+  <p class="spinner-grow"></p>
+</div> -->
+
+  <dx-data-grid
+  
+     [dataSource]="storedata"
+  id="gridContainer"
+  [selectedRowKeys]="[]"
+  [allowColumnResizing]="true"
+  [columnResizingMode]="'nextColumn'"
+  [columnMinWidth]="50"
+  [columnAutoWidth]="true"
+  [remoteOperations]="true"
+ 
+  [showColumnLines]="true"
+  [showRowLines]="true"
+  [showBorders]="true"
+  [rowAlternationEnabled]="true"
+  [rtlEnabled]="rtlEnabled"
+  (onExporting)="onExporting($event)"
+  cellTemplate="cellTemplate"
+  class="grid-class"
+     >
+
+    <dxo-toolbar class="grid-buttons">
+      <dxi-item location="before">
+        <div *dxTemplate>
+          <dx-button icon="refresh" (onClick)="refreshDataGrid()" hint="{{'refreshButton' | translate}}"></dx-button>
+          <dx-button icon="chevronup" (onClick)="zoomIn()" hint="{{'zoomIn' | translate}}"></dx-button>
+          <dx-button icon="chevrondown" (onClick)="zoomOut()" hint="{{'zoomOut' | translate}}"></dx-button>
+        </div>
+      </dxi-item>
+      <dxi-item name="exportButton"></dxi-item>
+      <dxi-item name="columnChooserButton"></dxi-item>
+      <dxi-item name="groupPanel"></dxi-item>
+    </dxo-toolbar>
+    <dxi-column dataField="localUser.user_name" [caption]="formatMessage('user_name')" dataType="string"> </dxi-column>
+    <dxi-column dataField="localUser.invoices_count" [caption]="formatMessage('invoices_count')" dataType="number">
+    </dxi-column>
+    <dxi-column dataField="cashSales" [caption]="formatMessage('SalsCash')" dataType="number"> </dxi-column>
+    <dxi-column dataField="creditSales" [caption]="formatMessage('SalsCrdit')" dataType="number"> </dxi-column>
+    <dxi-column dataField="returnSaleCash" [caption]="formatMessage('SalescashReturn')" dataType="number"> </dxi-column>
+    <dxi-column dataField="returnSaleCredit" [caption]="formatMessage('SalesCreditReturn')" dataType="number"></dxi-column>
+    <dxi-column dataField="totalRecipt" [caption]="formatMessage('totalRecipt')" dataType="number"> </dxi-column>
+    <dxo-column-chooser  #columnChooser [enabled]="true" mode="select" >
+      <dxo-search [enabled]="true" [editorOptions]="true"></dxo-search>
+      <dxo-selection [allowSelectAll]="true" [selectByClick]="true" [recursive]="true"></dxo-selection>
+    </dxo-column-chooser>
+
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+<dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+
+<dxo-selection mode="single"></dxo-selection>
+<dxo-scrolling rowRenderingMode="virtual"> </dxo-scrolling>
+  <dxo-paging [pageSize]="10"> </dxo-paging>
+  <dxo-pager
+    [visible]="true"
+    [allowedPageSizes]="[10, 50, 100, 'all']"
+    [displayMode]="'full'"
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+  >
+  </dxo-pager>
+  <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+  <dxo-export [enabled]="true" [formats]="['pdf','xlsx']" [allowExportSelectedData]="false" fileName="countries" ></dxo-export>
+  <dxo-sorting mode="multiple"></dxo-sorting>
+  </dx-data-grid>

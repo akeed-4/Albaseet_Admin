@@ -5,7 +5,6 @@ import { FormGroupDirective, FormsModule, ReactiveFormsModule } from '@angular/f
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DatePipe, HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { AppRoutes } from './app.routing';
-
 import { AppComponent } from './app.component';
 import { NgxPrintModule } from 'ngx-print';
 import { FullComponent } from './layouts/full/full.component';
@@ -13,7 +12,7 @@ import { AppHeaderComponent } from './layouts/full/header/header.component';
 import { AppSidebarComponent } from './layouts/full/sidebar/sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DemoMaterialModule } from './demo-material-module';
-import { DxDataGridModule, DxButtonModule,DxSelectBoxModule } from 'devextreme-angular';
+import { DxDataGridModule, DxButtonModule,DxSelectBoxModule, DxCheckBoxModule, DxNumberBoxModule, DxFormModule, DxAutocompleteModule, DxFormComponent, DxProgressBarModule, DxDrawerModule, DxListModule, DxRadioGroupModule, DxToolbarModule } from 'devextreme-angular';
 import { SpinnerComponent } from './shared/spinner.component';
 import { LoginComponent } from './albaseetCars/login/login.component';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -28,9 +27,9 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { ToastrModule, provideToastr } from 'ngx-toastr';
-
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { JwtModule } from '@auth0/angular-jwt';
 import { ProductDeleteComponent } from './albaseet/product-delete/product-delete.component';
 import { ViewProduct1Component } from './albaseet/product/view-product1/view-product1.component';
@@ -55,6 +54,7 @@ import { ReportCreditInvioceComponent } from './albaseet/report_invioce-unapprov
 import { ReportCustomerUnapproveComponent } from './albaseet/report_invioce-unapprove/report-customer-unapprove/report-customer-unapprove.component';
 import { ReportDateInvoiceUnComponent } from './albaseet/report_invioce-unapprove/report-date-invoice-un/report-date-invoice-un.component';
 import { ReportProductUnapproveComponent } from './albaseet/report_invioce-unapprove/report-product-unapprove/report-product-unapprove.component';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { CreditSalesInvoiceComponent } from './albaseet/report_invioce/credit-sales-invoice/credit-sales-invoice.component';
 import { PaidCashInvoiceComponent } from './albaseet/report_invioce/paid-cash-invoice/paid-cash-invoice.component';
@@ -99,6 +99,7 @@ import {
 	IgxCsvExporterService,
 	IgxInputGroupModule
  } from "igniteui-angular";
+ 
 import { GuiGridModule } from '@generic-ui/ngx-grid';
 import { IgxGridModule } from 'igniteui-angular';
 
@@ -108,10 +109,16 @@ import { AuthInterceptor, OidcSecurityService } from 'angular-auth-oidc-client';
 import { loadMessages, locale } from 'devextreme/localization';
 import { MomentUtcDateAdapter } from './albaseet/models/modells/moment-utc-date-adpater';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef, matDialogAnimations } from '@angular/material/dialog';
+import { DisplayErrorsComponent } from './display-errors/display-errors.component';
+import { SpinnerService } from './services/spinner.service';
+import { FormfiltingComponent } from './albaseet/formfilting/formfilting.component';
 
 export function tokenGetter() {
-  
   return localStorage.getItem("token");
+
 }
 
 @NgModule({
@@ -123,18 +130,17 @@ export function tokenGetter() {
     SpinnerComponent,
     LoginComponent,
 
-
 RequstComponent,
 AddrequstComponent,
 InviceComponent,
 PymontComponent,
 DashboraHomeComponent,
 DetialsPaymontComponent,
-
+DisplayErrorsComponent,
 ViewCustomerComponent,
       ViewProductComponent,
+     
    AddProductsComponent,
- 
 PaidCashInvoiceComponent,
     ReportAllInvoiceComponent,
     UpdateProductComponent,
@@ -146,9 +152,7 @@ PaidCashInvoiceComponent,
       CreditSalesInvoiceComponent,
    AddPymentMethodComponent,
    ConcetionCompanyComponent,
-
    ReportCustomerComponent,
- 
   ReportInvioceDateComponent,
    PaidCashInvoiceComponent,
    CreditSalesInvoiceComponent,
@@ -175,7 +179,6 @@ PaidCashInvoiceComponent,
    ReciptDateViewComponent,
    MainInvoicereportENComponent,
    MainRecipterportENComponent,
-
    ReportDaitalsDateComponent,
    ReportDaillyComponent,
    ReportAllInvioceVComponent,
@@ -186,45 +189,58 @@ PaidCashInvoiceComponent,
    CustomerDeleletComponent,
    ProductDeleteComponent,
    AddCustomersComponent,
+   FormfiltingComponent,
    
-
-    
-
   ],
   imports: [
     MatCardModule,
     FormsModule,
+    MatChipsModule,
     BrowserModule,
     BrowserAnimationsModule,
     DemoMaterialModule,
     MatTableModule,
-   
+    MatGridListModule,
     MatSortModule,
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
+    DxListModule,
+    DxRadioGroupModule,
+    DxToolbarModule,
     HttpClientModule,
     IgxAvatarModule,
 	  DxSelectBoxModule,
     IgxSwitchModule,
     DxDataGridModule,
+    DxCheckBoxModule,
+    DxSelectBoxModule,
+    DxNumberBoxModule,
+    DxButtonModule,
+    DxFormModule,
+    DxAutocompleteModule,
+    DxProgressBarModule,
      DxButtonModule,
     IgxInputGroupModule,
     SharedModule,
+    
     NgxPrintModule,
     MatSnackBarModule,
     AgGridModule,
+    
     ReactiveFormsModule,
     RouterModule.forRoot(AppRoutes),
     AppSidebarComponent,
     MatTableModule,
+    MatDatepickerModule,
     ToastrModule.forRoot(),
     MatSortModule,
     IgxGridModule,
+    DxDrawerModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ["localhost:44389"],
+        allowedDomains: ["baseet.selfip.com:8096"],
         disallowedRoutes: []
       }
   }),
@@ -232,7 +248,8 @@ PaidCashInvoiceComponent,
     GuiGridModule,
     MatPaginatorModule,
     MatFormFieldModule,
-
+    BrowserAnimationsModule,
+    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
     TranslateModule.forRoot({
       defaultLanguage : "en",
       loader: {
@@ -250,13 +267,12 @@ PaidCashInvoiceComponent,
       provide: LocationStrategy,
       useClass: HashLocationStrategy
     }, provideToastr(),
+   
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     { provide: DatePipe },
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
     { provide: DateAdapter, useClass: MomentUtcDateAdapter },
-
-  
-    
+   
   ],
   bootstrap: [AppComponent]
 })
@@ -268,8 +284,9 @@ export class AppModule {
     locale(this.localLanguage);
 }
 getLocalLang(){
-  this.localLanguage = localStorage.getItem('currentLanguage') || 'en';
+  this.localLanguage = localStorage.getItem('currentLanguage') || 'ar';
 }}
 export function httpTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http,'../assets/i18n/','.json');
 }
+// mobweb.eofficewebapp.com

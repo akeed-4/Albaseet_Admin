@@ -1,7 +1,7 @@
 <!-- ============================================================== -->
 <!-- Main wrapper - style you can find in pages.scss -->
 <!-- ============================================================== -->
-<div class="main-container" style="height: 910px;">
+<div class="main-container" >
     <!-- ============================================================== -->
     <!-- Topbar - style you can find in header.scss -->
     <!-- ============================================================== -->
@@ -14,17 +14,21 @@
                 <!-- Logo icon --><b>
                     <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                     <!-- Dark Logo icon -->
-                    <img src="assets/images/logo.png" alt="homepage" class="dark-logo">
+                    <!-- <img src="assets/images/logo.png" (click)="backdashboard()" alt="homepage" class="dark-logo"> -->
                     <!-- Light Logo icon -->
-                    <img src="assets/images/logo.png" alt="homepage" width="60px" class="light-logo">
+                    <!-- <img src="assets/images/logo.png"  style="cursor: pointer;" (click)="backdashboard()" alt="homepage" width="60px" class="light-logo"> -->
+                    <span (click)="backdashboard()" style="cursor: pointer;">
+                        <!-- <mat-icon>arrow_forward</mat-icon> -->
+                        <p style="color: #fcf8f8;margin-top: 30px;"> {{'Control Panel'|translate}} </p>
+                           </span>
                 </b>
                 <!--End Logo icon -->
                 <!-- Logo text -->
                 <span class="text-logo-icon" fxShow="false" fxShow.gt-xs>
                     <!-- dark Logo text -->
-                    <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo">
-                    <h6 style="color: #fcf8f8;"> {{'ALWASEET WEB'|translate}}</h6>
-
+                    <!-- <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo"> -->
+                    <!-- <h6 style="color: #fcf8f8;"> {{'ALWASEET WEB'|translate}}</h6> -->
+                   
                     <!-- <img src="assets/images/logo-light-text.png" class="light-logo" alt="homepage"> -->
                 </span>
             </p>
@@ -33,19 +37,18 @@
         <!-- sidebar toggle -->
         <!-- ============================================================== -->
 
-        <app-header class="d-flex align-items-center ml-auto"></app-header>
-        <button mat-icon-button (click)="snav.toggle()" id="menu" value="sidebarclosed">
+        <app-header class="d-flex align-items-center ml-auto" ></app-header>
+        <button mat-icon-button (click)="snav.toggle()" id="menu-side-bar" value="sidebarclosed">
             <mat-icon>menu</mat-icon>
         </button>
         <!-- ============================================================== -->
         <!-- app header component - style you can find in header.scss / header.component.ts-->
         <!-- ============================================================== -->
-
     </mat-toolbar>
     <!-- ============================================================== -->
     <!-- End Topbar - style you can find in pages.scss -->
     <!-- ============================================================== -->
-    <mat-sidenav #snav id="snav" (click)="toggleSidenav()" style="margin-top: 63px;color: black;" position="start"
+    <mat-sidenav #snav id="snav"   (click)="toggleSidenav()" style="margin-top: 62px;color: black;" position="start"
         class="dark-sidebar pl-xs md-sidenav"  [mode]="mobileQuery.matches ? 'side' : 'over'"
         [opened]="mobileQuery.matches">
 
@@ -53,30 +56,13 @@
 
 
     </mat-sidenav>
-    <mat-sidenav-container class="example-sidenav-container " [style.marginTop.px]="mobileQuery.matches ? 0 : 0">
+    <mat-sidenav-container  class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 0 : 0" >
         <!-- ============================================================== -->
-        <!-- Sidebar - style you can find in sidebar.scss -->
-        <!-- ============================================================== -->
-
-        <!-- ============================================================== -->
-        <!-- Sidebar - style you can find in sidebar.scss -->
-        <!-- ============================================================== -->
-
-        <!-- ============================================================== -->
-        <!-- Page container - style you can find in pages.scss -->
-        <!-- ============================================================== -->
-        <mat-sidenav-content class="page-wrapper">
-
-            <div class="example-sidenav-content">
-
-                <body [style]="styleMarginBody">
-
-                    <div class="container" style="height: 1000px;">
-                        <div style="margin-top: 30px;">
-                            <span (click)="backdashboard()" style="cursor: pointer;">
-                                <!-- <mat-icon>arrow_forward</mat-icon> -->
-                              {{'Control Panel'|translate}} 
-                        </span>
+        <mat-sidenav-content class="page-wrapper "   style="background-color: #ffffff;" >
+            <div >
+                <body  >
+                    <div class="container response" >
+                        <div style="margin-top: 0px;">
                         </div>
                         <router-outlet><app-spinner></app-spinner></router-outlet>
                     </div>
@@ -100,3 +86,27 @@
     </mat-sidenav-container>
 </div>
 
+<style>
+ /* @media (max-width: 1600px) {
+ 
+  #snav{
+    max-width: 140px;
+  }
+} */
+h6{
+    font-family: 'droidKufi-bold', sans-serif;
+
+}
+.dark-sidebar {
+
+  
+  width: 200px;
+
+}
+#snav{
+    height: 1800px;
+}
+
+
+
+</style>

@@ -11,14 +11,21 @@ import { ExportPdfService } from 'src/app/services/export-pdf.service';
 import { LanguageService } from '../../myservice/language.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { CurrentSettingService } from 'src/app/services/current-setting.service';
+import { data } from 'jquery';
+import CustomStore from 'devextreme/data/custom_store';
 
+import { SignalRService } from 'src/app/services/serviceSignalr';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { ExportExcelService } from 'src/app/services/export-excel.service';
+import { SpinnerService } from 'src/app/services/spinner.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-report-all-invioce',
   templateUrl: './report-all-invioce.component.html',
   styleUrls: ['./report-all-invioce.component.css']
 })
 export class ReportAllInvioceComponent {
-  readonly allowedPageSizes = [5, 10,100, 'all'];
+  readonly allowedPageSizes = [5, 10, 100, 'all'];
   placeholder = 'serch'
   public showPageSizeSelector = true;
   public showInfo = true;
@@ -47,19 +54,63 @@ export class ReportAllInvioceComponent {
   showloading: boolean;
   currentClickedId: any;
   product: any;
-  constructor(private currentSettingService:CurrentSettingService,
+  methodToSubscribe = 'receiveinvoiceData';
+  selsproduct: any[];
+  connectionStarted: boolean;
+  dataSource: CustomStore<any, any>;
+  messageData: any;
+  connectionState: string;
+  signalRMessageDataCaller: any;
+  signalRMessageDataContinuos: any;
+  methodToCall = '';
+  paramsBody = '';
+  routePath = 'procedures';
+  stronglyMethodToSubscribe = 'receiveinvoiceData';
+  stores: any;
+  constructor(private currentSettingService: CurrentSettingService, private exportExcelService : ExportExcelService,
     private router: Router, private fb: FormBuilder, private ListInvoices: ListInvoicesService,
     private servicess: MyservcesService, private exportPdfService: ExportPdfService, private languageService: LanguageService,
-    private activeRoute: ActivatedRoute) {
+    private activeRoute: ActivatedRoute,private signalRService:SignalRService,
+    private spinnerService: NgxSpinnerService) {
 
     loadMessages(this.ListInvoices.getListInvoicesDictionary());
+    this.connectionStarted = false;
+    // this.signalRService.signalRMessageData.subscribe(
+    //   (data) => (this.messageData = data)
+    // );
+    // this.signalRService.connectionState.subscribe(
+    //   (data) => (this.connectionState = data)
+    // );
+    // this.signalRService.signalRMessageDataCaller.subscribe(
+    //   (data) => (this.signalRMessageDataCaller = data)
+    // );
+    this.signalRService.startRoutedSignalRConnection(this.routePath);
+    this.signalRService.signalRMessageDataContinuos.subscribe(
+      (data) => (this.signalRMessageDataContinuos = data)
+     
+    );
+   
+  
   }
-
+  
   customer_aname: any;
   ngOnInit(): void {
+    this.spinnerService.show();
+    setTimeout(() => {
+      /** spinner ends after 5 seconds */
+      this.spinnerService.hide();
+    }, 3000);
+    // this.signalRService.addTransferChartDataListener();  
+    // setTimeout(() => {
+    //   this.signalRService.askServerListener("receiveinvoiceData");
+    // }, 9000);
+    
+    this.getAllinvioceUn()
+    this.selsproduct = []
     this.currentClickedId = 0
     this.showloading = false
-    this.getAllinvioceUn()
+
+   
     this.price = 0
     this.selectedMembers = []
     this.count = 0;
@@ -70,30 +121,17 @@ export class ReportAllInvioceComponent {
     this.realdata = []
     this.storedata = '';
     this.invoice = [];
-    this.report = {
-      enddate: new Date(),
-      startdate: new Date()
-
-    }
-
-
-    this.productForm = this.fb.group({
-      startdate: ['2022-07-01', Validators.required],
-      enddate: ['2022-09-01', Validators.required],
-
-    });
+    
 
   }
+  
   onExporting(e) {
     if (e.format == 'xlsx') {
-      // this.exportPdfService.exportPdfDataGrid(e, 'purches', false);
+      this.exportExcelService.exportExcelDataGrid(e, 'invoices', "invoices");
     }
     if (e.format == 'pdf') {
-      this.exportPdfService.exportPdfDataGrid(e, 'Invioces', false);
-
-
+      this.exportPdfService.exportPdfDataGrid(e, 'InviocesList', false);
     }
-
   }
   refreshDataGrid() {
     this.dataGrid.instance.refresh();
@@ -102,7 +140,14 @@ export class ReportAllInvioceComponent {
     document.getElementById('gridContainer')!.style.fontSize = ++this.fontSize + 'px';
     localStorage.setItem('gridFontSize', this.fontSize.toString());
   }
-
+  getDetailGridDataSource(product: any) {
+    const rows = [{
+      product_aname: product.product_aname,
+      price: product.price,
+    }];
+    console.log(rows)
+    return  rows;
+  }
   zoomOut() {
     document.getElementById('gridContainer')!.style.fontSize = --this.fontSize + 'px';
     localStorage.setItem('gridFontSize', this.fontSize.toString());
@@ -111,18 +156,17 @@ export class ReportAllInvioceComponent {
     return '<h2 style=\'float: right\'>' + 'تقارير الفواتير  </h2>';
   }
   getAllinvioceUn() {
+   
     this.servicess.GetAllInices().subscribe((list: any) => {
       this.Invoiceheader = list.data;
 
       if (this.Invoiceheader) {
         this.showloading = true
       }
-console.log(  this.Invoiceheader)
-
       //  this.renderchart(this.count, this.count1);
 
     }, (ex: any) => {
-      console.log(ex);
+      console.log(ex.error);
     });
   }
   previewinvioc() {
@@ -130,29 +174,9 @@ console.log(  this.Invoiceheader)
     window.print()
 
   }
-
-
-
-
-  sorting() {
-    this.servicess.GetAllInices().subscribe((list: any) => {
-
-      this.invoice = this.invoice
-
-
-      //  this.renderchart(this.count, this.count1);
-
-    }, (ex: any) => {
-      console.log(ex);
-    });
-  }
-
   getRowData(e: any) {
-
-    this.currentClickedId = e.row.data.customer_id;
-
+    this.currentClickedId = e.row.data.customer_id
   }
-
   sertch() {
     if (this.customer_aname == '') {
       this.ngOnInit()
@@ -165,8 +189,4 @@ console.log(  this.Invoiceheader)
     }
 
   }
-
 }
-
-
-

@@ -14,7 +14,7 @@ export class LanguageService {
   }
   changeLocalLanguage(language: string){
     this.translateService.use(language);
-    alert(language)
+    
     localStorage.setItem('currentLanguage', language);
   }
 }

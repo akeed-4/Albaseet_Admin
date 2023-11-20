@@ -25,3 +25,9 @@
             margin-top: -20px;
         }
     }
+    .cards{
+margin-bottom: 10px;
+        }
+        mat-toolbar{
+            font-family: 'droidKufi-bold', sans-serif;
+          }

@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
   Identity: 'https://localhost:44310',
-  Admin: 'https://localhost:44302/api',
-  sharedAPI : 'http://app.eofficewebapp.com/'
+  Admin: 'http://localhost:5000',
+  sharedAPI : 'http://app.eofficewebapp.com/',
+
 };

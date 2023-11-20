@@ -7,7 +7,7 @@ import { ControlRoleService } from '../control-role.service';
 import { AddProductsComponent } from '../albaseet/add-products/add-products.component';
 import { DetialsPaymontComponent } from '../albaseet/detials-paymont/detials-paymont.component';
 import { FooterMenuComponent } from '../albaseet/footer-menu/footer-menu.component';
-import { AbouteCompanyComponent } from '../albaseet/aboute-company/aboute-company.component';
+
 import { AddCustomersComponent } from '../albaseet/add-customers/add-customers.component';
 import { ConcetionCompanyComponent } from '../albaseet/concetion-company/concetion-company.component';
 import { CustomerDeleletComponent } from '../albaseet/customer-delelet/customer-delelet.component';
@@ -27,6 +27,9 @@ import { ReportAllInvioceComponent } from '../albaseet/report_invioce-unapprove/
 import { ReportAllReciptComponent } from '../albaseet/recipte/report-all-recipt/report-all-recipt.component';
 import { ViewProductComponent } from '../albaseet/view-product/view-product.component';
 import { AddPymentMethodComponent } from '../albaseet/add-pyment-method/add-pyment-method.component';
+import { ReportProductUnapproveComponent } from '../albaseet/report_invioce-unapprove/report-product-unapprove/report-product-unapprove.component';
+import { ReportDaillyComponent } from '../albaseet/recipte/report-dailly/report-dailly.component';
+import { CreditSalesInvoiceComponent } from '../albaseet/report_invioce/credit-sales-invoice/credit-sales-invoice.component';
 
 
 export const MaterialRoutes: Routes = [
@@ -36,11 +39,11 @@ export const MaterialRoutes: Routes = [
 
   {path:'detailspaymont',component:DetialsPaymontComponent},
 
-
+  {path:'selsproduct',component:ReportProductUnapproveComponent},
   {path:'footer',component:FooterMenuComponent},
   {path:'Addcustomer/:id',component:AddCustomersComponent},
   {path:'Addcustomer',component:AddCustomersComponent},
-  {path:'listcustomer',component:ViewCustomerComponent},
+  {path:'CustomerList',component:ViewCustomerComponent},
   {path:'updateproduct/:id',component:UpdateProductComponent},
   {path:'DeleteCustomer/:id',component:CustomerDeleletComponent},
   {path:'ProductDelet/:id',component:ProductDeleteComponent},
@@ -48,16 +51,19 @@ export const MaterialRoutes: Routes = [
   {path:'paid_cash',component:PaidCashInvoiceComponent},
   {path:'invice',component:InviceComponent},
   {path:'mysetting',component:MySettingComponent},
-  {path:'AlBaseet_Abute',component:AbouteCompanyComponent},
-  {path:'listproduct',component:ViewProductComponent},
+
+  {path:'productlist',component:ViewProductComponent},
   {path:'Contact_Us',component:ConcetionCompanyComponent},
   {path:'payment',component:PymontComponent},
-  {path:'lsitpaymont',component:ListPaymontMethodComponent},
+  {path:'paymontlsit',component:ListPaymontMethodComponent},
   {path:'Addpaymont',component:AddPymentMethodComponent},
-  {path:'listReicept',component:ReportAllReciptComponent},
-
-  {path:'reportinvioce',component:ReportAllInvioceComponent},
+  {path:'Addpaymont/:id',component:AddPymentMethodComponent},
+  {path:'ReiceptReport',component:ReportAllReciptComponent},
+  {path:'reportTotal',component:ReportDaillyComponent},
+  {path:'InvoiceReport',component:ReportAllInvioceComponent},
   {path:'logout',component:PrograsLogoutComponent},
+  {path:'Opertaion',component:PaidCashInvoiceComponent},
+  {path:'SalesTotal',component:CreditSalesInvoiceComponent},
 
 
 

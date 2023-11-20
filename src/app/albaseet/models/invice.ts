@@ -29,7 +29,7 @@ export  class inivce{
     btb_titleEn:string;
     invoice_name:nameModel;
     customer_name:string;
-
+    invioce_state:string
     products: InvoiceProductModel ;
   
   

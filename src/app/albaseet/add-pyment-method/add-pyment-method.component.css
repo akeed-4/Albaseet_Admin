@@ -1,7 +1,13 @@
 .tap{
     margin-top: 6%;
 }
-
+form{
+    padding: 5px;
+    border: 1px solid rgb(0, 0, 0);
+  }
+mat-form-field{
+    max-width: 400px;
+}
 @media (max-width: 412px) {
     #ar {
         margin-right: -60px;
@@ -16,3 +22,18 @@
     border-top-right-radius: 30px;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.075);
 }
+.form-control{
+    width: 150px;
+    border-radius: 8px;
+    padding: 5px;
+}
+form,mat-toolbar{
+    padding: 5px;
+    border: 1px solid rgb(0, 0, 0);
+    max-width: 900px;
+  }
+  ::ng-deep .form-field ,mat-form-field{
+    max-width: 600px !important;
+   width: 500px;
+   margin: 5px;
+  }

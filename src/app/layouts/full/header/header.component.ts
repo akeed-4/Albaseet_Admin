@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthoService } from 'src/app/autho.service';
 import { LanguageService } from 'src/app/services/language.service';
+import { loginAouthservice } from 'src/app/services/loginAouth.service';
 
 @Component({
   selector: 'app-header',
@@ -18,7 +19,9 @@ export class AppHeaderComponent {
   menuName='';
   UserName:any
   isExpanded: any;
-constructor( public translateService: TranslateService,private service: AuthoService,private route:Router,private languageService:LanguageService, @Inject(DOCUMENT) private document: Document,){
+  styleTexts: string;
+constructor(  private loginservice:loginAouthservice,
+  private router :Router,public translateService: TranslateService,private service: AuthoService,private route:Router,private languageService:LanguageService, @Inject(DOCUMENT) private document: Document,){
   this.currentLanguage = this.languageService.getCurrentLanguage();
   
 }
@@ -76,20 +79,17 @@ ngOnInit(){
   changeStyleMarginBody(){
     this.styleMarginBody = this.currentLanguage == 'ar' ? 'margin-left: 100px;' : 'margin-right: 100px;';
   }
-  
+  backdashboard(){
+    this.router.navigate(['dashboard'])
+      }
     logout(){
-      
       const token = localStorage.getItem('token');
-      
       if (token != null) {
-        this.service.LogoutUsers().subscribe(
+        this.loginservice.LogoutUsers().subscribe(
           succ => {
-  
             this.route.navigate(['login']);
-            localStorage.removeItem("token");
-            localStorage.removeItem("userName");
+            localStorage.clear();
             this.ngOnInit()
-      
           },
           err => console.log(err)
         );

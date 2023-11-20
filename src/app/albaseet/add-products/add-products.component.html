@@ -1,124 +1,107 @@
-<div class="container  ar mt-2 ">
-  <div class="row top1">
-    <div class="col-lg-6 mx-auto">
-      <div class="show1 p-5">
-        <div class="tab-content">
-          <div class="tab-pane fade show active ">
-            <div class="alert alert1 text-center alert-secondary1 alert-secondary mb-4 ">
-              <strong>{{'Add a new product'|translate}}</strong>
-            </div>
-            <!-- <div class="alert alert-success" role="alert" *ngIf="message">
-              <strong>{{message}}</strong>
-            </div> -->
-            <hr class="mb-6">
-           
 
-            <div class="hospital-container">
-              <div class="hospital">
-                <form [formGroup]="productForm" (ngSubmit)="Addproduct()">
+<mat-toolbar style="margin-top: 5%;" color="primary">{{getTitle()}}</mat-toolbar>
+<app-display-errors [errors]="errors"></app-display-errors>
+<form action="" [formGroup]="productForm" (ngSubmit)="Addproduct()" >
+  <mat-grid-list cols="2" rowHeight="130px" class="quot-service-grid">
+      <mat-grid-tile>
+          <mat-form-field appearance="outline" class="form-field" >
+              <mat-label>{{'product name(Ar)'|translate}} </mat-label>
+              <input matInput type="text " autofocus    dir="rtl"  
+              formControlName="productsnameAr" id="productsnameAr" requireInput
+              [ngClass]="{'is-invalid': this.productForm.get('productsnameAr').invalid && this.productForm.get('productsnameAr').touched}">
+              <mat-error class="text-danger"  *ngIf="this.productForm.get('productsnameAr').invalid && this.productForm.get('productsnameAr').touched
+              && this.productForm.get('productsnameAr').value===''">
 
-                  <div class="form-row  form-group">
-                    <div class="col-md-4 mb-3 form-group ">
-                      <div class="col-lg-12">
-                        <label> {{'product name(Ar)'|translate}} </label>
-                        <span class="text-danger">*</span>
-                      </div>
-                      <input type="text " class="form-control classm" maxlength="20" dir="rtl" autofocus required
-                        formControlName="productsnameAr" id="productsnameAr"
-                        [ngClass]="{'is-invalid': this.productForm.get('productsnameAr').invalid && this.productForm.get('productsnameAr').touched}">
+                   {{'Item name is required'|translate}}</mat-error>
+              <md-error class="text-danger" *ngIf="this.productForm.get('productsnameAr').value !== null && 
+              this.productForm.get('productsnameAr').value !== '' && isproductsNameExist()">
 
-                      <div class="text-danger" style=" width:190px " *ngIf="this.productForm.get('productsnameAr').invalid && this.productForm.get('productsnameAr').touched
-                 && this.productForm.get('productsnameAr').value===''">
+               {{'The name of the variety already exists.'|translate}}
 
-                        {{'Item name is required'|translate}}
-                      </div>
-                      <div class="text-danger" *ngIf="this.productForm.get('productsnameAr').value !== null && 
-                  this.productForm.get('productsnameAr').value !== '' && isproductsNameExist()">
+              </md-error>
+          </mat-form-field>
 
-                        {{'The name of the variety already exists.'|translate}}
-                      </div>
-                    </div>
-                    <div class="col-md-4 mb-3 form-group ">
-                      <div class="col-lg-12 lagstyle">
-                        <label> {{'Name En'|translate}} </label>
-                        <span class="text-danger">*</span>
-                      </div>
+      </mat-grid-tile>
 
-                      <input type="text " class="form-control classm1" required maxlength="20"   dir="ltr"
-                        formControlName="productsnameEn" id="productsnameEn"
-                        [ngClass]="{'is-invalid': this.productForm.get('productsnameEn').invalid && this.productForm.get('productsnameEn').touched}">
+      <mat-grid-tile>
+          <mat-form-field appearance="outline" >
+              <mat-label> {{'Name En'|translate}}</mat-label>
+              <input matInput type="text "   maxlength="20" dir="ltr" 
+              formControlName="productsnameEn" id="productsnameEn"
+              [ngClass]="{'is-invalid': this.productForm.get('productsnameEn').invalid && this.productForm.get('productsnameEn').touched}">
+              <mat-error class="text-danger" style="margin-right: 60px; width:180px " *ngIf="this.productForm.get('productsnameEn').invalid && this.productForm.get('productsnameEn').touched
+              && this.productForm.get('productsnameEn').value===''">
+                       {{'Item name is required'|translate}}</mat-error>
 
-                      <div class="text-danger" style="margin-right: 60px; width:180px " *ngIf="this.productForm.get('productsnameEn').invalid && this.productForm.get('productsnameEn').touched
-               && this.productForm.get('productsnameEn').value===''">
-                        {{'Item name is required'|translate}}
-                      </div>
 
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="col-lg-12">
-                      <label>{{'price'|translate}} </label>
-                      <span class="text-danger">*</span>
-                    </div>
-                    <!-- <label for="UserName" style="font-weight: bold;">البريد الالكتروني :</label> -->
-                    <input type="number" formControlName="price" class="form-control" id="price"
-                      [ngClass]="{'is-invalid': this.productForm.get('price').invalid && this.productForm.get('price').touched}">
+          </mat-form-field>
+      </mat-grid-tile>
 
-                    <div class="text-danger"
-                      *ngIf="!this.productForm.get('price').valid && this.productForm.get('price').touched  && this.productForm.get('price').value===''">
+     
 
-                      {{'Item price is required'|translate}}
-                    </div>
 
-                  </div>
+  </mat-grid-list>
+  <mat-grid-list cols="3" rowHeight="100px">
+      <mat-grid-tile>
+          <mat-form-field appearance="outline" >
+              <mat-label>{{'price'|translate}}</mat-label>
+              <input matInput  type="number"  formControlName="price"  id="price"  
+              [ngClass]="{'is-invalid': this.productForm.get('price').invalid && this.productForm.get('price').touched}">
+              <mat-error class="text-danger" *ngIf="!this.productForm.get('price').valid && this.productForm.get('price').touched  && this.productForm.get('price').value===''">
 
-                  <div>
-                    <div class="form-group">
-                      <label for="Image" style="font-weight: bold;"> {{'photo'|translate}} </label>
-                      <div class="input-group mb-3">
-                        <div class="custom-file">
-                          <input type="file" width="200px" height="300px"  formControlName="Images" id="Images" (change)="HandleFiles($event)"
-                            accept="Image/*" class="custom-file-input">
-                          <label class="custom-file-label upload-lbl" for="Images">
-                            <span *ngIf="img !== null ">{{img.name}}</span>
-                            <span *ngIf="img === null ">اختر صورة</span>
-                          </label>
-                        </div>
-                        <div class="text-danger"
-                          *ngIf="!this.productForm.get('Images').valid && this.productForm.get('Images').touched && img === null">
-                          {{messageValidate.Images.required}}
-                        </div>
-                      </div>
+              {{'Item price is required'|translate}}</mat-error>
+          </mat-form-field>
+      </mat-grid-tile>
 
-                    </div>
-                    <div class="col-md-4">
+      
 
-                      <img id="image"  style="max-height: 100px; max-width:100x" class="img-fluid rounded border bg-light" src="/assets/image/logo.png">
-                    </div>
-                  </div>
 
-                  <button type="submit" style="text-align:center ;"
-                    class=" subscribe btn btn-primary btn-block rounded-pill shadow-sm mt-4"
-                    [disabled]="productForm.invalid  ||isproductsNameExist()">
-                    {{btnTitle}}
 
-                
-                  </button>
-                  <div *ngIf="isloading" style="text-align: center;">
-                    <div class="spinner-grow text-muted"></div>
-                  </div>
-              
-                  
+      
+  </mat-grid-list>
+  <mat-grid-list cols="3" rowHeight="100px">
 
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
+      <mat-grid-tile>
+        
+        <input  type="file" width="200px" height="300px" formControlName="Images" id="Images"
+        (change)="HandleFiles($event)" accept="Image/*" class="custom-file-input">
+        <mat-error *ngIf="!this.productForm.get('Images').valid && this.productForm.get('Images').touched && img === null"></mat-error>
+        <label class="custom-file-label upload-lbl" for="Images">
+          <span *ngIf="img !== null ">{{img.name}}</span>
+          <span *ngIf="img === null " style="width: 100px;">اختر صورة</span>
+        </label>
+          
+      </mat-grid-tile>
+     
+     
+  </mat-grid-list>
+  <mat-grid-list cols="3" rowHeight="100px" >
+    <mat-grid-tile >
+     <div class="center" >
+      <img id="image" style="max-height: 100px; max-width:100x" 
+      src="/assets/images/logo.png">
+     </div>
+    </mat-grid-tile>
+    <mat-grid-tile >
+      <div class="center" >
+     
       </div>
-
-    </div>
-
+     </mat-grid-tile>
+     <mat-grid-tile >
+      <div class="center" >
+       
+      </div>
+     </mat-grid-tile>
+  </mat-grid-list>
+ <button type="button"     [disabled]="productForm.invalid  ||isproductsNameExist()"
+ class="btn btn-primary" (click)="Addproduct()">{{"btnTitle"|  translate}}</button>
+  
+  <div *ngIf="isloading" style="text-align: center;">
+      <div class="spinner-grow text-muted"></div>
   </div>
+</form>
 
-</div>
+
+  
+
+

@@ -1,16 +1,14 @@
-<div class="card-header" style="text-align: right;">
+<div class="cards" style="text-align: right;">
+  <mat-toolbar style="margin-top: 5%;" color="primary">{{'Invoice list'|translate}}</mat-toolbar>
 
 
 </div>
-<div *ngIf="!showloading" style="text-align: center;margin-top: 80px;" >
-  <p  class="spinner-grow "></p>
-  <!-- <app-spinner></app-spinner> -->
-  </div>
-<div *ngIf="showloading">
+
   <dx-data-grid 
   [dataSource]="Invoiceheader"
   keyExpr="customer_id"
   [focusedRowEnabled]="true"
+  [allowColumnResizing]="true"
   id="gridContainer"
   [columnAutoWidth]="true"
   (onExporting)="onExporting($event)"
@@ -22,10 +20,9 @@
   <dxo-toolbar class="grid-buttons">
     <dxi-item location="before" >
       <div *dxTemplate>
-      
-        <dx-button icon="refresh" (onClick)="refreshDataGrid()" hint="{{'dxDataGrid.refreshButton' | translate}}"></dx-button>
-        <dx-button icon="chevronup" (onClick)="zoomIn()" hint="{{'dxDataGrid.zoomIn' | translate}}"></dx-button>
-        <dx-button icon="chevrondown" (onClick)="zoomOut()" hint="{{'dxDataGrid.zoomOut' | translate}}"></dx-button>
+        <dx-button icon="refresh" (onClick)="refreshDataGrid()" hint="{{'refreshButton' | translate}}"></dx-button>
+        <dx-button icon="chevronup" (onClick)="zoomIn()" hint="{{'zoomIn' | translate}}"></dx-button>
+        <dx-button icon="chevrondown" (onClick)="zoomOut()" hint="{{'zoomOut' | translate}}"></dx-button>
       </div>
     </dxi-item>
     <dxi-item name="exportButton"></dxi-item>
@@ -33,62 +30,46 @@
     <dxi-item name="groupPanel"></dxi-item>
   </dxo-toolbar>
   
-  <dxo-search-panel [visible]="true" 
-  [placeholder]="placeholder"></dxo-search-panel>
-  <dxo-header-filter [visible]="true"> </dxo-header-filter>
-  <dxo-filter-panel [visible]="true"> </dxo-filter-panel>
-  <dxo-export [enabled]="true" [formats]="['pdf']" [allowExportSelectedData]="false" fileName="purches"></dxo-export>
-  <dxo-filter-row [visible]="true"> </dxo-filter-row>
   <dxi-column dataField="invoice_no" [caption]="formatMessage('invoiceNo')" dataType="number"> </dxi-column>
-  
   <dxi-column dataField="customer.customer_aname" [caption]="formatMessage('customer_aname')"   dataType="string"> </dxi-column>
-  <dxi-column dataField="customer.customer_address" [caption]="formatMessage('customer_address')"   dataType="string"> </dxi-column>
   <dxi-column dataType="date" dataField="invoice_date" [caption]="formatMessage('invoice_date')">
   </dxi-column> 
-  <dxi-column dataField="total_amount" [caption]="formatMessage('total_amount')"   dataType="number"> </dxi-column>
-  <dxi-column dataField="paid_amount" [caption]="formatMessage('paid_amount')" dataType="number" > </dxi-column>
-  <dxi-column dataField="tax_amount" [caption]="formatMessage('tax_amount')" dataType="number"> </dxi-column>
-  <dxi-column dataField="invoice_name.ar" [caption]="formatMessage('invoice_name')" dataType="string"> </dxi-column>
-  <dxi-column dataField="products" [caption]="formatMessage('product_aname')" dataType="string" > 
+  
+  <dxi-column dataField="amount_before_tax" [caption]="formatMessage('amount_before_tax')" dataType="string" > 
   </dxi-column>
+  <dxi-column dataField="tax_amount" [caption]="formatMessage('tax_amount')" dataType="number"> </dxi-column>
+  <dxi-column dataField="total_amount" [caption]="formatMessage('total_amount')"   dataType="number"> </dxi-column>
 
-   <dxi-column
-    dataField="invoice_acceptance"
-    [caption]="formatMessage('invoice_acceptance')"
-    cellTemplate="cellTemplate"
-    position="relative"
-  >
-  <div *dxTemplate="let data of 'cellTemplate'">
-    <div *ngIf="data.value==1"> {{'approved'|translate}}</div>
-    <div *ngIf="data.value==0"> {{'unapproved'|translate}}</div>
-  </div>
-</dxi-column> 
-
-<dxi-column
-dataField="invoice_type"
-[caption]="formatMessage('invoice_type')"
-cellTemplate="cellTemplate1"
-position="relative"
->
-
-<div *dxTemplate="let data1 of 'cellTemplate1'">
-  <div *ngIf="data1.value==1"> {{'Returned'|translate}}</div>
-  <div *ngIf="data1.value!=1"> {{'UnReturned'|translate}}</div>
-  </div>
-</dxi-column> 
+  <!-- <dxi-column dataField="invoice_name.ar" [caption]="formatMessage('invoice_name')" dataType="string"> </dxi-column> -->
+  <dxi-column dataField="invioce_state" [caption]="formatMessage('invoice_acceptance')" dataType="string" > 
+  </dxi-column>
+  
+  <dxi-column dataField="localUser.user_name" [caption]="formatMessage('user_name')"  dataType="string"> </dxi-column>
+  <dxi-column dataField="invioce_types" [caption]="formatMessage('invoice_type')"  dataType="string"> </dxi-column>
+  <dxi-column dataField="paid_amount" [caption]="formatMessage('paid_amount')" dataType="number" > </dxi-column>
 
 
-  <dxo-column-chooser #columnChooser [enabled]="true" mode="select">
+  <dxo-column-chooser  #columnChooser [enabled]="true" mode="select" >
     <dxo-search [enabled]="true" [editorOptions]="true"></dxo-search>
     <dxo-selection [allowSelectAll]="true" [selectByClick]="true" [recursive]="true"></dxo-selection>
   </dxo-column-chooser>
+  
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
 
-
-  <dxo-paging [pageSize]="10"> </dxo-paging>
-
-  <!-- <dxo-export [enabled]="true" [formats]="['pdf','xlsx']" [allowExportSelectedData]="false" fileName="countries" *ngIf="exportCountry"></dxo-export> -->
-  <dxo-pager [visible]="true"  [allowedPageSizes]="allowedPageSizes"  [displayMode]="displayMode"
-    [showPageSizeSelector]="showPageSizeSelector" [showInfo]="showInfo" [showNavigationButtons]="showNavButtons">
-  </dxo-pager>
+  <dxo-selection mode="single"></dxo-selection>
+  <dxo-scrolling rowRenderingMode="virtual"> </dxo-scrolling>
+    <dxo-paging [pageSize]="10"> </dxo-paging>
+    <dxo-pager
+      [visible]="true"
+      [allowedPageSizes]="[10, 50, 100, 'all']"
+      [displayMode]="'full'"
+      [showPageSizeSelector]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+    >
+    </dxo-pager>
+    <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+    <dxo-export [enabled]="true" [formats]="['pdf','xlsx']" [allowExportSelectedData]="false" fileName="countries" ></dxo-export>
+    <dxo-sorting mode="multiple"></dxo-sorting>
 </dx-data-grid>
-</div>

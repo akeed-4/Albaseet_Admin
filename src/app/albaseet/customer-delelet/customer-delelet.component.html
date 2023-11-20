@@ -1,5 +1,5 @@
 <div class="container py-5 ar   ">
-    <div class="row tap  ">
+    <div class="row   ">
         <div class="col-lg-6 mx-auto ">
             <div class="   p-5 show1 ">
                 <div class="alert alert1 text-center alert-secondary1 alert-secondary mb-4 ">
@@ -7,9 +7,7 @@
                 </div>
                 
                 <hr class="mb-6">
-                <button (click)="GoToList()" id="rmz" style="border:none "
-                    class="fa fa-arrow-right fa-2x mb-3 rounded-pill shadow-sm"></button>
-
+              
                 <div class="tab-content">
                     <div class="tab-pane fade show  active form-row ">
                         <form [formGroup]="customerForm" (ngSubmit)="Addcustmer()">
@@ -95,8 +93,11 @@
                             <button type="submit" (click)="DeleteConfirm()" style="text-align:center ;"
                                 class="subscribe rounded-pill btn btn-primary btn-block rounded-pill shadow-sm mt-4"
                                 >{{btnTitle}}
-                                <img *ngIf="isloading" src="/assets/image/op.gif" alt=""
-                                    style="background-color: rgb(16, 151, 151);">
+                              
+                                    <div *ngIf="isloading">
+                                        
+                                        <div class="spinner-grow text-muted"></div> 
+                                    </div>
                             </button>
 
                         </form>

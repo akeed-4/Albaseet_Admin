@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatChipsModule } from '@angular/material/chips';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -40,6 +40,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
@@ -49,6 +50,8 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { PlatformModule } from '@angular/cdk/platform';
 import { ObserversModule } from '@angular/cdk/observers';
 import { PortalModule } from '@angular/cdk/portal';
+import { DxSelectBoxModule, DxDataGridModule, DxCheckBoxModule, DxNumberBoxModule, DxButtonModule, DxFormModule, DxAutocompleteModule, DxProgressBarModule } from 'devextreme-angular';
+import { IgxSwitchModule } from 'igniteui-angular';
 
 /**
  * NgModule that includes all Material modules that are required to serve the demo-app.
@@ -85,6 +88,7 @@ import { PortalModule } from '@angular/cdk/portal';
         MatSnackBarModule,
         MatSortModule,
         MatStepperModule,
+        MatChipsModule,
         MatTabsModule,
         MatToolbarModule,
         MatTooltipModule,
@@ -96,7 +100,20 @@ import { PortalModule } from '@angular/cdk/portal';
         ObserversModule,
         OverlayModule,
         PlatformModule,
-        PortalModule
+        PortalModule,
+        DxSelectBoxModule,
+        IgxSwitchModule,
+        DxDataGridModule,
+        DxCheckBoxModule,
+        DxSelectBoxModule,
+        DxNumberBoxModule,
+        DxButtonModule,
+        DxFormModule,
+        DxAutocompleteModule,
+        DxProgressBarModule,
+         DxButtonModule,
+         MatDatepickerModule,
+         NgxMatSelectSearchModule
     ]
 })
 export class DemoMaterialModule { }

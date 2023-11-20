@@ -1,0 +1,18 @@
+<div  style="text-align: right;" class="border-form " >
+    <form [formGroup]="productForm" class="cardss">
+      <mat-form-field appearance="outline">
+        <mat-label>{{'Start_date'|translate}}</mat-label>
+        <input matInput  formControlName="startDate"  (dateChange)="generateReport()"  placeholder="{{'Start_date'|translate}}" [matDatepicker]="startDatePicker">
+        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #startDatePicker></mat-datepicker>
+      </mat-form-field>
+    
+      <mat-form-field appearance="outline">
+        <mat-label>{{'End_date'|translate}}</mat-label>
+        <input matInput  formControlName="endDate"  (dateChange)="generateReport()"  placeholder="{{'End_date'|translate}}" [matDatepicker]="endDatePicker">
+        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #endDatePicker></mat-datepicker>
+      </mat-form-field>
+    
+    </form>
+   </div>

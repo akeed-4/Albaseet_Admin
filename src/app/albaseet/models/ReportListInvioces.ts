@@ -20,7 +20,7 @@ export interface ReportListInvioces{
     invoice_type:string
     qrData:string;
     amount_before_tax:string
-
+user_name:string
   
 
   }
@@ -53,7 +53,8 @@ export interface ReportListInvioces{
         invoice_acceptance:'Invoice Acceptance',
         invoice_type:'invoice_type',
         product_aname:'product_aname',
-        invoice_name:"invoice_name"
+        invoice_name:"invoice_name",
+        user_name:"user_name"
       },
       ar: {
         id:'الكود',
@@ -73,7 +74,8 @@ export interface ReportListInvioces{
         invoice_type:'نوع الفاتورة',
         invoice_acceptance:'حاله الفاتورة',
         product_aname:'اسم الصنف',
-        invoice_name:'حالة الدفع'
+        invoice_name:'حالة الدفع',
+        user_name:"اسم المستخدم"
       }
     };
   }

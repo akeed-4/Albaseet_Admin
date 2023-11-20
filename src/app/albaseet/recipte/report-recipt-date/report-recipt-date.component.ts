@@ -65,9 +65,7 @@ insail:Date
   getrecipte() {
     this.servicess.GetAllrecipte().subscribe((list:any) => {
       this.storedata = list.data;
-
       this.recipte =  this.storedata.filter((x:any)=> x.receipt_acceptance===1 ) ;
-
     }, (ex: any) => {
       console.log(ex);
     });

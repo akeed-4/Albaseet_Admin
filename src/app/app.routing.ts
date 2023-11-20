@@ -17,26 +17,6 @@ export const AppRoutes: Routes = [
     
   },
  
-
-
-
-  // { path: 'Addcars', component: AddCarstypeComponent },
-
-
-  //  { path: 'registar', component: CreatAccountTabbiComponent },
-
-  // { path: 'Addmodelcar', component: AddCarmodelComponent },
-  // { path: 'Addtypecar', component: AddCarstypeComponent },
-  // // { path: 'Addcolorcar', component: AddCarcolorComponent },
-  // { path: 'AddPurchase_invoices', component: AddPurchaseInvoicesComponent },
-
-  // { path: 'viewCars', component: ViewCarComponent },
-
-  // { path: 'AddSales_invoices', component: AddSalesContractComponent },
-  // { path: 'addclasscar', component: AddClassCarsComponent },
-  // { path: 'AddRecieptsales', component: EditReceiptComponent },
-  // { path: 'addcar', component: AddCarstypeComponent },
-  // { component: AddSalesContractComponent, path: "editinvoice/:invoiceno" },
   {
     path: '',
     component: FullComponent,

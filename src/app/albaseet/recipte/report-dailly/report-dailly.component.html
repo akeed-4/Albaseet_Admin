@@ -1,67 +1,100 @@
+<div  style="text-align: right;margin-top: 10px;">
+  <!-- <p>{{'ReportsTransactionsTotal'|translate}}</p> -->
+  <mat-toolbar style="margin-top: 5%;" color="primary">{{'ReportsTransactionsTotal'|translate}}</mat-toolbar>
 
-<div  [dir]="'dir'|translate">
-
-
-    <div class="alert alert-primary" role="alert" >
-      <strong>      {{'List of reports by period '|translate}}</strong>
-    </div>
-  
-    <div class="doctor-view" [dir]="'dir'|translate">
-  
-  
-      <form   [formGroup]="productForm">
-          <div class="row form-group"  id="right">
-              <div style="margin-left: 45px;">
-                  <label class="id2">من تاريخ</label>
-                  <input  type="date" formControlName="startdate" class="id2" (change)="change()" value="2018-07-22">
-              </div>
-              <div>
-                  <label  for="" class="id2">الى تاريخ</label>
-                  <input  type="date" formControlName="enddate" class="id2" (change)="change()" value="2020-07-22">
-              </div>
-          </div>
-      </form>
-      
-      <table id="tbl" class="table table-hover table-striped rounded mb-3 table-bordered " >
-        <thead>
-          <tr class="bg-dark text-warning">
-          
-            <th> {{'history'|translate}}</th>
-        
-            <th>{{'Amount'|translate}}</th>
-          
-            
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of selectedMember">
-           
-            <td scope="row">{{item. date| date: 'dd/MM/yyyy hh:mm a' }}</td>
-       
-            <td scope="row">{{item.totalamount }}</td>
-           
+   <div class="border-forms"  >
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-3 ">
+        <mat-form-field appearance="outline" class="select mat-form-fieldS" >
+          <mat-label style="font-size: 18px;">{{'Select a representative'|translate}}</mat-label>
+          <mat-select (valueChange)="sendValue($event)" >
+            <mat-option *ngFor="let currency of dataSources" [value]="currency.user_id">
+              {{currency.user_name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     
-          </tr>
-          
-        </tbody>
-      </table>
-      <!-- <div>
-        <button type="button" class="btn btn-danger btn-lg rounded-pill shadow-sm" data-toggle="modal" data-target="#modelId"  (click)="DeleteCount()" [disabled]="!IsDelete()">
-          حــذف
-        </button>
-      </div> -->
+      <div class="col-lg-6 col-md-6 col-sm-12">
+        <form [formGroup]="productForm" class="form">
+          <mat-form-field appearance="outline" class="ml-2 mat-form-fields">
+            <mat-label>{{'Start_date'|translate}}</mat-label>
+            <input matInput formControlName="startDate"  (dateChange)="generateReport()" placeholder="{{'Start_date'|translate}}" [matDatepicker]="startDatePicker">
+            <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+          </mat-form-field>
+    
+          <mat-form-field appearance="outline" class="mat-form-fields">
+            <mat-label>{{'End_date'|translate}}</mat-label>
+            <input matInput formControlName="endDate" (dateChange)="generateReport()" placeholder="{{'End_date'|translate}}" [matDatepicker]="endDatePicker">
+            <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+          </mat-form-field>
+    
+          <!-- <button mat-raised-button >
+            <mat-icon matPrefix>search</mat-icon>
+          </button> -->
+        </form>
+      </div>
     </div>
-    <div *ngIf="selectedMember.length<1">
-      <div class="alert alert-primary d-flex justify-content-center">
-        <strong>{{'Choose the period first'|translate}}   </strong>
-      <!-- <button class="btn" (click)="getInvice()">تحديث القائمة</button> -->
+    
+   </div>
+
+</div >
+  <dx-data-grid 
+  [dataSource]="dataSource.total"
+  keyExpr="invoice_type"
+  [showBorders]="true"
+  [focusedRowEnabled]="true"
+  id="gridContainer"
+  [columnAutoWidth]="true"
+  (onExporting)="onExporting($event)"
+  [showColumnLines]="true"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true"
+  [rtlEnabled]="rtlEnabled"
+  >
+  
+  <dxo-toolbar class="grid-buttons">
+    <dxi-item location="before" >
+      <div *dxTemplate>
+      
+        <dx-button icon="refresh" (onClick)="refreshDataGrid()" hint="{{'refreshButton' | translate}}"></dx-button>
+        <dx-button icon="chevronup" (onClick)="zoomIn()" hint="{{'zoomIn' | translate}}"></dx-button>
+        <dx-button icon="chevrondown" (onClick)="zoomOut()" hint="{{'zoomOut' | translate}}"></dx-button>
       </div>
-      </div>
-  </div>
+    </dxi-item>
+    <dxi-item name="exportButton"></dxi-item>
+    <dxi-item name="columnChooserButton"></dxi-item>
+    <dxi-item name="groupPanel"></dxi-item>
+  </dxo-toolbar>
+
+  <dxi-column dataField="invoice_name.ar"   [caption]="formatMessage('transactions')" dataType="string"> </dxi-column>
+  <dxi-column dataField="total_amount" [caption]="formatMessage('total_amount')" dataType="string"> </dxi-column>
   
+  <dxo-column-chooser  #columnChooser [enabled]="true" mode="select" >
+    <dxo-search [enabled]="true" [editorOptions]="true"></dxo-search>
+    <dxo-selection [allowSelectAll]="true" [selectByClick]="true" [recursive]="true"></dxo-selection>
+  </dxo-column-chooser>
   
-  
-  
-    <!-- Modal -->
-  
-   
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+  <dxo-selection mode="single"></dxo-selection>
+  <dxo-scrolling rowRenderingMode="virtual"> </dxo-scrolling>
+    <dxo-paging [pageSize]="10"> </dxo-paging>
+    <dxo-pager
+      [visible]="true"
+      [allowedPageSizes]="[10, 50, 100, 'all']"
+      [displayMode]="'full'"
+      [showPageSizeSelector]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+    >
+    </dxo-pager>
+    <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+    <dxo-export [enabled]="true" [formats]="['pdf','xlsx']" [allowExportSelectedData]="false" fileName="countries" ></dxo-export>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+  </dx-data-grid>
+
+
+ 

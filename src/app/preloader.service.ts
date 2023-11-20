@@ -24,5 +24,6 @@ export class PreloaderService {
         el.className += ' global-loader-fade-out';
       }
     }
+
   }
 }

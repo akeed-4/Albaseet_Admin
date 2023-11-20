@@ -11,6 +11,8 @@ import { ListReceiptService } from 'src/app/services/list-receipt.service';
 import { ExportPdfService } from 'src/app/services/export-pdf.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { CurrentSettingService } from 'src/app/services/current-setting.service';
+import { ExportExcelService } from 'src/app/services/export-excel.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-report-all-recipt',
@@ -33,12 +35,12 @@ export class ReportAllReciptComponent {
   @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
 rtlEnabled = this.languageService.getCurrentLanguage() == 'en' ? false : true;
   AllRecipte: any;
-  constructor(
+  constructor(private exportExcelService:ExportExcelService,
     private router: Router,
     private servicess: MyservcesService, private listReceipt: ListReceiptService,
     private currentSettingService:CurrentSettingService,
     private activeRoute: ActivatedRoute,private exportPdfService:ExportPdfService,private languageService: LanguageService,
-
+private spinnerService: NgxSpinnerService,
   ) { 
     loadMessages(this.listReceipt.getListReceiptDictionary());
   }
@@ -52,6 +54,11 @@ rtlEnabled = this.languageService.getCurrentLanguage() == 'en' ? false : true;
   
 
   ngOnInit(): void {
+    this.spinnerService.show();
+    setTimeout(() => {
+      /** spinner ends after 5 seconds */
+      this.spinnerService.hide();
+    }, 3000);
     this.getrecipte();
     this.currentClickedId=0
  this.showloading=false
@@ -64,11 +71,10 @@ rtlEnabled = this.languageService.getCurrentLanguage() == 'en' ? false : true;
  
   onExporting(e) {
     if (e.format == 'xlsx') {
-      // this.exportPdfService.exportPdfDataGrid(e, 'purches', false);
+       this.exportExcelService.exportExcelDataGrid(e, 'reciept', "reciept");
     }
     if (e.format == 'pdf') {
-      this.exportPdfService.exportPdfDataGrid(e, 'Receipt', false);
-
+      this.exportPdfService.exportPdfDataGrid(e, 'ReceiptList', false);
 
     }
 
@@ -76,7 +82,7 @@ rtlEnabled = this.languageService.getCurrentLanguage() == 'en' ? false : true;
   getrecipte() {
     this.servicess.GetAllrecipte().subscribe((list:any) => {
     this. AllRecipte = list.data;
-   
+ console.log( this. AllRecipte)
 if(  this. AllRecipte ){
   this.showloading=true
 }
